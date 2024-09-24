@@ -14,7 +14,7 @@ Introduction {#intro}
 
 DID-Linked Resources are digital files that can be retrieved and referenced using a persistent and unique DID URL. 
 
-This specification defines common requirements, algorithms including their request formats and response formats, architectural options, and various considerations for how DID-Linked Resources SHOULD act as persistent identifiers for referencing and retrieving digital Resources (such as data schemas, status lists, trust registries, governance documents, or policy definitions). This specification complements the <a href="https://w3c-ccg.github.io/did-resolution/">DID Resolution Specification</a>, including its patterns and algorithms for DID URL resolution and dereferencing. 
+This specification defines common requirements, patterns, algorithms including their request formats and response formats, architectural options, and various considerations for how DID-Linked Resources SHOULD act as persistent identifiers for referencing and retrieving digital Resources (such as data schemas, status lists, trust registries, governance documents, or policy definitions). This specification complements the <a href="https://w3c-ccg.github.io/did-resolution/">DID Resolution Specification</a>, including its patterns and algorithms for DID URL resolution and dereferencing. 
 
 By using DID URLs which remain conformant with W3C Decentralized Identifiers (DIDs) v1.0 Recommendation [[DID-CORE]] and the <a href="https://w3c-ccg.github.io/did-resolution/">DID Resolution Specification</a>, existing DID Resolvers will be able to dereference these DID URLs to retrieve the identified resources using the DID URL query syntax in this specification.
 
@@ -82,14 +82,14 @@ Using traditional web endpoints to store digital resources that are critical for
 DID-Linked Resources construction {#contruction}
 ---------------------
 
-"Resources" SHOULD be identifiable using a Decentralized Identifier (DID) and a Universally Unique Identifier (UUID) that acts as a permanently-accessible identifier to fetch the Resource from a Verifiable Data Registry or other storage endpoint. We refer to this UUID as the "Resource ID".
+"Resources" SHOULD be identifiable using a Decentralized Identifier (DID) and a permanently-accessible unique identifier to fetch the Resource from a Verifiable Data Registry or other storage endpoint. We refer to this identifier as the "Resource ID".
 
-Using UUIDs ensures a high level of confidence that no two identical Resource IDs will ever be created. This is important for ensuring the integrity and unambiguity of each individual DID-Linked Resource.
+Using unique identifiers ensures a high level of confidence that no two identical Resource IDs will ever be created. This is important for ensuring the integrity and unambiguity of each individual DID-Linked Resource. As such, throughout this specification, we will use UUIDs as the Resource ID example, although different method implementations may specify other Resource ID formats.
 
 The following path-based syntax is an example of how a DID Method may construct a DID URL to point to a DID-Linked Resource:
 
  ```json
-did:example:<unique-identifier>/resources/<universally-unique-identifier>
+did:example:<unique-identifier>/resources/<unique-identifier>
 ```
 
 <div class="note"> <b>Note:</b> The above path-based syntax would be an implementation-specific way of referencing a resource. </div>
@@ -195,6 +195,12 @@ As a response, the DID Document SHOULD append metadata about the DID-Linked Reso
   }
 }
 ```
+Control of Linked Resources {#control}
+=====================
+
+A DID-Linked Resource can only be created if the transaction is signed by the same Verification Method keys that are defined in the parent DID Document. This ensures that the DID-Linked Resource shares the same cryptographic trust properties as the Parent DID, in terms of its creation and subsequent updates. It also ensures that new versions of a Resource can only be made by the Controller of the parent DID. 
+
+<div class="note"> <b>Note:</b> There is ambiguity in the DID Core specification around how Verification Method relationships can be used for different purposes. For example, some methods may use keys embedded within fields like 'capabilityDelegation' or 'keyAgreement' for specific purposes. To avoid ambiguity in implementation, this specification has chosen to require the keys to create DID-Linked Resources to be described in the Verification Method section of the parent DID Document.
 
 Linking DIDs to Resources and Collections {#linkage}
 =====================
