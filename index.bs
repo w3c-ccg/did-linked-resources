@@ -84,7 +84,7 @@ DID-Linked Resources construction {#contruction}
 
 "Resources" SHOULD be identifiable using a Decentralized Identifier (DID) and a permanently-accessible unique identifier to fetch the Resource from a Verifiable Data Registry or other storage endpoint. We refer to this identifier as the "Resource ID".
 
-Using unique identifiers ensures a high level of confidence that no two identical Resource IDs will ever be created. This is important for ensuring the integrity and unambiguity of each individual DID-Linked Resource. As such, throughout this specification, we will use UUIDs as the Resource ID example, although different method implementations may specify other Resource ID formats.
+Using unique identifiers increases confidence that no two identical Resource IDs will ever be created. This is important for ensuring the integrity and unambiguity of each individual DID-Linked Resource. Throughout this specification, we will therefore use UUIDs for example Resource IDs, although different method implementations may specify other Resource ID formats.
 
 The following path-based syntax is an example of how a DID Method may construct a DID URL to point to a DID-Linked Resource:
 
