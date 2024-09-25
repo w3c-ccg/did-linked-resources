@@ -84,7 +84,7 @@ DID-Linked Resources construction {#contruction}
 
 "Resources" SHOULD be identifiable using a Decentralized Identifier (DID) and a permanently-accessible unique identifier to fetch the Resource from a Verifiable Data Registry or other storage endpoint. We refer to this identifier as the "Resource ID".
 
-Using unique identifiers increases confidence that no two identical Resource IDs will ever be created. This is important for ensuring the integrity and unambiguity of each individual DID-Linked Resource. Throughout this specification, we will therefore use UUIDs for example Resource IDs, although different method implementations may specify other Resource ID formats.
+Using unique identifiers increases confidence that no two identical Resource IDs will ever be created. This is important for ensuring the integrity and unambiguity of each individual DID-Linked Resource. Throughout this specification, we will therefore use UUIDs for the Resource IDs in examples, although different method implementations may specify other Resource ID formats.
 
 The following path-based syntax is an example of how a DID Method may construct a DID URL to point to a DID-Linked Resource:
 
@@ -195,12 +195,6 @@ As a response, the DID Document SHOULD append metadata about the DID-Linked Reso
   }
 }
 ```
-Control of Linked Resources {#control}
-=====================
-
-A DID-Linked Resource can only be created if the transaction is signed by the same Verification Method keys that are defined in the parent DID Document. This ensures that the DID-Linked Resource shares the same cryptographic trust properties as the Parent DID, in terms of its creation and subsequent updates. It also ensures that new versions of a Resource can only be made by the Controller of the parent DID. 
-
-<div class="note"> <b>Note:</b> There is ambiguity in the DID Core specification around how Verification Method relationships can be used for different purposes. For example, some methods may use keys embedded within fields like 'capabilityDelegation' or 'keyAgreement' for specific purposes. To avoid ambiguity in implementation, this specification has chosen to require the keys to create DID-Linked Resources to be described in the Verification Method section of the parent DID Document.
 
 Linking DIDs to Resources and Collections {#linkage}
 =====================
