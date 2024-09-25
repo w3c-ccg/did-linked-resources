@@ -123,7 +123,7 @@ To create a "DID-Linked Resource", you MUST first create a "parent" DID, from wh
 
 Next, to create a digital Resource associated with the "parent" DID, you MUST provide the following Request inputs:
 
-1. `resourceId`: Generate a new, unique UUID for the Resource
+1. `resourceId`: Generate a new, unique identifier for the Resource
 2. `collectionId`: Specify the Collection ID as the same unique identifier of the parent DID
 3. `resourceName`: Provide a name for the Resource of your choice
 4. `resourceType`: Specify the type of Resource and make reference to the DID Spec Registries to utilise consistent and registered Resource Types. 
@@ -393,7 +393,7 @@ Composition of Resource Preview {#preview}
 Resource previews will appear within DID document metadata. These do not include the actual core data of the resource and only reference the metadata:
 
 * Resource Collection ID: (`did:example:...:`) (supplied client-side)\*\*
-* Resource ID: UUID ➝ specific to resource, also effectively a version number (supplied client-side)
+* Resource ID: identifier ➝ specific to resource, also effectively a version number (supplied client-side)
 * Resource Name: String (e.g., `JSONSchema2020` (supplied client-side))
 * Resource Type (supplied client-side)
 * Resource Version (supplied client-side)
