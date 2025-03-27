@@ -80,7 +80,7 @@ Example schema.org address with full URLs:
 
 Using traditional web endpoints to store digital resources that are critical for a Verifiable Credential to function, detracts from the proper functioning and utility that persistently-accessible Decentralized Identifiers offer. This has also resulted in inconsistent and unstandardized approaches to storing, referencing, and retrieving digital resources such as schemas, trusted issuer lists and status lists.
 
-DID-Linked Resources Construction {#contruction}
+DID-Linked Resources Construction {#construction}
 ---------------------
 
 "Resources" SHOULD be identifiable using a Decentralized Identifier (DID) and a permanently-accessible unique identifier to fetch the Resource from a Verifiable Data Registry or other storage endpoint. We refer to this identifier as the "Resource ID".
