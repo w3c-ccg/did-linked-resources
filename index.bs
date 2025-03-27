@@ -4,15 +4,15 @@ Shortname: DID-Linked Resources
 Level: 1
 Status: w3c/CG-DRAFT
 Group: w3c-ccg
-URL: https://w3c-ccg.github.io/did-linked-resources
+URL: https://w3c-ccg.github.io/DID-Linked-Resources
 Editor: Alex Tweeddale, https://github.com/Tweeddalex
-Abstract: This specification creates a standardized way of referencing, dereferencing, and fetching digital resources. This includes associating digital resources with Decentralized Identifiers (DIDs) and organizing digital resources into DID-Linked Collections, where each individual resource is identifiable through its own DID URL.
+Abstract: This specification creates a standardized way of referencing, dereferencing, and fetching digital resources. This includes associating digital resources with Decentralized Identifiers (DIDs) and organizing digital resources into resource Collections, where each individual resource is identifiable through its own DID URL.
 </pre>
 
 Introduction {#intro}
 =====================
 
-DID-Linked Resources are digital files that can be retrieved and referenced using a persistent and unique DID URL. 
+DID-Linked Resources (DLRs) are digital files that can be retrieved and referenced using a persistent and unique DID URL. 
 
 This specification defines common requirements, patterns, algorithms including their request formats and response formats, architectural options, and various considerations for how DID-Linked Resources SHOULD act as persistent identifiers for referencing and retrieving digital Resources (such as data schemas, status lists, trust registries, governance documents, or policy definitions). This specification complements the <a href="https://w3c-ccg.github.io/did-resolution/">DID Resolution Specification</a>, including its patterns and algorithms for DID URL resolution and dereferencing. 
 
@@ -79,16 +79,16 @@ Example schema.org address with full URLs:
 
 Using traditional web endpoints to store digital resources that are critical for a Verifiable Credential to function, detracts from the proper functioning and utility that persistently-accessible Decentralized Identifiers offer. This has also resulted in inconsistent and unstandardized approaches to storing, referencing, and retrieving digital resources such as schemas, trusted issuer lists and status lists.
 
-DID-Linked Resources construction {#contruction}
+DID-Linked Resources Construction {#contruction}
 ---------------------
 
 "Resources" SHOULD be identifiable using a Decentralized Identifier (DID) and a permanently-accessible unique identifier to fetch the Resource from a Verifiable Data Registry or other storage endpoint. We refer to this identifier as the "Resource ID".
 
-Using unique identifiers increases confidence that no two identical Resource IDs will ever be created. This is important for ensuring the integrity and unambiguity of each individual DID-Linked Resource. Throughout this specification, we will therefore use UUIDs for the Resource IDs in examples, although different method implementations may specify other Resource ID formats.
+Using unique identifiers increases confidence that no two identical Resource IDs will ever be created. This is important for ensuring the integrity and unambiguity of each individual DID-Linked Resource. Throughout this specification, we will therefore use UUIDs for the Resource IDs in examples, although different method implementations MAY specify other Resource ID formats.
 
 The following path-based syntax is an example of how a DID Method may construct a DID URL to point to a DID-Linked Resource:
 
- ```json
+```json
 did:example:<unique-identifier>/resources/<unique-identifier>
 ```
 
@@ -99,12 +99,12 @@ DID-Linked Resource Collections {#collections}
 
 Resources are organized into groups or sets called "Collections". Each DID may have an associated Collection, and the Collection ID is derived from the unique identifier of the DID.
 
-The most important concept used in this design is that each Collection is identified using a DID and is described using a DID document.
+The most important concept used in this design is that each Collection is identified using a DID and is described using a DID Document.
 
-The DID document acts as metadata, providing information about the Collection, such as who is able to update it, when it was created, and what are the latest and/or deprecated versions of Resources within the Collection.
+The DID Document acts as metadata, providing information about the Collection, such as who is able to update it, when it was created, and what are the latest and/or deprecated versions of Resources within the Collection.
 For example, the following DID:
 
- ```json
+```json
 did:example:0a5b94d0-a417-48ed-a6f5-4abc9e95888d
 ```
 
@@ -116,19 +116,30 @@ will derive the Collection ID:
 
 <div class="note"> <b>Note:</b> The Collection ID may take the syntactical form of the DID method that the DID-Linked Resource is associated with. </div>
 
+DID-Linked Resources Authentication {#authentication}
+=====================
+
+When creating a new DID-Linked Resource associated with a DID, there is a "parent" and "child" relationship, where the DID itself acts as a "parent" as the keys embedded or referenced within the `authentication` section of the DID Document MUST be used to create any "child" DID-Linked Resources.
+
+Each new DID-Linked Resource MUST require one or multiple signatures, matching the keys within the `authentication` section of the parent DID Document. If there are multiple keys in the `authentication` section, the number of keys required to sign MUST correlate with the key relationships required to provide other `authentication` mechanisms, such as updating or deactivating the DID Document, as defined by the specific DID method.
+
+This relationship ensures that all DID-Linked Resources that are linked to the "parent" DID are authenticated by the controllers of the `authentication` keys in the parent DID Document.
+
+This relationship MAY be enforced and validated by the underlying infrastructure (such as a distirbuted ledger consensus mechanism), or by a data integrity proof included within the Resource itself.
+
 DID-Linked Resources Algorithm {#algorithm}
 =====================
 
-To create a "DID-Linked Resource", you MUST first create a "parent" DID, from which the Collection ID can be derived, and under which the associated Resources will be linked. 
+To create a "DID-Linked Resource", a "parent" DID MUST be created first, from which the Collection ID can be derived, and under which the associated Resources will be linked. 
 
-Next, to create a digital Resource associated with the "parent" DID, you MUST provide the following Request inputs:
+Next, to create a digital Resource associated with the "parent" DID, the following request inputs MUST be provided:
 
 1. `resourceId`: Generate a new, unique identifier for the Resource
 2. `collectionId`: Specify the Collection ID as the same unique identifier of the parent DID
 3. `resourceName`: Provide a name for the Resource of your choice
 4. `resourceType`: Specify the type of Resource and make reference to the DID Spec Registries to utilise consistent and registered Resource Types. 
 5. `data`: pass the Resource file as a path or Base64 encoded in-line.
-5. Sign the transaction using the same Verification Method keys as those within the parent DID Document. 
+5. Sign the transaction using the `authentication` keys referenced or embedded within the parent DID Document. 
 
 As a response, the DID Document SHOULD append metadata about the DID-Linked Resource into the existing DID Document Metadata.
 
@@ -201,7 +212,7 @@ Linking DIDs to Resources and Collections {#linkage}
 
 Multiple Resources can be stored within a Collection and linked to the same DID; for example, this could be new versions of the same Resource over a period of time, or entirely different resources. This enables unique resources to be stored directly on a Verifiable Data Registry (VDR) and be retrievable through DID resolution and DID URL dereferencing.
 
-Once you have created a resource, the DID document will automatically reference the resource and the collection within the `didDocumentMetadata` in a newly defined section called `linkedResourceMetadata`.
+Once you have created a resource, the DID Document will automatically reference the resource and the Resource Collection within the `didDocumentMetadata` in a newly defined section called `linkedResourceMetadata`.
 
 Architecture Overview {#archoverview}
 =====================
