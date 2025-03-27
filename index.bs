@@ -30,19 +30,19 @@ The key words MAY, MUST, MUST NOT, OPTIONAL, and SHOULD in this document are to 
 Terminology {#terminology}
 =====================
 
-{DID controller}: As defined in [[DID-CORE]].
+<dfn>DID controller</dfn>: As defined in [[DID-CORE]].
 
-{{DID Document}}: As defined in [[DID-CORE]].
+<dfn>DID document</dfn>: As defined in [[DID-CORE]].
 
-{{DID URL}}: As defined in [[DID-CORE]].
+<dfn>DID URL</dfn>: As defined in [[DID-CORE]].
 
-{{DID URL Dereferencing}}: As defined in [[DID-CORE]].
+<dfn>DID URL Dereferencing</dfn>: As defined in [[DID-CORE]].
 
-{{DID-Linked Resource}}: Digital files that can be retrieved and referenced using persistent and unique DID URLs.
+<dfn>DID-Linked Resource</dfn>: Digital files that can be retrieved and referenced using persistent and unique DID URLs.
 
-{{Resource Collection}}: An organized and structured set of digital resources, collectively and individually identifiable using persistent and unique DID URLs.
+<dfn>Resource Collection</dfn>: An organized and structured set of digital resources, collectively and individually identifiable using persistent and unique DID URLs.
 
-{{Resource ID}}: A unique identifier for a specified DID-Linked Resource. 
+<dfn>Resource ID</dfn>: A unique identifier for a specified DID-Linked Resource. 
 
 DID-Linked Resources {#resources}
 =====================
