@@ -32,7 +32,7 @@ Digital Resources are generally stored on traditional centralized-storage endpoi
 2. <b>Hosting providers could unilaterally cease to host particular clients</b>: Hosting providers could terminate accounts due to factors such as non-payment of fees, violation of Terms of Service, etc.
 3. <b><a href="https://dbpedia.org/resource/Single_point_of_failure">Single point of failure (SPOF)</a></b>: Even with highly-trusted and sophisticated hosting providers who may not present a risk of infrastructure being compromised, a service outage at the hosting provider can make a Resource anchored on their systems inaccessible.
 
-Despite these issues, many decentralized identity or Digital Credential implementations, even ones that use ledgers or other distributed systems for DIDs, often utilize centralized storage. From the <a href="https://w3c.github.io/vc-imp-guide/#creating-new-credential-types">W3C Verifiable Credential Implementation Guide</a>.
+Despite these issues, many decentralized identity and digital credential implementations, even ones that use ledgers or other distributed systems for DIDs, often utilize centralized storage. From the <a href="https://w3c.github.io/vc-imp-guide/#creating-new-credential-types">W3C Verifiable Credential Implementation Guide</a>.
 
 Example schema.org address with full URLs:
 
@@ -50,19 +50,19 @@ Example schema.org address with full URLs:
  }
 ```
 
-Using traditional web endpoints to store digital resources that are critical for a Verifiable Credential to function, detracts from the proper functioning and utility that persistently-accessible Decentralized Identifiers offer. This has also resulted in inconsistent and unstandardized approaches to storing, referencing, and retrieving digital resources such as schemas, trusted issuer lists and status lists.
+Using traditional web endpoints to store digital resources that are critical for a Verifiable Credential to function detracts from the proper functioning and utility that persistently-accessible Decentralized Identifiers offer. This has also resulted in inconsistent and unstandardized approaches to storing, referencing, and retrieving digital resources such as schemas, trust registries and status lists.
 
 A Simple Example {#example}
 ---------------------
 
-To illustrate the concept of **DID-Linked Resources** (DLRs) and the **parent-child relationship** between a DID and its resources, consider the following simple example. In this example, **Entity A's** DID (`did:example:entity123`) is the **parent**, and its associated resources are the **children**. Each resource is uniquely identified by an identifier, such as a UUID, and is bound to the DID under paths like `/resources/{resourceId}`. For example, the URI `did:example:entity123/resources/41c0f0fe-cd4e-45aa-aec5-754db4a63865` points to a specific resource controlled by Entity A's DID.
+To illustrate the concept of **DID-Linked Resources** (DLRs), one of the core concepts is the **parent-child relationship** between a DID and its resources. Consider the following simple example where **Entity A's** DID (`did:example:entity123`) is the **parent**, and its associated resources are the **children**. Each resource is uniquely identified by an identifier, such as a UUID, and is bound to the DID under paths like `/resources/{resourceId}`. For example, the URI `did:example:entity123/resources/41c0f0fe-cd4e-45aa-aec5-754db4a63865` points to a specific resource controlled by Entity A's DID.
 
 The DID controller, Entity A, has authority over these child resources, and each resource is independently addressable by its unique identifier, but remains logically tied to the parent DID. This structure allows flexible management of resources while maintaining the DID as the authoritative identifier.
 
 Architecture Overview {#archoverview}
 ---------------------
 
-The relationship between DIDsand Resources is shown in the diagram below:
+The relationship between DIDs and Resources is shown in the diagram below:
 
 <img src="images/DID-Linked-Resources-Relationship.png" alt="DID-Linked Resources Architecture Overview">
 
@@ -84,21 +84,28 @@ In addition to sections marked as non-normative, all authoring guidelines, diagr
 The key words MAY, MUST, MUST NOT, OPTIONAL, and SHOULD in this document are to be interpreted as described in BCP 14 [[RFC2119]] [[RFC8174]] when, and only when, they appear in all capitals, as shown here.
 
 Terminology {#terminology}
-=====================
+==========================
 
-<dfn>DID Controller</dfn>: As defined in [[DID-CORE]].
+<dfn>DID Controller</dfn>
+: As defined in [[DID-CORE]].
 
-<dfn>DID Document</dfn>: As defined in [[DID-CORE]].
+<dfn>DID Document</dfn>
+: As defined in [[DID-CORE]].
 
-<dfn>DID URL</dfn>: As defined in [[DID-CORE]].
+<dfn>DID URL</dfn>
+: As defined in [[DID-CORE]].
 
-<dfn>DID URL Dereferencing</dfn>: As defined in [[DID-CORE]].
+<dfn>DID URL Dereferencing</dfn>
+: As defined in [[DID-CORE]].
 
-<dfn>DID-Linked Resource</dfn>: Digital files that can be retrieved and referenced using persistent and unique DID URLs.
+<dfn>DID-Linked Resource</dfn>
+: Digital files that can be retrieved and referenced using persistent and unique DID URLs.
 
-<dfn>Resource Collection</dfn>: An organized and structured set of digital resources, collectively and individually identifiable using persistent and unique DID URLs.
+<dfn>Resource Collection</dfn>
+: An organized and structured set of digital resources, collectively and individually identifiable using persistent and unique DID URLs.
 
-<dfn>Resource ID</dfn>: A unique identifier for a specified DID-Linked Resource. 
+<dfn>Resource ID</dfn>
+: A unique identifier for a specified DID-Linked Resource.
 
 Core Properties {#core}
 =====================
@@ -190,7 +197,7 @@ DID-Linked Resources (DLRs) are content-addressable or identifier-addressable re
 Resource Identifiers {#resourceid}
 ---------------------
 
-A `resourceId` MUST be a unique identifier for a single resource. Two resources under the same DID method MUST NOT share the same `resourceId`.
+A Resource Identifier, or `resourceId`, MUST be a unique identifier for a single resource. Two resources under the same DID method MUST NOT share the same `resourceId`.
 
 Binding to DIDs {#binding}
 ---------------------
@@ -291,9 +298,9 @@ DIGIT = %x30-39
 The components of a DID-Linked Resource URI carry the following semantics:
 
 * The `did` component identifies the base Decentralized Identifier (DID) under which the resource is logically scoped.
-* The `path` identifies the logical or versioned name of the resource. This may represent:
+* The `path` identifies the logical or versioned name of the resource. This may represent for example:
   * A generalalized resource (`/resources/1234`)
-  * A schema (`/schema/1234`)
+  * A specific resource, such as a schema (`/schema/1234`)
   * A different attachment or file (e.g., `/assets/image.png`)
 * The `fragment` MAY refer to a sub-component within the resource (e.g., a specific field in a schema, or a section in a document).
 
@@ -708,7 +715,7 @@ Resolution and Dereferecing examples {#examples}
 =====================
 
 
-ResourceMetadata & other filter
+ResourceMetadata and Filter
 ---------------------
 
 This parameter is a filter that spefically returns metadata of one or more resources and can be combined with other filters, for specific filtering. The optional variants are:
@@ -798,7 +805,7 @@ did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceType=exampleSchema&reso
 
 </details>
 
-ResourceId
+ResourceId Parameter
 ---------------------
 
 `resourceId` parameter can be used for filtering a particular resource version by specifically identifying its unique ID.
@@ -843,7 +850,7 @@ The resource itself is returned. In this example, we show a returned schema:
 
 </details>
 
-ResourceCollectionId
+ResourceCollectionId Patameter
 ---------------------
 
 `resourceCollectionId` parameter filters all resources linked to a particular DID by the `collectionId` property. It is recommended that this query is only used when there is one resource linked to a DID. If it is used with multiple resources, it is recommended to be combined with another query parameter to act as a filter such as `resourceMetadata=true`. Otherwise, it is likely to result in an ambigous query.
@@ -889,7 +896,7 @@ The resource itself is returned. In this example, we show a returned schema:
 </details>
 
 
-ResourceType
+ResourceType Parameter
 ---------------------
 
 This parameter is another filter for the `resourceType` property. Again, this should only be used if there is one resource associated with the DID. Otherwise additional filters should be added to avoid ambiguous queries.
@@ -936,7 +943,7 @@ The resource itself is returned. In this example, we show a returned schema:
 
 
 
-ResourceName
+ResourceName Parameter
 ---------------------
 
 This parameter is a filter for the `resourceName` property. Again, this should only be used if there is one resource associated with the DID. Otherwise additional filters should be added to avoid ambiguous queries.
@@ -981,7 +988,7 @@ The resource itself is returned. In this example, we show a returned schema:
 
 </details>
 
-ResourceName & ResourceType
+ResourceName & ResourceType Parameters
 ---------------------
 
 This is a combined filter that SHOULD fetch the latest version of the resource, of the same name and type.
@@ -1024,7 +1031,7 @@ The resource itself is returned. In this example, we show a returned schema:
 
 ```
 
-ResourceVersion
+ResourceVersion Parameter
 ---------------------
 
 This parameter filters by `resourceVersion` field. 
@@ -1069,7 +1076,7 @@ The resource itself is returned. In this example, we show a returned schema:
 
 </details>
 
-ResourceVersionTime
+ResourceVersionTime Parameter
 ---------------------
 
 <div class="note"> <b>Important:</b> This parameter SHOULD always be accompanied by another resource query qualifier. </div>
@@ -1115,7 +1122,7 @@ did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceVersionTime=2023-02-22T
 
 </details>
 
-Checksum
+Checksum Parameter
 ---------------------
 
 This parameter can be used to check that the `checksum` is the same as resource's metadata.
@@ -1165,7 +1172,7 @@ Practical Considerations {#practical}
 Creation of a Resource {#creation}
 ---------------------
 
-The creation of a Resource is a process that is defined by each corresponding DID Method.
+The creation of a Resource is a process that is defined by each corresponding DID Method. The underlying input parameters can also be defined by the method, as long as the Core Properties are produced in a representation of resource metadata.
 
 Recommendations for constructing linkedResourceMetadata {#linkedresourcemetadata}
 ---------------------
