@@ -195,7 +195,9 @@ A `resourceId` MUST be a unique identifier for a single resource. Two resources 
 Binding to DIDs {#binding}
 ---------------------
 
-In the context of DID-Linked Resources (DLRs), **binding** refers to the relationship between a resource and a Decentralized Identifier (DID). A DID acts as the **parent** that has authority over the resource, which is the **child**. The DID controller (the entity controlling the DID) has control over the resource and can modify, update or deprecate it.
+In the context of DID-Linked Resources (DLRs), **binding** refers to the relationship between a resource and a Decentralized Identifier (DID). This binding is OPTIONAL but is recommended.
+
+A DID acts as the **parent** that has authority over the resource, which is the **child**. The DID controller (the entity controlling the DID) has control over the resource and can modify, update or deprecate it.
 
 ### Parent-Child Relationship: DID as Parent, Resource as Child
 
@@ -206,6 +208,26 @@ In this parent-child relationship:
 The binding of a resource to a DID ensures that the DID controller has control over the resource and that the resource is logically scoped within the DID's authority.
 
 This relationship MAY be enforced and validated by the underlying infrastructure (such as a distributed ledger consensus mechanism), or by a data integrity proof included within the Resource itself.
+
+Resource Name {#resourcename}
+---------------------
+
+The resourceName property is OPTIONAL. If present, the value of the type property MUST be a string.
+
+Resource Type {#resourcetype}
+---------------------
+
+The resourceType property is OPTIONAL. If present, the value of the type property MUST be a string. In order to maximize interoperability, the resource type and its associated properties SHOULD be registered in the DID Specification Registries [DID-SPEC-REGISTRIES].
+
+Resource Version {#resourceversion}
+---------------------
+
+The resourceVersion property is OPTIONAL. If present, the value of the type property MUST be a string.
+
+Alternative URI {#alternativeuri}
+---------------------
+
+The AlternativeURI property is OPTIONAL. If present, the value MUST be a set where each item in the set is a URI conforming to [RFC3986].
 
 Syntax {#syntax}
 =====================
@@ -434,6 +456,33 @@ The following list defines which specific parameters are required and which are 
     </tr>
   </tbody>
 </table>
+
+Resource Metadata Properties {metadataproperties}
+---------------------
+
+### Media Type
+
+The Media Type property is OPTIONAL. If present, the value SHOULD match the underlying media type of the file of the resource identified by the resourceId.
+
+### Checksum
+
+The Media Type property is OPTIONAL. If present, the value SHOULD be an equivalent representation of the resource identified by the resourceId.
+
+### Created
+
+Resource metadata SHOULD include a created property to indicate the timestamp of the Create operation. The value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision. For example: 2020-12-20T19:17:47Z.
+
+### Updated
+
+Resource metadata SHOULD include an updated property to indicate the timestamp of the last Update operation for the document version which was resolved. The value of the property MUST follow the same formatting rules as the created property. The updated property is omitted if an Update operation has never been performed on the DID document. If an updated property exists, it can be the same value as the created property when the difference between the two timestamps is less than one second.
+
+### PreviousIDVersion
+
+Resource metadata MAY include a previousVersionId property if the resolved resource has one or more previous versions. The value of the property MUST be an ASCII string.
+
+### NextIDVersion
+
+Resource metadata MAY include a nextVersionId property if the resolved resource is not the latest version of the resource. The value of the property MUST be an ASCII string.
 
 Rules and Logic for Handling Ambiguous Queries {#ambiguity}
 ---------------------
@@ -1027,11 +1076,20 @@ did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceType=exampleSchema&reso
 Practical Considerations {#practical}
 =====================
 
+Creation of a Resource {#creation}
+---------------------
+
+The creation of a Resource is a process that is defined by each corresponding DID Method.
+
 Recommendations for constructing linkedResourceMetadata {#linkedresourcemetadata}
 ---------------------
 
+DID Methods that implement DID-Linked Resources SHOULD define how the linkedResourceMetadata property is constructed. Some DID Methods MAY require an update operation to populate the linkedResourceMetadata into the DIDDocumentMetadata. Other methods MAY automate the addition of linkedResourceMetadata through the underlying DID Method protocol.
+
 Applicability for web-based DID Methods {#webbasedmethods}
 ---------------------
+
+For web-based DID Methods that adopt DID-Linked Resources, each method SHOULD define a method for updating the DID Document, each time a new resource is bound to the DID.
 
 Security Considerations {#security}
 =====================
@@ -1041,14 +1099,22 @@ This section discusses the security considerations associated with linking and d
 Proving Control and Binding {#authority}
 ---------------------
 
+DID Methods MAY define processes for cryptographically validating each newly created resource against keys referened or embedded within the corresponding DID Document. This MAY take the form of a data integrity proof or other construction.
+
 Alternative Resource Locations {#alternativelocaton}
 ---------------------
+
+Resources MAY be stored at locations that differ from the underlying architecture used to store the DID Document. In this case, the external resource location SHOULD be included in the linkedResourceMetadata. This MAY require a separate DID update operation. 
 
 Parent DID Deactivation {#deactivation}
 ---------------------
 
+If a **parent** DID is deactivated, it is up to the DID Method to decide whether the **child** resources remain active or inherit the deactivation. It is recommeded that a **child** resource inherits the deactivation status from the **parent** DID.
+
 Persistence after Broken Link with DID {#persistence}
 ---------------------
+
+A Resource MAY, in some circumstances, become detached from the parent DID, if for example, the parent DID Document removes a key that is controlling the linked resources. In this case, it is up to the DID Method whether it still wants to persist the rseource in the linkedResourceMetadata.
 
 Privacy Considerations {#privacy}
 =====================
@@ -1058,7 +1124,7 @@ This section explores the privacy considerations associated with DID-Linked Reso
 Linkability and Pseudonymity {#pseudonymity}
 ---------------------
 
-<TODO> Examines the potential linkability of resources to DIDs and the impact on privacy. It discusses techniques for preserving pseudonymity and minimizing the correlation of identities across different resources.
+Resources should not contain personally identifiable information. This is particularly the case for ledger-based DID methods. 
 
 Immutability {#immutability}
 ---------------------
@@ -1066,17 +1132,27 @@ Immutability {#immutability}
 Encrypted Data in Resources {#encryption}
 ---------------------
 
+DID Methods MAY introduce encryption for their resources, to protect the information contained in the resource or to gate access to the resource. 
+
 Architectural Considerations {#architectural}
 =====================
 
 Resource Versioning {#versioning}
 ---------------------
 
+Resources that contain resourceName and resourceType SHOULD be able to be versioned sequentially. It is recommended that methods use both resourceName and resourceType as properties that, if the same, represents a new version of the resource. 
+
 Resources in Service Endpoint versus DID Document Metadata {#serviceendpoint}
 ---------------------
+
+Resources are not referenced using the serviceEndpoint section of the DID Document owing to the limited fields that can be included in the service section. Using the linkedResourceMetadata field allows for additional richness to be added. Existing resolvers will be able to resolve the underlying DIDs without needing to understand DID-Linked Resources.
 
 Resource Deactivation or Deprecation {#deactivation}
 ---------------------
 
+DID Methods MAY include additional metadata in their resources, such as a flag to deactivate or deprecate the resource.
+
 Resource Extensions {#extensions}
 ---------------------
+
+Additional extensions to the DID-Linked Resource spec MAY be defined in a future registry, that include OPTIONAL properties that MAY be added into resourceMetadata, such as, for example, a DNS pointer or X.509 certificate representation. 
