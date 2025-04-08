@@ -8,7 +8,7 @@ W3C functions under a [code of conduct](https://www.w3.org/Consortium/cepc/).
 
 ## About
 
-Please find the formatted specification at this URL: https://w3c-ccg.github.io/DID-Linked-Resources/
+Please find the formatted specification at this URL: https://w3c-ccg.github.io/did-linked-resources/
 
 This specification intends to create a standardized way of referencing, dereferencing and fetching digital resources (schemas, trust & status lists, visual representations of Verifiable Credentials, governance documents, logos). This includes associating digital resources with Decentralized Identifiers (DIDs) and organizing in DID-Linked Collections, where each individual resource is identifiable through its own DID URL.
 
