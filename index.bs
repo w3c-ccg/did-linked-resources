@@ -1,18 +1,19 @@
 <pre class='metadata'>
 Title: DID-Linked Resources
-Shortname: DID-Linked Resources
+Shortname: DID-Linked-Resources
 Level: 1
 Status: w3c/CG-DRAFT
 Group: w3c-ccg
 URL: https://w3c-ccg.github.io/did-linked-resources
-Editor: Alex Tweeddale, https://github.com/Tweeddalex
-Abstract: This specification creates a standardized way of referencing, dereferencing, and fetching digital resources. This includes associating digital resources with Decentralized Identifiers (DIDs) and organizing digital resources into DID-Linked Collections, where each individual resource is identifiable through its own DID URL.
+Editor: Alex Tweeddale, https://github.com/tweeddalex
+Editor: Ankur Banerjee, https://github.com/ankurdotb
+Abstract: This specification creates a standardized way of referencing, dereferencing, and fetching digital resources. This includes associating digital resources with Decentralized Identifiers (DIDs), where each individual resource is identifiable through its own DID URL.
 </pre>
 
 Introduction {#intro}
 =====================
 
-DID-Linked Resources are digital files that can be retrieved and referenced using a persistent and unique DID URL. 
+DID-Linked Resources (DLRs) are digital files that can be retrieved and referenced using a persistent and unique DID URL. 
 
 This specification defines common requirements, patterns, algorithms including their request formats and response formats, architectural options, and various considerations for how DID-Linked Resources SHOULD act as persistent identifiers for referencing and retrieving digital Resources (such as data schemas, status lists, trust registries, governance documents, or policy definitions). This specification complements the <a href="https://w3c-ccg.github.io/did-resolution/">DID Resolution Specification</a>, including its patterns and algorithms for DID URL resolution and dereferencing. 
 
@@ -20,38 +21,10 @@ By using DID URLs which remain conformant with W3C Decentralized Identifiers (DI
 
 <div class="note"> <b>Note:</b> while this specification defines some base-level functionality for DID URL dereferencing, the actual steps required to communicate with a DID's verifiable data registry are defined by the applicable DID method specification. </div>
 
-Conformance {#conformance}
+Context for Specification {#context}
 ---------------------
 
-In addition to sections marked as non-normative, all authoring guidelines, diagrams, examples, and notes in this specification are non-normative. Everything else in this specification is normative.
-The key words MAY, MUST, MUST NOT, OPTIONAL, and SHOULD in this document are to be interpreted as described in BCP 14 [[RFC2119]] [[RFC8174]] when, and only when, they appear in all capitals, as shown here.
-
-Terminology {#terminology}
-=====================
-
-<dfn>DID controller</dfn>: As defined in [[DID-CORE]].
-
-<dfn>DID document</dfn>: As defined in [[DID-CORE]].
-
-<dfn>DID URL</dfn>: As defined in [[DID-CORE]].
-
-<dfn>DID URL Dereferencing</dfn>: As defined in [[DID-CORE]].
-
-<dfn>DID-Linked Resource</dfn>: Digital files that can be retrieved and referenced using persistent and unique DID URLs.
-
-<dfn>Resource Collection</dfn>: An organized and structured set of digital resources, collectively and individually identifiable using persistent and unique DID URLs.
-
-<dfn>Resource ID</dfn>: A unique identifier for a specified DID-Linked Resource. 
-
-DID-Linked Resources {#resources}
-=====================
-
-This section explains the context for building DID-Linked Resources, as well as their fundamental components for construction.
-
-DID-Linked Resources context {#context}
----------------------
-
-The [[DID-CORE]] specification defines an interoperable standard for DID documents and associated core properties, however it does not currently have a standardized way to specify properties of Resources associated with DIDs, nor how to consistently reference nor retrieve them.
+The [[DID-CORE]] specification defines an interoperable standard for DID documents and associated core properties, however, it does not currently have a standardized way to specify properties of Resources associated with DIDs, nor how to consistently reference nor retrieve them.
 
 Digital Resources are generally stored on traditional centralized-storage endpoints, but this comes with certain drawbacks:
 
@@ -59,7 +32,7 @@ Digital Resources are generally stored on traditional centralized-storage endpoi
 2. <b>Hosting providers could unilaterally cease to host particular clients</b>: Hosting providers could terminate accounts due to factors such as non-payment of fees, violation of Terms of Service, etc.
 3. <b><a href="https://dbpedia.org/resource/Single_point_of_failure">Single point of failure (SPOF)</a></b>: Even with highly-trusted and sophisticated hosting providers who may not present a risk of infrastructure being compromised, a service outage at the hosting provider can make a Resource anchored on their systems inaccessible.
 
-Despite these issues, many decentralized identity or Digital Credential implementations, even ones that use ledgers or other distributed systems for DIDs, often utilize centralized storage. From the <a href="https://w3c.github.io/vc-imp-guide/#creating-new-credential-types">W3C Verifiable Credential Implementation Guide</a>.
+Despite these issues, many decentralized identity and digital credential implementations, even ones that use ledgers or other distributed systems for DIDs, often use centralized storage. From the <a href="https://w3c.github.io/vc-imp-guide/#creating-new-credential-types">W3C Verifiable Credential Implementation Guide</a>.
 
 Example schema.org address with full URLs:
 
@@ -77,31 +50,198 @@ Example schema.org address with full URLs:
  }
 ```
 
-Using traditional web endpoints to store digital resources that are critical for a Verifiable Credential to function, detracts from the proper functioning and utility that persistently-accessible Decentralized Identifiers offer. This has also resulted in inconsistent and unstandardized approaches to storing, referencing, and retrieving digital resources such as schemas, trusted issuer lists and status lists.
+Using traditional web endpoints to store digital resources that are critical for a Verifiable Credential to function detracts from the proper functioning and utility that persistently-accessible Decentralized Identifiers offer. It can also result in inconsistent and unstandardized approaches to storing, referencing, and retrieving digital resources such as schemas, trust registries, and status lists.
 
-DID-Linked Resources construction {#contruction}
+A Simple Example {#example}
 ---------------------
 
-"Resources" SHOULD be identifiable using a Decentralized Identifier (DID) and a permanently-accessible unique identifier to fetch the Resource from a Verifiable Data Registry or other storage endpoint. We refer to this identifier as the "Resource ID".
+To illustrate the concept of **DID-Linked Resources** (DLRs), one of the core concepts is the **parent-child relationship** between a DID and its resources. Consider the following simple example where **Entity A's** DID (`did:example:entity123`) is the **parent**, and its associated resources are the **children**. Each resource is uniquely identified by an identifier, such as a UUID, and is bound to the DID under paths like `/resources/{resourceId}`. For example, the URI `did:example:entity123/resources/41c0f0fe-cd4e-45aa-aec5-754db4a63865` points to a specific resource controlled by Entity A.
 
-Using unique identifiers increases confidence that no two identical Resource IDs will ever be created. This is important for ensuring the integrity and unambiguity of each individual DID-Linked Resource. Throughout this specification, we will therefore use UUIDs for the Resource IDs in examples, although different method implementations may specify other Resource ID formats.
+The DID controller, Entity A, has authority over these child resources, and each resource is independently addressable by its unique identifier, but remains logically tied to the parent DID. This structure allows flexible management of resources while maintaining the DID as the authoritative identifier.
 
-The following path-based syntax is an example of how a DID Method may construct a DID URL to point to a DID-Linked Resource:
-
- ```json
-did:example:<unique-identifier>/resources/<unique-identifier>
-```
-
-<div class="note"> <b>Note:</b> The above path-based syntax would be an implementation-specific way of referencing a resource. </div>
-
-DID-Linked Resource Collections {#collections}
+Architecture Overview {#archoverview}
 ---------------------
 
-Resources are organized into groups or sets called "Collections". Each DID may have an associated Collection, and the Collection ID is derived from the unique identifier of the DID.
+The relationship between DIDs and Resources is shown in the diagram below:
 
-The most important concept used in this design is that each Collection is identified using a DID and is described using a DID document.
+<img src="images/DID-Linked-Resources-Relationship.png" alt="DID-Linked Resources Architecture Overview">
 
-The DID document acts as metadata, providing information about the Collection, such as who is able to update it, when it was created, and what are the latest and/or deprecated versions of Resources within the Collection.
+Design Principles {#principles}
+---------------------
+
+The following design principles should be taken into consideration. DID-Linked Resources SHOULD:
+
+1. Use existing and familiar DID Core Spec patterns where possible.
+2. Support existing DID Resolvers and principles of DID URL dereferencing.
+3. Protect against linkrot for long-term retrieval.
+4. Enable resources to be versioned and organized, with individual versions being able to be fetched.
+5. Include semantic linkage between DID documents and associated resources (via metadata or otherwise).
+
+Conformance {#conformance}
+---------------------
+
+In addition to sections marked as non-normative, all authoring guidelines, diagrams, examples, and notes in this specification are non-normative. Everything else in this specification is normative.
+The key words MAY, MUST, MUST NOT, OPTIONAL, and SHOULD in this document are to be interpreted as described in BCP 14 [[RFC2119]] [[RFC8174]] when, and only when, they appear in all capitals, as shown here.
+
+Terminology {#terminology}
+==========================
+
+<dfn>DID Controller</dfn>: As defined in [[DID-CORE]].
+
+<dfn>DID Document</dfn>: As defined in [[DID-CORE]].
+
+<dfn>DID URL</dfn>: As defined in [[DID-CORE]].
+
+<dfn>DID URL Dereferencing</dfn>: As defined in [[DID-CORE]].
+
+<dfn>DID-Linked Resource</dfn>: Digital files that can be retrieved and referenced using persistent and unique DID URLs.
+
+<dfn>Resource Collection</dfn>: An organized and structured set of digital resources, collectively and individually identifiable using persistent and unique DID URLs.
+
+<dfn>Resource ID</dfn>: A unique identifier for a specified DID-Linked Resource.
+
+DID-Linked Resource URI Syntax {#syntax}
+=====================
+
+The following is the ABNF definition using the syntax in [[RFC5234]]. All DID-Linked Resources MUST conform to the DID-Linked Resource URI Syntax ABNF Rules.
+
+<pre class=abnf>
+; DID-Linked Resource URI
+dlr-uri = did path-abempty [ "?" query ] [ "#" fragment ]
+
+; DID (per W3C DID Core)
+did = "did:" method ":" method-specific-id
+method = 1*method-char
+method-char = ALPHA / DIGIT / "-"
+method-specific-id = 1*( idchar / ":" )
+idchar = ALPHA / DIGIT / "." / "-" / "_" / pct-encoded
+pct-encoded = "%" HEXDIG HEXDIG
+
+; Resource path
+path-abempty = *( "/" segment )
+segment = *pchar
+
+; Optional query and fragment (RFC 3986)
+query = *( pchar / "/" / "?" )
+fragment = *( pchar / "/" / "?" )
+
+; Character classes
+pchar = unreserved / pct-encoded / sub-delims / ":" / "@"
+unreserved = ALPHA / DIGIT / "-" / "." / "_" / "~"
+sub-delims = "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / ";" / "="
+HEXDIG = DIGIT / "A" / "B" / "C" / "D" / "E" / "F"
+ALPHA = %x41-5A / %x61-7A
+DIGIT = %x30-39
+</pre>
+
+=== Semantics
+
+The components of a DID-Linked Resource URI carry the following semantics:
+
+* The `did` component identifies the base Decentralized Identifier (DID) under which the resource is logically scoped.
+* The `path` identifies the logical or versioned name of the resource. This SHOULD be defined at the DID method level and may represent for example:
+  * A generalized resource (`/resources/1234`)
+  * A specific resource, such as a schema (`/schema/1234`)
+  * A different attachment or file (e.g., `/assets/image.png`)
+* The `fragment` MAY refer to a sub-component within the resource (e.g., a specific field in a schema, or a section in a document).
+
+Core Properties {#core}
+=====================
+
+The following tables contain informative references for the core properties defined by this specification, with expected values, and whether or not they are required. The property names in the tables are linked to the normative definitions and more detailed descriptions of each property.
+
+<table>
+  <thead>
+    <tr>
+      <th>Property</th>
+      <th>Required?</th>
+      <th>Value Constraints</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong><code>resourceUri</code></strong></td>
+      <td>yes</td>
+      <td>A string that conforms to a method-specific supported unique identifier format. For example, a UUID: <code>46e2af9a-2ea0-4815-999d-730a6778227c</code>.</td>
+    </tr>
+    <tr>
+      <td><strong><code>resourceId</code></strong></td>
+      <td>yes</td>
+      <td>A string or a map that conforms to the rules of <a href="https://tools.ietf.org/html/rfc3986" target="_blank">[[RFC3986]]</a> URIs which MUST directly lead to a location where the resource can be accessed.</td>    
+    </tr>
+    <tr>
+      <td><strong><code>resourceCollectionId</code></strong></td>
+      <td>no</td>
+      <td>A string that uniquely identifies the DID associated with the resource</td>
+    </tr>
+    <tr>
+      <td><strong><code>resourceName</code></strong></td>
+      <td>no</td>
+      <td>A string that uniquely names and identifies a resource. This property, along with the <code>resourceType</code> below, can be used to track version changes within a resource.</td>
+    </tr>
+    <tr>
+      <td><strong><code>resourceType</code></strong></td>
+      <td>no</td>
+      <td>A string that identifies the type of resource. This property, along with the <code>resourceName</code> above, can be used to track version changes within a resource. Not to be confused with <code>mediaType</code>.</td>
+    </tr>
+    <tr>
+      <td><strong><code>resourceVersion</code></strong></td>
+      <td>no</td>
+      <td>(Optional) A string that identifies the version of the resource. This property is provided by the client and can be any value.</td>
+    </tr>
+    <tr>
+      <td><strong><code>alternativeUri</code></strong></td>
+      <td>no</td>
+      <td>An array that describes alternative URIs for the resource.</td>
+    </tr>
+    <tr>
+      <td><strong><code>mediaType</code></strong></td>
+      <td>no</td>
+      <td>A string that identifies the IANA-media type of the resource.</td>
+    </tr>
+    <tr>
+      <td><strong><code>created</code></strong></td>
+      <td>no</td>
+      <td>A string that identifies the date and time the resource was created, as an XML date-time.</td>
+    </tr>
+    <tr>
+      <td><strong><code>updated</code></strong></td>
+      <td>no</td>
+      <td>A string that identifies the time the resource was updated, as an XML date-time.</td>
+    </tr>
+    <tr>
+      <td><strong><code>checksum</code></strong></td>
+      <td>no</td>
+      <td>A string that may be used to prove that the resource has not been tampered with.</td>
+    </tr>
+    <tr>
+      <td><strong><code>previousVersionId</code></strong></td>
+      <td>no</td>
+      <td>A string that identifies the previous version of the resource.</td>
+    </tr>
+    <tr>
+      <td><strong><code>nextVersionId</code></strong></td>
+      <td>no</td>
+      <td>A string that identifies the next version of the resource.</td>
+    </tr>
+  </tbody>
+</table>
+
+Resource URI {#resourceuri}
+---------------------
+
+DID-Linked Resources (DLRs) are content-addressable or identifier-addressable resources associated with a Decentralized Identifier (DID). They are represented as URIs rooted at a valid DID. The full Resource URI identifying a Resource MUST include a DID and a Resource Identifier `resourceId`.
+
+Resource Identifiers {#resourceid}
+---------------------
+
+A Resource Identifier, or `resourceId`, MUST be a unique identifier for a single resource. Two resources under the same DID method MUST NOT share the same `resourceId`.
+
+Resource Collection ID {#resourcecollectionid}
+---------------------
+
+The `resourceCollectionId` property is OPTIONAL. This property is the unique identifier of the DID that the resource is bound to, under which resources are logically collected.
+
 For example, the following DID:
 
  ```json
@@ -114,237 +254,89 @@ will derive the Collection ID:
 0a5b94d0-a417-48ed-a6f5-4abc9e95888d
 ```
 
-<div class="note"> <b>Note:</b> The Collection ID may take the syntactical form of the DID method that the DID-Linked Resource is associated with. </div>
+<div class="note"> <b>Note:</b> If used, the Collection ID SHOULD take the syntactical form of the DID method that the DID-Linked Resource is associated with. </div>
 
-DID-Linked Resources Algorithm {#algorithm}
-=====================
-
-To create a "DID-Linked Resource", you MUST first create a "parent" DID, from which the Collection ID can be derived, and under which the associated Resources will be linked. 
-
-Next, to create a digital Resource associated with the "parent" DID, you MUST provide the following Request inputs:
-
-1. `resourceId`: Generate a new, unique identifier for the Resource
-2. `collectionId`: Specify the Collection ID as the same unique identifier of the parent DID
-3. `resourceName`: Provide a name for the Resource of your choice
-4. `resourceType`: Specify the type of Resource and make reference to the DID Spec Registries to utilise consistent and registered Resource Types. 
-5. `data`: pass the Resource file as a path or Base64 encoded in-line.
-5. Sign the transaction using the same Verification Method keys as those within the parent DID Document. 
-
-As a response, the DID Document SHOULD append metadata about the DID-Linked Resource into the existing DID Document Metadata.
-
-```json
-{
-  "@context": "https://w3id.org/did-resolution/v1",
-  "didResolutionMetadata": {
-    "contentType": "application/did+ld+json",
-    "retrieved": "2023-06-23T11:21:20Z",
-    "did": {
-      "didString": "did:example:0a5b94d0-a417-48ed-a6f5-4abc9e95888d",
-      "methodSpecificId": "0a5b94d0-a417-48ed-a6f5-4abc9e95888d",
-      "method": "example"
-    }
-  },
-  "didDocument": {
-    "@context": [
-      "https://www.w3.org/ns/did/v1",
-      "https://w3id.org/security/suites/ed25519-2020/v1"
-    ],
-    "id": "did:example:0a5b94d0-a417-48ed-a6f5-4abc9e95888d",
-    "controller": [
-      "did:example:0a5b94d0-a417-48ed-a6f5-4abc9e95888d"
-    ],
-    "verificationMethod": [
-      {
-        "id": "did:example:0a5b94d0-a417-48ed-a6f5-4abc9e95888d#key-1",
-        "type": "Ed25519VerificationKey2020",
-        "controller": "did:example:0a5b94d0-a417-48ed-a6f5-4abc9e95888d",
-        "publicKeyMultibase": "z6Mkphkdz97NJXYSbj7eGDkWR242kP58LEEkVrSseTtAzbWE"
-      }
-    ],
-    "authentication": [
-      "did:example:0a5b94d0-a417-48ed-a6f5-4abc9e95888d#key-1"
-    ],
-    "service": [
-      {
-        "id": "did:example:0a5b94d0-a417-48ed-a6f5-4abc9e95888d#website",
-        "type": "LinkedDomains",
-        "serviceEndpoint": [
-          "https://foo.com"
-        ]
-      }
-    ]
-  },
-  "didDocumentMetadata": {
-    "created": "2023-03-22T07:19:47Z",
-    "versionId": "15be3e0f-12e9-4c26-9b60-a02bf5746313",
-    "linkedResourceMetadata": [
-      {
-        "resourceURI": "did:example:0a5b94d0-a417-48ed-a6f5-4abc9e95888d/resources/4e1104f9-2ee9-4bde-adc2-ab8ba72b124a",
-        "resourceCollectionId": "0a5b94d0-a417-48ed-a6f5-4abc9e95888d",
-        "resourceId": "4e1104f9-2ee9-4bde-adc2-ab8ba72b124a",
-        "resourceName": "ExampleResource",
-        "resourceType": "StatusList2021Revocation",
-        "mediaType": "application/json",
-        "resourceVersion": "",
-        "created": "2023-03-24T12:13:45Z",
-        "checksum": "6819aaecd4073173b159fedf8077c38e14939d03d58e7f4e2a0ddfe034eb2ed4",
-        "previousVersionId": null,
-        "nextVersionId": null
-      }
-    ]
-  }
-}
-```
-
-Linking DIDs to Resources and Collections {#linkage}
-=====================
-
-Multiple Resources can be stored within a Collection and linked to the same DID; for example, this could be new versions of the same Resource over a period of time, or entirely different resources. This enables unique resources to be stored directly on a Verifiable Data Registry (VDR) and be retrievable through DID resolution and DID URL dereferencing.
-
-Once you have created a resource, the DID document will automatically reference the resource and the collection within the `didDocumentMetadata` in a newly defined section called `linkedResourceMetadata`.
-
-Architecture Overview {#archoverview}
-=====================
-
-The relationship between DIDs, Resource Collections and Resources is shown in the diagram below:
-
-<img src="DID-Linked-Resources-Relationship.png" alt="DID-Linked Resources Architecture Overview">
-
-Design principles {#principles}
-=====================
-
-The following design principles should be taken into consideration. DID-Linked Resources SHOULD:
-
-1. Use existing, familiar DID Core Spec patterns where possible
-2. Support existing DID Resolvers and principles of DID URL dereferencing
-3. Protect against linkrot for long-term retrieval
-4. Enable resources to be versioned and organized, with individual versions being able to be fetched
-5. Include semantic linkage between DID documents and associated resources (via metadata or otherwise)
-
-
-Resource Request Parameters {#request}
-=====================
-
-The following list defines which specific parameters are required and are optional for a request to create a resource:
-
-<table>
-  <thead>
-    <tr>
-      <th>Parameter</th>
-      <th>Type</th>
-      <th>Required?</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>"resourceCollectionId"</code></td>
-      <td>A <a href="https://infra.spec.whatwg.org/#string">String</a> that conforms to a unique identifier format for an associated DID method</td>
-      <td>Yes</td>
-    </tr>
-    <tr>
-      <td><code>"resourceId"</code></td>
-      <td>A <a href="https://infra.spec.whatwg.org/#string">String</a>, such as a UUID, that uniquely identifies the resource</td>
-      <td>Yes</td>
-    </tr>
-    <tr>
-      <td><code>"resourceName"</code></td>
-      <td>A <a href="https://infra.spec.whatwg.org/#string">String</a> that names and identifies a resource. This property, along with the <code>resourceType</code> below, can be used to track version changes within a resource</td>
-      <td>Yes</td>
-    </tr>
-    <tr>
-      <td><code>"resourceType"</code></td>
-      <td>A <a href="https://infra.spec.whatwg.org/#string">String</a> that uniquely identifies the type of resource</td>
-      <td>Yes</td>
-    </tr>
-    <tr>
-      <td><code>"resourceVersion"</code></td>
-      <td>A <a href="https://infra.spec.whatwg.org/#string">String</a> that identifies the version of the resource. This property, along with the <code>resourceName</code> above, can be used to track version changes within a resource</td>
-      <td>No</td>
-    </tr>
-    <tr>
-      <td><code>"alsoKnownAs"</code></td>
-      <td>An <a href="https://infra.spec.whatwg.org/#array">array</a> that describes alternative URIs for the resource</td>
-      <td>No</td>
-    </tr>
-  </tbody>
-</table>
-
-Resource Response Parameters {#response}
-=====================
-
-The following list defines which specific parameters are required and which are optional for a response, following the creation of a Resource:
-
-<table>
-  <thead>
-    <tr>
-      <th>Parameter</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><strong><code>resourceUri</code></strong></td>
-      <td>A string or a map that conforms to the rules of <a href="https://tools.ietf.org/html/rfc3986" target="_blank">RFC3986</a> URIs which SHOULD directly lead to a location where the resource can be accessed. For example: <code>did:example:46e2af9a-2ea0-4815-999d-730a6778227c/resources/0f964a80-5d18-4867-83e3-b47f5a756f02</code>.</td>
-    </tr>
-    <tr>
-      <td><strong><code>resourceCollectionId</code></strong></td>
-      <td>A string that conforms to a method-specific supported unique identifier format. For example, a UUID: <code>46e2af9a-2ea0-4815-999d-730a6778227c</code>.</td>
-    </tr>
-    <tr>
-      <td><strong><code>resourceId</code></strong></td>
-      <td>A string that uniquely identifies the resource. For example, a UUID: <code>0f964a80-5d18-4867-83e3-b47f5a756f02</code>.</td>
-    </tr>
-    <tr>
-      <td><strong><code>resourceName</code></strong></td>
-      <td>A string that uniquely names and identifies a resource. This property, along with the <code>resourceType</code> below, can be used to track version changes within a resource.</td>
-    </tr>
-    <tr>
-      <td><strong><code>resourceType</code></strong></td>
-      <td>A string that identifies the type of resource. This property, along with the <code>resourceName</code> above, can be used to track version changes within a resource. Not to be confused with <code>mediaType</code>.</td>
-    </tr>
-    <tr>
-      <td><strong><code>resourceVersion</code></strong></td>
-      <td>(Optional) A string that identifies the version of the resource. This property is provided by the client and can be any value.</td>
-    </tr>
-    <tr>
-      <td><strong><code>alsoKnownAs</code></strong></td>
-      <td>(Optional) An array that describes alternative URIs for the resource.</td>
-    </tr>
-    <tr>
-      <td><strong><code>mediaType</code></strong></td>
-      <td>A string that identifies the IANA-media type of the resource.</td>
-    </tr>
-    <tr>
-      <td><strong><code>created</code></strong></td>
-      <td>A string that identifies the time the resource was created, as an XML date-time.</td>
-    </tr>
-    <tr>
-      <td><strong><code>updated</code></strong></td>
-      <td>(Optional) A string that identifies the time the resource was updated, as an XML date-time.</td>
-    </tr>
-    <tr>
-      <td><strong><code>checksum</code></strong></td>
-      <td>A string that may be used to prove that the resource has not been tampered with.</td>
-    </tr>
-    <tr>
-      <td><strong><code>previousVersionId</code></strong></td>
-      <td>(Optional) A string that identifies the previous version of the resource.</td>
-    </tr>
-    <tr>
-      <td><strong><code>nextVersionId</code></strong></td>
-      <td>(Optional) A string that identifies the next version of the resource.</td>
-    </tr>
-  </tbody>
-</table>
-
-
-
-Discoverability via DIDDoc Metadata {#discoverability}
+Resource Name {#resourcename}
 ---------------------
 
-Once a Resource has been created under a Resource Collection, the parent DID document will automatically have an updated `didDocumentMetadata` section, including `linkedResourceMetadata`.
+The `resourceName` property is OPTIONAL. If present, the value of the type property MUST be expressed as an [ASCII string](https://infra.spec.whatwg.org/#ascii-string).
 
-The syntax of the linked Resource metadata is as follows:
+Resource Type {#resourcetype}
+---------------------
+
+The `resourceType` property is OPTIONAL. If present, the value of the type property MUST be expressed as an [ASCII string](https://infra.spec.whatwg.org/#ascii-string). In order to maximize interoperability, the resource type and its associated properties SHOULD be registered in the DID Specification Registries [[DID-SPEC-REGISTRIES]].
+
+Resource Version {#resourceversion}
+---------------------
+
+The `resourceVersion` property is OPTIONAL. If present, the value of the type property be expressed as an [ASCII string](https://infra.spec.whatwg.org/#ascii-string).
+
+Alternative URI {#alternativeuri}
+---------------------
+
+The `alternativeUri` property is OPTIONAL. If present, the value MUST be a set where each item in the set is a URI conforming to [[RFC3986]].
+
+Resource Metadata Properties {#resourceMetadataProperties}
+---------------------
+
+### Media Type {#mediatype}
+
+The `mediaType` property is OPTIONAL. If present, the value must be expressed as an [ASCII string](https://infra.spec.whatwg.org/#ascii-string) and SHOULD match the underlying IANA media type of the file of the resource identified by the resourceId.
+
+### Checksum {#checksum}
+
+The `checksum` property is OPTIONAL. If present, the value SHOULD be an equivalent representation of the resource identified by the resourceId.
+
+### Created {#created}
+
+The `created` property is OPTIONAL. If present, the value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision. For example: 2020-12-20T19:17:47Z.
+
+### Updated {#updated}
+
+The `updated` property is OPTIONAL. If present, the value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision. For example: 2020-12-20T19:17:47Z.
+
+### PreviousVersionId {#previousversionid}
+
+The `previousVersionId` property is OPTIONAL. If present, the value should reference the directly previous version of the resource. The value of the property MUST be an ASCII string.
+
+### NextVersionId {#nextversionid}
+
+The `nextVersionId` property is OPTIONAL. If present, the value should reference the directly next version of the resource. The value of the property MUST be an ASCII string.
+
+Binding to DIDs {#binding}
+=====================
+
+In the context of DID-Linked Resources (DLRs), **binding** refers to the relationship between a resource and a Decentralized Identifier (DID). This binding is OPTIONAL, but it is highly recommended.
+
+A DID acts as the **parent** that has authority over the resource, which is the **child**. The DID controller (the entity controlling the DID) has control over the resource and can modify, update or deprecate it.
+
+In this context, the DID itself becomes a **collection**, within which one or multiple resources can be referenced.
+
+In this parent-child relationship:
+- The **DID** is the **parent** entity. It serves as the root identifier for an entity, and a collection for the resources, and has the authority to control or manage resources associated with it.
+- The **resource** is the **child** entity. A resource is a specific object or piece of data associated with the DID. The resource can include things like schemas, files, metadata, or any other linked data related to the DID.
+
+The binding of a resource to a DID ensures that the DID controller has control over the resource and that the resource is logically scoped within the DID's authority.
+
+Multiple resources MAY be bound to the same DID, and each MUST include a unique `resourceId`.
+
+This relationship MAY be enforced and validated by the underlying infrastructure (such as a distributed ledger consensus mechanism), or through other cryptographic techniques, defined by the DID Method implementing DID-Linked Resources.
+
+Representations {#representations}
+---------------------
+
+Resources linked to a DID should be represented in a way that maintains a verifiable association with that DID. The metadata describing each Resource SHOULD be included as part of the DID Document Metadata, rather than within the DID Document itself. This allows for clear delineation between identity-related data and externally linked Resources.
+
+To ensure the integrity and traceability of Resources associated with a DID, the `didDocumentMetadat`a object MAY include a `linkedResourceMetadata` array. Each entry in this array corresponds to a distinct Resource that is logically bound to the DID. Resources MAY be grouped or indexed by name and type, allowing multiple different resources (not necessarily different versions of the same one) to be managed within a single logical collection.
+
+This approach provides flexibility for DID controllers to organize and track various types of linked Resources while preserving clear versioning relationships and semantic meaning.
+
+Representation within DID Document Metadata {#diddocmetadata}
+---------------------
+
+The `linkedResourceMetadata` array is used to track these resources, where each entry corresponds to a specific resource within the collection. Each resource metadata entry SHOULD includes the properties included in the Core Properties, including links to previous and subsequent versions (if applicable). This allows for a clear versioning and management system while supporting the inclusion of different types of resources in a single collection.
+
+The syntax of the `didDocumentMetadata` including `linkedResourceMetadata` is as follows:
 
 ```json
 "didDocumentMetadata": {
@@ -380,82 +372,42 @@ The syntax of the linked Resource metadata is as follows:
         "checksum": "9123dcbb0b42652b0e105956c68d3ca2ff34584f324fa41a29aedd32b883e131", // New version checksum
         "previousVersionId": "44547089-170b-4f5a-bcbc-06e46e0089e4", // Points to previous version above
         "nextVersionId": "0be87654-4a48-4f8e-8789-15ec3589ccdd" // Points to next version. Empty string if no new version
-        }
+        },
+    { // First version of a different Resource called IDCardSchema
+      "resourceURI": "did:example:13d5ad44-9e99-428f-81e9-274458cefddc/resources/12345678-90ab-cdef-1234-567890abcdef",
+      "resourceCollectionId": "13d5ad44-9e99-428f-81e9-274458cefddc", // Same collection ID
+      "resourceId": "12345678-90ab-cdef-1234-567890abcdef", // New Resource ID and version number
+      "resourceName": "IDCardSchema", // Resource name must remain the same
+      "resourceType": "JSONSchema2020", // Resource type must remain the same
+      "resourceVersion": "1.0.0", // User-set version
+      "mediaType": "application/json",
+      "created": "2022-09-01T09:30:00Z",
+      "checksum": "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6", // Version checksum
+      "previousVersionId": "", // Empty string, no previous version
+      "nextVersionId": "" // Empty string, no next version
+      }
       ]
     }
 ```
+<div class="note"> <b>Note:</b> The `didDocumentMetadata` SHOULD NOT be populated with the actual resource, but instead, populated with only the <b>Resource Metadata</b> which contains all the metadata about the associated resources. </div>
 
-Importantly, we decided not to populate the `didDocumentMetadata` with the actual resource data, but instead, populate what we refer to as a <b>Resource Preview</b> which contains all the metadata about the associated resources.
+All required fields defined under Core Properties MUST be included for each Resource Metadata entry.
 
-Composition of Resource Preview {#preview}
+Resource Representation {#resourcerepresentation}
 ---------------------
 
-Resource previews will appear within DID document metadata. These do not include the actual core data of the resource and only reference the metadata:
+Resources linked to a DID via a DID-Linked Resource mechanism MUST be retrievable either individually (by their full resourceId) or in aggregate (by querying resources linked to a given DID, using a particular filter).
 
-* Resource Collection ID: (`did:example:...:`) (supplied client-side)\*\*
-* Resource ID: identifier ➝ specific to resource, also effectively a version number (supplied client-side)
-* Resource Name: String (e.g., `JSONSchema2020` (supplied client-side))
-* Resource Type (supplied client-side)
-* Resource Version (supplied client-side)
-* MediaType: (e.g., `application/json`/`image`/`application/octet-stream`/`text/plain`) (computed VDR-side)
-* Created: XMLDatetime (computed VDR-side)
-* Checksum: SHA-256 (computed VDR-side)
-* previousVersionId: empty string if first, otherwise ID as long as `Name`, `ResourceType`, and `MimeType` match previous version (computed VDR-side)
-* nextVersionId: empty string if first/latest, otherwise ID as long as `Name`, `ResourceType`, and `MimeType` match previous version (computed VDR-side)
-* Also known as: a list of alternative URIs that can be used to get the resource.
+When queried individually, the result MUST return the full Resource representation associated with the provided resourceId.
 
-Example:
+When queried in aggregate, the result MUST return an array of Resource Metadata entries, each describing a distinct Resource or version of the same resource. These metadata entries provide an overview of the linked Resources without including the Resources’ full content or returning the DID Document itself.
 
-```json
-{
-  "resourceUri": "did:example:13d5ad44-9e99-428f-81e9-274458cefddc/resources/bb2118f3-5e55-4510-b420-33ef9e1726d2",
-  "resourceCollectionId": "13d5ad44-9e99-428f-81e9-274458cefddc",
-  "resourceId": "bb2118f3-5e55-4510-b420-33ef9e1726d2",
-  "resourceName": "PassportSchema",
-  "resourceType": "CL-SChema",
-  "resourceVersion": "1.0.1",
-  "mediaType": "application/json",
-  "created": "2022-04-20T20:19:19Z",
-  "checksum": "a7c369ee9da8b25a2d6e93973fa8ca939b75abb6c39799d879a929ebea1adc0a",
-  "previousVersionId": "67f2df00-0b6e-404b-8c70-1d63200e6412",
-  "nextVersionId": "98922424-c214-4439-b52c-f68ddb450b40",
-  "alsoKnownAs": [{
-      "uri": "https://example.com/alternative-uri",
-      "description": "Alternative URI description"
-      },
-      {
-      "uri": "https://example.com/alternative-uri",
-      "description": "Alternative URI description"
-      }]
-}
-```
-
-Resolution and Dereferecing process {#process}
+Resource Parameters {#resourceparameters}
 =====================
 
-This section outlines the process for resolving a DID URL to retrieve the linked resource.
+The Resource URI syntax supports a simple format for parameters (see section Query in [[DID-CORE]]). Adding a resource parameter to a Resource URI means that the parameter becomes part of the identifier for a resource.
 
-DID Resolution and Dereferencing {#resolution}
----------------------
-
-When you resolve a DID you get a DID Document as by DID Core. When you dereference a DID, you may get the DID Document, a portion of a DID document, or the resource at the end of a service endpoint (if the DID contains a service component). You can only resolve a DID to return a DID document, and you can only dereference a DID reference to return a digital resource.
-
-Resource resolution and dereferencing {#dereferencing}
----------------------
-
-Normal DID URL dereferencing can be conceived in two steps:
-
-1. A DID is resolved to a DID Document;
-2. A resource within / associated with the DID Document is identified, based on the portion of the DID URL that follows the DID (path, query, fragment as defined by the ABNF in section 3.2 of the [[DID-CORE]] specification.).
-
-Requests to fetch Resources are considered as a DID URL Dereferencing scenario it uses [DID URL paths](https://w3c.github.io/did-core/#path) to lead to a Resource object, rather than a DIDDoc.
-
-On the other hand, Resources metadata requests are handled like DID URL Resolution since the result is a subsection of `didDocumentMetadata` specific to that resource.
-
-Resource resolution and dereferencing parameters
----------------------
-
-Here we have an ability to specify different parameters to filter to particular DID-Linked Resources.
+Resource parameters are completely independent of any specific DID method and function the same way for all DIDs. 
 
 <table>
   <thead>
@@ -504,29 +456,77 @@ Here we have an ability to specify different parameters to filter to particular 
   </tbody>
 </table>
 
+Resolution and Dereferencing {#resolutionanddereferencing}
+=====================
 
-Like with DIDDoc query parameters, these can all be chained together to create complex requests for specific DID-Linked Resources at particular points in time or associated with particular DIDDoc versions.&#x20;
+Requests to fetch Resources are considered as a DID URL Dereferencing scenario it uses [DID URL paths](https://w3c.github.io/did-core/#path) to lead to a Resource object, rather than a DIDDoc.
 
-Rules and logic for handling ambiguous queries
----------------------
+The DID URL dereferencing function dereferences a Resource URI (a type of DID URL), into a resource with contents depending on the DID URL's components, including the DID method, method-specific identifier, path, query, and fragment. This process depends on DID resolution of the DID contained in the DID URL. DID URL dereferencing might involve multiple steps (e.g., when the DID URL being dereferenced includes a fragment), and the function is defined to return the final resource after all steps are completed.
 
-It is important to understand how our resolver logically handles more complex dereferencing requests. We have set some baseline defaults and rules to ensure a logical and consistent experience for clients who use our resolver.
+Normal DID URL dereferencing can be understood as a two-step process:
 
-### Ambiguity generally throws an error
+1. Resolution: The DID is resolved to its corresponding DID Document using the relevant DID method.
+2. Dereferencing: A Resource is located using the path, query, and/or fragment components of the DID URL, which point to the Resource either directly or by reference.
 
-If the request specifies a parameter where there are multiple potential results, such as where the DID has two resources of the same `resourceType` but `resourceName` is not the same,  an error will be thrown because there is not enough information to discern which resource is being requested.
+Unlike standard DID dereferencing that fetches a section of the DID Document (such as a service or verification method), dereferencing a Resource URI returns an external Resource object that is linked to, but not contained within, the DID Document.
 
-### Multiple versions of the same resource
+Dereferencing a Resource URI returns the full Resource representation. In parallel, a metadata representation describing that Resource MUST also be obtainable—either alongside the Resource itself or via a distinct query mechanism (e.g., via content negotiation or an aggregate query over the DID).
 
-If there are multiple resources with the same `resourceType` and `resourceName` but with different `versionIds,` and there is no parameter specified to fetch a particular version, <b>the resolver will fetch the latest resource by default</b>.
+This metadata allows clients to understand key attributes of the Resource without retrieving or parsing the entire Resource content. It also supports version tracking, indexing, and discoverability in decentralized systems.
 
-This is because the query is not ambiguous in terms of discerning which set of resources to dereference to, but is only ambiguous in terms of which version of that resource to fetch.&#x20;
+Below is an example of a Resource Metadata structure:
 
-### Ambiguity + resourceMetadata=true
+```json
+{
+  "resourceUri": "did:example:13d5ad44-9e99-428f-81e9-274458cefddc/resources/bb2118f3-5e55-4510-b420-33ef9e1726d2",
+  "resourceCollectionId": "13d5ad44-9e99-428f-81e9-274458cefddc",
+  "resourceId": "bb2118f3-5e55-4510-b420-33ef9e1726d2",
+  "resourceName": "PassportSchema",
+  "resourceType": "JSONSchemaValidator2020",
+  "resourceVersion": "1.0.1",
+  "mediaType": "application/json",
+  "created": "2022-04-20T20:19:19Z",
+  "checksum": "a7c369ee9da8b25a2d6e93973fa8ca939b75abb6c39799d879a929ebea1adc0a",
+  "previousVersionId": "67f2df00-0b6e-404b-8c70-1d63200e6412",
+  "nextVersionId": "98922424-c214-4439-b52c-f68ddb450b40",
+  "alsoKnownAs": [{
+      "uri": "https://example.com/alternative-uri",
+      "description": "Alternative URI description"
+      },
+      {
+      "uri": "https://example.com/alternative-uri",
+      "description": "Alternative URI description"
+      }]
+}
+```
 
-If there is an ambiguous query, such as where there are two resources with the same name but different types, AND there is a resourceMetadata=true parameter, resource data pertaining to all the resources which could potentially be seen as being ambiguous will be returned.&#x20;
+Rules and Logic for Handling Ambiguous Queries {#ambiguity}
+===========================================================
 
-For example, in the below example, there are multiple resources with the `resourceType= string`, but with different `resourceName` parameters:
+This section describes how the resolver handles complex or ambiguous dereferencing requests. The resolver applies consistent logic and default behaviors to ensure predictable outcomes for clients.
+
+Ambiguity Triggers Errors {#ambiguityerror}
+--------------------------
+
+If a query results in multiple matching resources and does not include sufficient parameters to disambiguate between them, the resolver MUST return an error. 
+
+For example, a query that specifies a `resourceType` where multiple resources share that type but differ in `resourceName` will result in an error due to ambiguity.
+
+Multiple Versions of the Same Resource {#multipleversions}
+--------------------------------------
+
+If multiple versions of a single resource exist—meaning the resources have the same `resourceType` and `resourceName`, but different `versionId` values—and no specific version is requested, the resolver MUST default to returning the latest version.
+
+This situation is not considered ambiguous, as the resource identity is clear; only the version is unspecified.
+
+Ambiguous Query with `resourceMetadata=true` {#ambiguityplusmetadata}
+--------------------------------------------
+
+When a query is ambiguous, but includes the `resourceMetadata=true` parameter, the resolver SHOULD return metadata for all matching resources that could be the intended target.
+
+This enables clients to inspect available options and decide which resource to dereference.
+
+For example, the following request would return metadata for all resources matching the specified `resourceType`, regardless of differing `resourceName` values.:
 
 <details>
 
@@ -562,7 +562,7 @@ did:example:c1685ca0-1f5b-439c-8eb8-5c0e85ab7cd0?resourceType=String&resourceMet
                 "resourceURI": "did:example:c1685ca0-1f5b-439c-8eb8-5c0e85ab7cd0/resources/9ba3922e-d5f5-4f53-b265-fc0d4e988c77",
                 "resourceCollectionId": "c1685ca0-1f5b-439c-8eb8-5c0e85ab7cd0",
                 "resourceId": "9ba3922e-d5f5-4f53-b265-fc0d4e988c77",
-                "resourceName": "exampleResourceName",
+                "resourceName": "exampleResourceName1",
                 "resourceType": "exampleResourceType",
                 "mediaType": "application/json",
                 "resourceVersion": "",
@@ -575,7 +575,7 @@ did:example:c1685ca0-1f5b-439c-8eb8-5c0e85ab7cd0?resourceType=String&resourceMet
                 "resourceURI": "did:example:c1685ca0-1f5b-439c-8eb8-5c0e85ab7cd0/resources/e733ebb7-c8dd-41ed-9d42-33bceea70952",
                 "resourceCollectionId": "c1685ca0-1f5b-439c-8eb8-5c0e85ab7cd0",
                 "resourceId": "e733ebb7-c8dd-41ed-9d42-33bceea70952",
-                "resourceName": "exampleResourceName",
+                "resourceName": "exampleResourceName2",
                 "resourceType": "exampleResourceType",
                 "mediaType": "application/json",
                 "resourceVersion": "",
@@ -592,323 +592,20 @@ did:example:c1685ca0-1f5b-439c-8eb8-5c0e85ab7cd0?resourceType=String&resourceMet
 
 </details>
 
-Resolution and Dereferecing examples {#examples}
+HTTP Accept Headers {#acceptheaders}
+---------------------
+
+Clients MAY use the `Accept` HTTP header to express a preference for the media type of the dereferenced resource.
+
+The resolver MUST respect the `Accept` header if possible and return a resource representation that matches the requested media type. If no exact match is found, the resolver SHOULD return an error status, following the statuses in the DID Resolution Spec, or fall back to a default media type if appropriate.
+
+Resolution and Dereferecing examples {#resolutionanddereferencingexamples}
 =====================
 
-ResourceId
+ResourceMetadata and Filter {#resourcemetadatafilter}
 ---------------------
 
-`ResourceId` parameter can be used for filtering a particular resource version by specifically identifying its unique ID.
-
-For example:
-
-<details>
-
-<summary>Request format</summary>
-
-```json
-did:example:b5d70adf-31ca-4662-aa10-d3a54cd8f06c?resourceId=5e16a3f9-7c6e-4b6b-8e28-20f56780ee25
-```
-
-</details>
-
-<details>
-
-<summary>Response format</summary>
-
-```json
-
-{
-  "title": "Example Verifiable Credential Schema",
-  "description": "Example schema for DID-Linked Resources spec",
-  "type": "object",
-  "properties": {
-    "@context": {
-      "description": "Defines semantic context of the Example Credential",
-      "type": "array",
-        "items": {
-          "type": "string",
-          "format": "uri"
-        }
-    }
-  }  
-}
-
-```
-
-</details>
-
-ResourceCollectionId
----------------------
-
-`resourceCollectionId` parameter filters all the resource by `collectionId` field. By default cause we are asking for resources for a particular DID it already includes all the resource with the same `collectionId` and this parameter can used mostly as sanity check. Without `resourceMetadata=true` parameter will return the latest created resource if there is only one resource or an unambiguous resource.
-
-For example:
-
-<details>
-
-<summary>Request format</summary>
-
-```json
-did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceCollectionId=d8ac0372-0d4b-413e-8ef5-8e8f07822b2c
-```
-
-</details>
-
-<details>
-
-<summary>Response format</summary>
-
-```json
-
-{
-  "title": "Example Verifiable Credential Schema",
-  "description": "Example schema for DID-Linked Resources spec",
-  "type": "object",
-  "properties": {
-    "@context": {
-      "description": "Defines semantic context of the Example Credential",
-      "type": "array",
-        "items": {
-          "type": "string",
-          "format": "uri"
-        }
-    }
-  }  
-}
-
-```
-
-</details>
-
-
-ResourceType
----------------------
-
-This parameter is also just a filter by `Type` field through resources. But there is a corner case if the user asks about exact resource (exact data). If after applying all the parameters in request several resources are left with the same `Name` - the latest one will be responded. Otherwise - error `NotFoundError` will be raised.
-
-For example:
-
-<details>
-
-<summary>Request format</summary>
-
-```json
-did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceType=exampleResourceType
-```
-
-</details>
-
-<details>
-
-<summary>Response format</summary>
-
-```json
-
-{
-  "title": "Example Verifiable Credential Schema",
-  "description": "Example schema for DID-Linked Resources spec",
-  "type": "object",
-  "properties": {
-    "@context": {
-      "description": "Defines semantic context of the Example Credential",
-      "type": "array",
-        "items": {
-          "type": "string",
-          "format": "uri"
-        }
-    }
-  }  
-}
-
-```
-
-</details>
-
-
-
-ResourceName
----------------------
-
-Behavior of this parameter is similar with [resourceType](adr-005-did-resolution-and-did-url-dereferencing.md#resourcetype) one. If there is no ambiguous resource, it will be fetched. Otherwise greater specifity is required.&#x20;
-
-For example:
-
-<details>
-
-<summary>Request format</summary>
-
-```json
-did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceName=exampleResourceName
-```
-
-</details>
-
-<details>
-
-<summary>Response format</summary>
-
-```json
-
-{
-  "title": "Example Verifiable Credential Schema",
-  "description": "Example schema for DID-Linked Resources spec",
-  "type": "object",
-  "properties": {
-    "@context": {
-      "description": "Defines semantic context of the Example Credential",
-      "type": "array",
-        "items": {
-          "type": "string",
-          "format": "uri"
-        }
-    }
-  }  
-}
-
-```
-
-</details>
-
-ResourceVersion
----------------------
-
-This parameter filters by `Version` field. We introduced it with latest network upgrade and can be optionally set to identify a version of a resource with a particular string.
-
-For example:
-
-<details>
-
-<summary>Request format</summary>
-
-```json
-did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceVersion=b9029cf7-c40b-4850-b9a1-9bfad46a68d7
-```
-
-</details>
-
-<details>
-
-<summary>Response format</summary>
-
-```json
-
-{
-  "title": "Example Verifiable Credential Schema",
-  "description": "Example schema for DID-Linked Resources spec",
-  "type": "object",
-  "properties": {
-    "@context": {
-      "description": "Defines semantic context of the Example Credential",
-      "type": "array",
-        "items": {
-          "type": "string",
-          "format": "uri"
-        }
-    }
-  }  
-}
-
-```
-
-</details>
-
-
-
-ResourceVersionTime
----------------------
-
-<div class="note"> <b>Important:</b> This parameter must always be accompanied by another resource query qualifier. </div>
-
-The main goal here is to get the nearest resource for `resourceVersionTime` value. "Nearest" means that if we are asking for time between `resource1` and `resource2` were created - `resource1` will be returned. In case if requested `resourceVersionTime` is before the first resource created - `NotFoundError` will be returned. The most useful use-case here is checking that some "Credential" (driver's license) was active at `resourceVersionTime` (was not revoked from Revocation Registry for example).
-
-For example:
-
-<details>
-
-<summary>Request format</summary>
-
-```json
-did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceVersionTime=2023-02-22T06:58:18.61Z&resourceVersion=1.14.41
-```
-
-</details>
-
-<details>
-
-<summary>Response format</summary>
-
-```json
-
-{
-  "title": "Example Verifiable Credential Schema",
-  "description": "Example schema for DID-Linked Resources spec",
-  "version": "1.14.41",
-  "type": "object",
-  "properties": {
-    "@context": {
-      "description": "Defines semantic context of the Example Credential",
-      "type": "array",
-        "items": {
-          "type": "string",
-          "format": "uri"
-        }
-    }
-  }  
-}
-
-```
-
-</details>
-
-Checksum
----------------------
-
-It just checks that `checksum` is the same as resource's metadata and also can used as a sanity check. For example, if the user knows what is exact checksum then it may be checked before actual downloading.
-
-For example:
-
-<details>
-
-<summary>Request format</summary>
-
-```json
-did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?checksum=27ad51a49f079a6634b18bbc3ac08dd2d91f13fabf72ea8e5d83692fe4820058
-```
-
-</details>
-
-<details>
-
-<summary>Response format</summary>
-
-```json
-
-{
-  "title": "Example Verifiable Credential Schema",
-  "description": "Example schema for DID-Linked Resources spec",
-  "version": "1.14.41",
-  "type": "object",
-  "properties": {
-    "@context": {
-      "description": "Defines semantic context of the Example Credential",
-      "type": "array",
-        "items": {
-          "type": "string",
-          "format": "uri"
-        }
-    }
-  }  
-}
-
-```
-
-</details>
-
-ResourceMetadata
----------------------
-
-This parameter a kind of modifier which works in the same manner as [metadata](adr-005-did-resolution-and-did-url-dereferencing.md#metadata) but applies to resources. It allows to get only Metadata information about resource(s) without downloading. Also it changes the flow for `resourceType` and `resourceName` parameters and general meaning of this parameter - just filter. So, here it allows to create a chain of parameters and apply all of them to the resourceCollection and get only interested resource metadata. Possible variants:
+This parameter is a filter that specifically returns metadata of one or more resources and can be combined with other filters, for specific filtering. The optional variants are:
 
 * `resourceMetadata=true`
 * `resourceMetadata=false`
@@ -920,8 +617,10 @@ For example:
 
 <summary>Request format</summary>
 
+Here, there is a composite query, requesting the `resourceName`, `resourceType` and `resourceMetadata=true`. This filter returns the metadata of ALL resources of this name and type.
+
 ```json
-did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceType=exampleSchema&resourceMetadata=true
+did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceType=exampleSchema&resourceName=exampleResourceName&resourceMetadata=true
 ```
 
 </details>
@@ -993,35 +692,485 @@ did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceType=exampleSchema&reso
 
 </details>
 
-Security considerations {#security}
-=====================
-
-This section discusses the security considerations associated with linking and dereferencing DID-Linked Resources.
-
-Access Control
+ResourceId Parameter {#resourceidparamater}
 ---------------------
 
-<TODO> Provides guidance on access control mechanisms for ensuring that only authorized entities can access the linked resources.
+`resourceId` parameter can be used for filtering a particular resource version by specifically identifying its unique ID.
 
-Authenticity and Integrity
+For example:
+
+<details>
+
+<summary>Request format</summary>
+
+```json
+did:example:b5d70adf-31ca-4662-aa10-d3a54cd8f06c?resourceId=5e16a3f9-7c6e-4b6b-8e28-20f56780ee25
+```
+
+</details>
+
+<details>
+
+<summary>Response format</summary>
+
+The resource itself is returned. In this example, we show a returned schema:
+
+```json
+
+{
+  "title": "Example Verifiable Credential Schema",
+  "description": "Example schema for DID-Linked Resources spec",
+  "type": "object",
+  "properties": {
+    "@context": {
+      "description": "Defines semantic context of the Example Credential",
+      "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uri"
+        }
+    }
+  }  
+}
+
+```
+
+</details>
+
+ResourceCollectionId Parameter {#resourcecollectionidparameter}
 ---------------------
-<TODO> Addresses the importance of ensuring the authenticity and integrity of the linked resources. It discusses techniques such as digital signatures and cryptographic proofs to verify the origin and integrity of the resources.
 
-Confidentiality
+`resourceCollectionId` parameter filters all resources linked to a particular DID by the `collectionId` property. It is recommended that this query is only used when there is one resource linked to a DID. If it is used with multiple resources, it is recommended to be combined with another query parameter to act as a filter such as `resourceMetadata=true`. Otherwise, it is likely to result in an ambigous query.
+
+For example:
+
+<details>
+
+<summary>Request format</summary>
+
+```json
+did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceCollectionId=d8ac0372-0d4b-413e-8ef5-8e8f07822b2c
+```
+
+</details>
+
+<details>
+
+<summary>Response format</summary>
+
+The resource itself is returned. In this example, we show a returned schema:
+
+```json
+
+{
+  "title": "Example Verifiable Credential Schema",
+  "description": "Example schema for DID-Linked Resources spec",
+  "type": "object",
+  "properties": {
+    "@context": {
+      "description": "Defines semantic context of the Example Credential",
+      "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uri"
+        }
+    }
+  }  
+}
+
+```
+
+</details>
+
+
+ResourceType Parameter {#resourcetypeparameter}
 ---------------------
-<TODO> Discusses considerations for preserving the confidentiality of the linked resources, especially when accessing them over insecure channels. It suggests techniques such as encryption and secure communication protocols.
 
-Privacy considerations {#privacy}
+This parameter is another filter for the `resourceType` property. Again, this should only be used if there is one resource associated with the DID. Otherwise additional filters should be added to avoid ambiguous queries.
+
+For example:
+
+<details>
+
+<summary>Request format</summary>
+
+```json
+did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceType=exampleResourceType
+```
+
+</details>
+
+<details>
+
+<summary>Response format</summary>
+
+The resource itself is returned. In this example, we show a returned schema:
+
+```json
+
+{
+  "title": "Example Verifiable Credential Schema",
+  "description": "Example schema for DID-Linked Resources spec",
+  "type": "object",
+  "properties": {
+    "@context": {
+      "description": "Defines semantic context of the Example Credential",
+      "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uri"
+        }
+    }
+  }  
+}
+
+```
+
+</details>
+
+
+ResourceName Parameter {#resourcenameparameter}
+---------------------
+
+This parameter is a filter for the `resourceName` property. Again, this should only be used if there is one resource associated with the DID. Otherwise additional filters should be added to avoid ambiguous queries.
+
+For example:
+
+<details>
+
+<summary>Request format</summary>
+
+```json
+did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceName=exampleResourceName
+```
+
+</details>
+
+<details>
+
+<summary>Response format</summary>
+
+The resource itself is returned. In this example, we show a returned schema:
+
+```json
+
+{
+  "title": "Example Verifiable Credential Schema",
+  "description": "Example schema for DID-Linked Resources spec",
+  "type": "object",
+  "properties": {
+    "@context": {
+      "description": "Defines semantic context of the Example Credential",
+      "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uri"
+        }
+    }
+  }  
+}
+
+```
+
+</details>
+
+ResourceName and ResourceType Parameters {#typeandnameparameter}
+---------------------
+
+This is a combined filter that SHOULD fetch the latest version of the resource, of the same name and type.
+
+For example:
+
+<details>
+
+<summary>Request format</summary>
+
+```json
+did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceName=exampleResourceName
+```
+
+</details>
+
+<details>
+
+<summary>Response format</summary>
+
+The resource itself is returned. In this example, we show a returned schema:
+
+```json
+
+{
+  "title": "Example Verifiable Credential Schema",
+  "description": "Example schema for DID-Linked Resources spec",
+  "type": "object",
+  "properties": {
+    "@context": {
+      "description": "Defines semantic context of the Example Credential",
+      "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uri"
+        }
+    }
+  }  
+}
+
+```
+
+ResourceVersion Parameter {#resourceversionparameter}
+---------------------
+
+This parameter filters by `resourceVersion` field. 
+
+For example:
+
+<details>
+
+<summary>Request format</summary>
+
+```json
+did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceVersion=b9029cf7-c40b-4850-b9a1-9bfad46a68d7
+```
+
+</details>
+
+<details>
+
+<summary>Response format</summary>
+
+The resource itself is returned. In this example, we show a returned schema:
+
+```json
+
+{
+  "title": "Example Verifiable Credential Schema",
+  "description": "Example schema for DID-Linked Resources spec",
+  "type": "object",
+  "properties": {
+    "@context": {
+      "description": "Defines semantic context of the Example Credential",
+      "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uri"
+        }
+    }
+  }  
+}
+
+```
+
+</details>
+
+ResourceVersionTime Parameter {#resourceversiontimeparameter}
+---------------------
+
+<div class="note"> <b>Important:</b> This parameter SHOULD always be accompanied by another resource query qualifier. </div>
+
+This parameter filters to the nearest resource for `resourceVersionTime` value.
+
+For example:
+
+<details>
+
+<summary>Request format</summary>
+
+```json
+did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceVersionTime=2023-02-22T06:58:18.61Z&resourceVersion=1.14.41
+```
+
+</details>
+
+<details>
+
+<summary>Response format</summary>
+
+```json
+
+{
+  "title": "Example Verifiable Credential Schema",
+  "description": "Example schema for DID-Linked Resources spec",
+  "version": "1.14.41",
+  "type": "object",
+  "properties": {
+    "@context": {
+      "description": "Defines semantic context of the Example Credential",
+      "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uri"
+        }
+    }
+  }  
+}
+
+```
+
+</details>
+
+Checksum Parameter {#checksumparameter}
+---------------------
+
+This parameter can be used to check that the `checksum` is the same as resource's metadata.
+
+For example:
+
+<details>
+
+<summary>Request format</summary>
+
+```json
+did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?checksum=27ad51a49f079a6634b18bbc3ac08dd2d91f13fabf72ea8e5d83692fe4820058
+```
+
+</details>
+
+<details>
+
+<summary>Response format</summary>
+
+```json
+
+{
+  "title": "Example Verifiable Credential Schema",
+  "description": "Example schema for DID-Linked Resources spec",
+  "version": "1.14.41",
+  "type": "object",
+  "properties": {
+    "@context": {
+      "description": "Defines semantic context of the Example Credential",
+      "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uri"
+        }
+    }
+  }  
+}
+
+```
+
+</details>
+
+Practical Considerations {#practicalconsiderations}
+==========================
+
+Creation of a Resource {#resourcecreation}
+----------------------------------
+
+The creation of a DID-Linked Resource is defined by the specific capabilities and constraints of the corresponding DID Method. Each method MAY define its own procedures and required parameters for resource creation, provided that the resulting metadata includes the required core properties. These properties MUST be represented in a valid form of `linkedResourceMetadata` so that the resource can be effectively discovered, dereferenced, and versioned.
+
+Recommendations for constructing linkedResourceMetadata {#linkedresourcemetadata}
+----------------------------------------------
+
+DID Methods that support DID-Linked Resources SHOULD define how `linkedResourceMetadata` entries are constructed and maintained. This includes how resources are named, typed, versioned, and referenced. Some DID Methods MAY require an explicit update operation to populate the `linkedResourceMetadata` in the `didDocumentMetadata`. Other methods MAY automate this process via the underlying protocol logic, such as smart contract events or system-level triggers.
+
+To maintain consistency and traceability, resources with the same `resourceName` and `resourceType` MAY be grouped as different versions of the same logical resource, while resources with distinct names and types MAY coexist within the same `resourceCollectionId` to support broader groupings.
+
+Applicability for Web-based DID Methods {#webbasedmethods}
+-----------------------------------------------------------
+
+Web-based DID Methods, such as `did:web`, present unique constraints due to the stateless and document-centric nature of HTTP infrastructure. For these methods, implementers SHOULD define a clear strategy for persisting and updating the DID Document and its associated metadata whenever a new DID-Linked Resource is created or modified.
+
+This may include publishing an updated JSON file at a well-known URI, leveraging existing content management systems, or adopting tooling that automates updates to `didDocumentMetadata`. Regardless of the mechanism, web-based methods MUST ensure that any addition of `linkedResourceMetadata` is accurately reflected in the published DID Document and adheres to consistency and versioning rules.
+
+Access Control and Provenance {#accesscontrol}
+----------------------------------------------
+
+Each DID Method or implementation MAY also define mechanisms to ensure the authenticity, authorization, and integrity of linked resources. This may include cryptographic proofs within the metadata, DID-based access control lists (ACLs), or binding to verifiable credentials. Provenance and auditability of resource updates SHOULD be considered, particularly when supporting mutable resources or collaborative workflows.
+
+Security Considerations {#securityconsiderations}
+====================================
+
+This section discusses the security and integrity considerations associated with the creation, linking, dereferencing, and management of DID-Linked Resources.
+
+Proving Control and Binding {#authority}
+----------------------------------------
+
+To ensure that a DID-Linked Resource is legitimately associated with a DID, DID Methods MAY define processes for cryptographically verifying control over the resource. These verification mechanisms MAY involve signatures or proofs generated using verification methods referenced in the DID Document. For example, a data integrity proof (e.g., using [[VC-DATA-INTEGRITY]]) MAY be used to assert that the resource was authored or approved by the DID controller.
+
+Verifying the binding between a DID and its linked resources is essential for establishing trust. Implementations SHOULD ensure that any control or update operations over resources are performed only by authorized parties, and that tampering with resource content can be detected through checksum validation or integrity proofs.
+
+Alternative Resource Locations {#alternativelocation}
+-----------------------------------------------------
+
+DID-Linked Resources MAY reside at locations different from the storage or resolution infrastructure used by the DID itself. For instance, while a DID Document may be stored on a blockchain, its associated resources might be hosted in IPFS, cloud object storage, or private data vaults.
+
+In such cases, the external location of a resource SHOULD be clearly specified in the `resourceURI` field within `linkedResourceMetadata`. If the resource’s address or availability changes, this MAY require a DID Document metadata update to reflect the new location, subject to the rules of the corresponding DID Method.
+
+Parent DID Deactivation {#diddeactivation}
+----------------------------------------
+
+If a **parent** DID is deactivated, the status of its associated DID-Linked Resources must be clearly defined by the DID Method. It is RECOMMENDED that child resources automatically inherit the deactivated status of the parent DID. This ensures that resources can no longer be dereferenced or trusted under the assumption that they are still associated with an active DID.
+
+However, some use cases MAY require resources to persist or remain accessible after DID deactivation (e.g., for audit or archival purposes). In such cases, implementations MUST clearly distinguish between active and inactive resources, and SHOULD ensure that clients understand the deactivated state when dereferencing.
+
+Persistence after Broken Link with DID {#persistence}
+------------------------------------------------------
+
+There are scenarios in which a resource may become logically detached from its parent DID—for example, when keys used to control the resource are removed from the DID Document, or if a controller relationship is revoked.
+
+In such cases, it is up to the DID Method to decide whether the resource remains referenced in the `linkedResourceMetadata`. DID Methods SHOULD clearly define policies for handling orphaned or stale resources, including whether they are retained, archived, or purged.
+
+Regardless of the decision, implementations SHOULD clearly indicate when a linked resource is no longer actively bound to the DID, either through metadata flags or dereferencing responses.
+
+Privacy Considerations {#privacy}
 =====================
 
 This section explores the privacy considerations associated with DID-Linked Resources.
 
-Linkability and Pseudonymity
+Linkability and Pseudonymity {#pseudonymity}
 ---------------------
 
-<TODO> Examines the potential linkability of resources to DIDs and the impact on privacy. It discusses techniques for preserving pseudonymity and minimizing the correlation of identities across different resources.
+Resources should not contain personally identifiable information. This is particularly the case for ledger-based DID methods. 
 
-Information Exposure
+Immutability {#immutability}
 ---------------------
 
-<TODO> Addresses the risks of unintentional information exposure when dereferencing DID URLs. It provides recommendations for managing and controlling the disclosure of sensitive information.
+Encrypted Data in Resources {#encryption}
+---------------------
+
+DID Methods MAY introduce encryption for their resources, to protect the information contained in the resource or to gate access to the resource. 
+
+Architectural Considerations {#architectural}
+=============================================
+
+This section outlines architectural design principles and best practices for implementing DID-Linked Resources across various DID Methods.
+
+Resource Versioning {#versioning}
+---------------------------------
+
+Multiple resources can be stored within a collection and linked to the same DID. These resources MAY represent either new versions of the same logical resource (e.g., a credential schema) or entirely different artifacts (e.g., terms of service, logos, templates). This structure supports the evolution of resources over time and enables granular management of linked data assets.
+
+Resources that contain both a `resourceName` and a `resourceType` SHOULD be treated as part of a versioning sequence. DID Methods SHOULD treat resources with identical `resourceName` and `resourceType` as sequential versions when accompanied by differing `resourceId` values. This provides clarity in dereferencing operations and allows consumers to trace the lineage of a resource across updates.
+
+To ensure traceability, each version MAY include a `previousVersionId` and a `nextVersionId` that form a linked list across time, enabling version chaining and safe traversal.
+
+Resources in Service Endpoint versus DID Document Metadata {#serviceendpoint}
+------------------------------------------------------------------------------
+
+The `service` section of the DID Document is intentionally limited in structure and expressiveness. As such, DID-Linked Resources are NOT referenced through service endpoints. Instead, they are expressed using the `linkedResourceMetadata` field in the `didDocumentMetadata` section, which allows for a more expressive and extensible format, including properties such as version history, checksums, creation timestamps, and media types.
+
+This architectural decision ensures backward compatibility with existing DID resolvers and DID Documents, which are not required to interpret DID-Linked Resources in order to perform DID resolution. Systems that understand DID-Linked Resources can leverage the `linkedResourceMetadata` field to retrieve and process associated artifacts, while maintaining interoperability with resolvers that only support core DID operations.
+
+Resource Deactivation or Deprecation {#resourcedeactivation}
+-----------------------------------------------------
+
+DID Methods MAY support additional metadata properties that indicate the deactivation or deprecation status of a resource. This allows resource publishers to signal that a given version (or all versions) of a resource is no longer valid, should not be used, or has been replaced.
+
+For example, a `deprecated: true` or `deactivated: true` flag within the resource metadata can alert consuming systems not to rely on the resource without requiring immediate deletion. This pattern is useful for managing lifecycle transitions, such as phasing out an old schema or rotating public keys associated with the DID.
+
+Implementations SHOULD continue to support dereferencing of deprecated resources for archival and verification purposes, unless policy or security requirements dictate otherwise.
+
+Resource Extensions {#extensions}
+---------------------------------
+
+The base structure of `linkedResourceMetadata` is intentionally flexible to support evolving use cases. Future specifications or community registries MAY define extensions—optional properties that enhance the resource metadata model with additional semantics.
+
+For example, future extensions MAY include:
+- `dnsPointer`: A DNS name associated with the resource (e.g., for domain verification)
+- `x509Cert`: An X.509 certificate or fingerprint tied to the resource contents
+- `accessControl`: A policy object defining who can access or modify the resource
+- `validUntil`: An expiration timestamp for time-limited validity
+
+These extensions SHOULD be non-breaking and follow a common pattern to ensure compatibility across tools and DID Methods. A future registry MAY provide standardized semantics and identifiers for such extensions to promote ecosystem-wide interoperability.
