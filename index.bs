@@ -3,7 +3,7 @@ Title: DID-Linked Resources
 Shortname: DID-Linked-Resources
 Level: 1
 Status: w3c/CG-DRAFT
-Group: w3c-ccg
+Group: Credentials Community Group
 URL: https://w3c-ccg.github.io/did-linked-resources
 Editor: Alex Tweeddale, https://github.com/tweeddalex
 Editor: Ankur Banerjee, https://github.com/ankurdotb
