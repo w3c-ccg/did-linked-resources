@@ -55,7 +55,7 @@ Using traditional web endpoints to store digital resources that are critical for
 A Simple Example {#example}
 ---------------------
 
-To illustrate the concept of **DID-Linked Resources** (DLRs), one of the core concepts is the **parent-child relationship** between a DID and its resources. Consider the following simple example where **Entity A's** DID (`did:example:entity123`) is the **parent**, and its associated resources are the **children**. Each resource is uniquely identified by an identifier, such as a UUID, and is bound to the DID under paths like `/resources/{resourceId}`. For example, the URI `did:example:entity123/resources/41c0f0fe-cd4e-45aa-aec5-754db4a63865` points to a specific resource controlled by Entity A's DID.
+To illustrate the concept of **DID-Linked Resources** (DLRs), one of the core concepts is the **parent-child relationship** between a DID and its resources. Consider the following simple example where **Entity A's** DID (`did:example:entity123`) is the **parent**, and its associated resources are the **children**. Each resource is uniquely identified by an identifier, such as a UUID, and is bound to the DID under paths like `/resources/{resourceId}`. For example, the URI `did:example:entity123/resources/41c0f0fe-cd4e-45aa-aec5-754db4a63865` points to a specific resource controlled by Entity A.
 
 The DID controller, Entity A, has authority over these child resources, and each resource is independently addressable by its unique identifier, but remains logically tied to the parent DID. This structure allows flexible management of resources while maintaining the DID as the authoritative identifier.
 
@@ -110,7 +110,7 @@ Terminology {#terminology}
 DID-Linked Resource URI Syntax {#syntax}
 =====================
 
-The following is the ABNF definition using the syntax in [RFC5234]. All DID-Linked Resources MUST conform to the DID-Linked Resource URI Syntax ABNF Rules.
+The following is the ABNF definition using the syntax in [[RFC5234]]. All DID-Linked Resources MUST conform to the DID-Linked Resource URI Syntax ABNF Rules.
 
 <pre class=abnf>
 ; DID-Linked Resource URI
@@ -147,7 +147,7 @@ The components of a DID-Linked Resource URI carry the following semantics:
 
 * The `did` component identifies the base Decentralized Identifier (DID) under which the resource is logically scoped.
 * The `path` identifies the logical or versioned name of the resource. This SHOULD be defined at the DID method level and may represent for example:
-  * A generalalized resource (`/resources/1234`)
+  * A generalized resource (`/resources/1234`)
   * A specific resource, such as a schema (`/schema/1234`)
   * A different attachment or file (e.g., `/assets/image.png`)
 * The `fragment` MAY refer to a sub-component within the resource (e.g., a specific field in a schema, or a section in a document).
@@ -174,7 +174,7 @@ The following tables contain informative references for the core properties defi
     <tr>
       <td><strong><code>resourceId</code></strong></td>
       <td>yes</td>
-      <td>A string or a map that conforms to the rules of <a href="https://tools.ietf.org/html/rfc3986" target="_blank">RFC3986</a> URIs which MUST directly lead to a location where the resource can be accessed.</td>    
+      <td>A string or a map that conforms to the rules of <a href="https://tools.ietf.org/html/rfc3986" target="_blank">[[RFC3986]]</a> URIs which MUST directly lead to a location where the resource can be accessed.</td>    
     </tr>
     <tr>
       <td><strong><code>resourceCollectionId</code></strong></td>
@@ -281,7 +281,7 @@ The `resourceVersion` property is OPTIONAL. If present, the value of the type pr
 Alternative URI {#alternativeuri}
 ---------------------
 
-The `alternativeUri` property is OPTIONAL. If present, the value MUST be a set where each item in the set is a URI conforming to [RFC3986](https://www.rfc-editor.org/rfc/rfc3986).
+The `alternativeUri` property is OPTIONAL. If present, the value MUST be a set where each item in the set is a URI conforming to [[RFC3986]].
 
 Resource Metadata Properties {#resourceMetadataProperties}
 ---------------------
@@ -612,7 +612,7 @@ Resolution and Dereferecing examples {#resolutionanddereferencingexamples}
 ResourceMetadata and Filter {#resourcemetadatafilter}
 ---------------------
 
-This parameter is a filter that spefically returns metadata of one or more resources and can be combined with other filters, for specific filtering. The optional variants are:
+This parameter is a filter that specifically returns metadata of one or more resources and can be combined with other filters, for specific filtering. The optional variants are:
 
 * `resourceMetadata=true`
 * `resourceMetadata=false`
@@ -881,7 +881,7 @@ The resource itself is returned. In this example, we show a returned schema:
 
 </details>
 
-ResourceName & ResourceType Parameters {#typeandnameparameter}
+ResourceName and ResourceType Parameters {#typeandnameparameter}
 ---------------------
 
 This is a combined filter that SHOULD fetch the latest version of the resource, of the same name and type.
