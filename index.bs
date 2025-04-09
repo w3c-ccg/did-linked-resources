@@ -7,7 +7,7 @@ Group: w3c-ccg
 URL: https://w3c-ccg.github.io/did-linked-resources
 Editor: Alex Tweeddale, https://github.com/tweeddalex
 Editor: Ankur Banerjee, https://github.com/ankurdotb
-Abstract: This specification creates a standardized way of referencing, dereferencing, and fetching digital resources. This includes associating digital resources with Decentralized Identifiers (DIDs) and organizing digital resources into resource Collections, where each individual resource is identifiable through its own DID URL.
+Abstract: This specification creates a standardized way of referencing, dereferencing, and fetching digital resources. This includes associating digital resources with Decentralized Identifiers (DIDs), where each individual resource is identifiable through its own DID URL.
 </pre>
 
 Introduction {#intro}
