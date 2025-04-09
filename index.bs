@@ -319,8 +319,6 @@ A DID acts as the **parent** that has authority over the resource, which is the 
 
 In this context, the DID itself becomes a **collection**, within which one or multiple resources can be referenced.
 
-### Parent-Child Relationship: DID as Parent, Resource as Child
-
 In this parent-child relationship:
 - The **DID** is the **parent** entity. It serves as the root identifier for an entity, and a collection for the resources, and has the authority to control or manage resources associated with it.
 - The **resource** is the **child** entity. A resource is a specific object or piece of data associated with the DID. The resource can include things like schemas, files, metadata, or any other linked data related to the DID.
@@ -1108,7 +1106,7 @@ DID-Linked Resources MAY reside at locations different from the storage or resol
 
 In such cases, the external location of a resource SHOULD be clearly specified in the `resourceURI` field within `linkedResourceMetadata`. If the resource’s address or availability changes, this MAY require a DID Document metadata update to reflect the new location, subject to the rules of the corresponding DID Method.
 
-Parent DID Deactivation {#deactivation}
+Parent DID Deactivation {#diddeactivation}
 ----------------------------------------
 
 If a **parent** DID is deactivated, the status of its associated DID-Linked Resources must be clearly defined by the DID Method. It is RECOMMENDED that child resources automatically inherit the deactivated status of the parent DID. This ensures that resources can no longer be dereferenced or trusted under the assumption that they are still associated with an active DID.
@@ -1163,7 +1161,7 @@ The `service` section of the DID Document is intentionally limited in structure 
 
 This architectural decision ensures backward compatibility with existing DID resolvers and DID Documents, which are not required to interpret DID-Linked Resources in order to perform DID resolution. Systems that understand DID-Linked Resources can leverage the `linkedResourceMetadata` field to retrieve and process associated artifacts, while maintaining interoperability with resolvers that only support core DID operations.
 
-Resource Deactivation or Deprecation {#deactivation}
+Resource Deactivation or Deprecation {#resourcedeactivation}
 -----------------------------------------------------
 
 DID Methods MAY support additional metadata properties that indicate the deactivation or deprecation status of a resource. This allows resource publishers to signal that a given version (or all versions) of a resource is no longer valid, should not be used, or has been replaced.
