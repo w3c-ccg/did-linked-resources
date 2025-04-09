@@ -32,7 +32,7 @@ Digital Resources are generally stored on traditional centralized-storage endpoi
 2. <b>Hosting providers could unilaterally cease to host particular clients</b>: Hosting providers could terminate accounts due to factors such as non-payment of fees, violation of Terms of Service, etc.
 3. <b><a href="https://dbpedia.org/resource/Single_point_of_failure">Single point of failure (SPOF)</a></b>: Even with highly-trusted and sophisticated hosting providers who may not present a risk of infrastructure being compromised, a service outage at the hosting provider can make a Resource anchored on their systems inaccessible.
 
-Despite these issues, many decentralized identity and digital credential implementations, even ones that use ledgers or other distributed systems for DIDs, often utilize centralized storage. From the <a href="https://w3c.github.io/vc-imp-guide/#creating-new-credential-types">W3C Verifiable Credential Implementation Guide</a>.
+Despite these issues, many decentralized identity and digital credential implementations, even ones that use ledgers or other distributed systems for DIDs, often use centralized storage. From the <a href="https://w3c.github.io/vc-imp-guide/#creating-new-credential-types">W3C Verifiable Credential Implementation Guide</a>.
 
 Example schema.org address with full URLs:
 
@@ -50,7 +50,7 @@ Example schema.org address with full URLs:
  }
 ```
 
-Using traditional web endpoints to store digital resources that are critical for a Verifiable Credential to function detracts from the proper functioning and utility that persistently-accessible Decentralized Identifiers offer. This has also resulted in inconsistent and unstandardized approaches to storing, referencing, and retrieving digital resources such as schemas, trust registries and status lists.
+Using traditional web endpoints to store digital resources that are critical for a Verifiable Credential to function detracts from the proper functioning and utility that persistently-accessible Decentralized Identifiers offer. It can also result in inconsistent and unstandardized approaches to storing, referencing, and retrieving digital resources such as schemas, trust registries, and status lists.
 
 A Simple Example {#example}
 ---------------------
