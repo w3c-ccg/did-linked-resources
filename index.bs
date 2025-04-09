@@ -71,7 +71,7 @@ Design Principles {#principles}
 
 The following design principles should be taken into consideration. DID-Linked Resources SHOULD:
 
-1. Use existing, familiar DID Core Spec patterns where possible.
+1. Use existing and familiar DID Core Spec patterns where possible.
 2. Support existing DID Resolvers and principles of DID URL dereferencing.
 3. Protect against linkrot for long-term retrieval.
 4. Enable resources to be versioned and organized, with individual versions being able to be fetched.
