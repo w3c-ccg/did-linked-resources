@@ -271,7 +271,7 @@ The `resourceName` property is OPTIONAL. If present, the value of the type prope
 Resource Type {#resourcetype}
 ---------------------
 
-The `resourceType` property is OPTIONAL. If present, the value of the type property MUST be expressed as an [ASCII string](https://infra.spec.whatwg.org/#ascii-string). In order to maximize interoperability, the resource type and its associated properties SHOULD be registered in the DID Specification Registries [DID-SPEC-REGISTRIES].
+The `resourceType` property is OPTIONAL. If present, the value of the type property MUST be expressed as an [ASCII string](https://infra.spec.whatwg.org/#ascii-string). In order to maximize interoperability, the resource type and its associated properties SHOULD be registered in the DID Specification Registries [[DID-SPEC-REGISTRIES]].
 
 Resource Version {#resourceversion}
 ---------------------
@@ -286,27 +286,27 @@ The `alternativeUri` property is OPTIONAL. If present, the value MUST be a set w
 Resource Metadata Properties {#resourceMetadataProperties}
 ---------------------
 
-### Media Type
+### Media Type {#mediatype}
 
 The `mediaType` property is OPTIONAL. If present, the value must be expressed as an [ASCII string](https://infra.spec.whatwg.org/#ascii-string) and SHOULD match the underlying IANA media type of the file of the resource identified by the resourceId.
 
-### Checksum
+### Checksum {#checksum}
 
 The `checksum` property is OPTIONAL. If present, the value SHOULD be an equivalent representation of the resource identified by the resourceId.
 
-### Created
+### Created {#created}
 
 The `created` property is OPTIONAL. If present, the value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision. For example: 2020-12-20T19:17:47Z.
 
-### Updated
+### Updated {#updated}
 
 The `updated` property is OPTIONAL. If present, the value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision. For example: 2020-12-20T19:17:47Z.
 
-### PreviousVersionId
+### PreviousVersionId {#previousversionid}
 
 The `previousVersionId` property is OPTIONAL. If present, the value should reference the directly previous version of the resource. The value of the property MUST be an ASCII string.
 
-### NextVersionId
+### NextVersionId {#nextversionid}
 
 The `nextVersionId` property is OPTIONAL. If present, the value should reference the directly next version of the resource. The value of the property MUST be an ASCII string.
 
@@ -412,7 +412,7 @@ When queried in aggregate, the result MUST return an array of Resource Metadata 
 Resource Parameters {#resourceparameters}
 =====================
 
-The Resource URI syntax supports a simple format for parameters (see section Query in [DID-CORE]). Adding a resource parameter to a Resource URI means that the parameter becomes part of the identifier for a resource.
+The Resource URI syntax supports a simple format for parameters (see section Query in [[DID-CORE]]). Adding a resource parameter to a Resource URI means that the parameter becomes part of the identifier for a resource.
 
 Resource parameters are completely independent of any specific DID method and function the same way for all DIDs. 
 
@@ -512,21 +512,21 @@ Rules and Logic for Handling Ambiguous Queries {#ambiguity}
 
 This section describes how the resolver handles complex or ambiguous dereferencing requests. The resolver applies consistent logic and default behaviors to ensure predictable outcomes for clients.
 
-Ambiguity Triggers Errors
+Ambiguity Triggers Errors {#ambiguityerror}
 --------------------------
 
 If a query results in multiple matching resources and does not include sufficient parameters to disambiguate between them, the resolver MUST return an error. 
 
 For example, a query that specifies a `resourceType` where multiple resources share that type but differ in `resourceName` will result in an error due to ambiguity.
 
-Multiple Versions of the Same Resource
+Multiple Versions of the Same Resource {#multipleversions}
 --------------------------------------
 
 If multiple versions of a single resource exist—meaning the resources have the same `resourceType` and `resourceName`, but different `versionId` values—and no specific version is requested, the resolver MUST default to returning the latest version.
 
 This situation is not considered ambiguous, as the resource identity is clear; only the version is unspecified.
 
-Ambiguous Query with `resourceMetadata=true`
+Ambiguous Query with `resourceMetadata=true` {#ambiguityplusmetadata}
 --------------------------------------------
 
 When a query is ambiguous, but includes the `resourceMetadata=true` parameter, the resolver SHOULD return metadata for all matching resources that could be the intended target.
@@ -606,10 +606,10 @@ Clients MAY use the `Accept` HTTP header to express a preference for the media t
 
 The resolver MUST respect the `Accept` header if possible and return a resource representation that matches the requested media type. If no exact match is found, the resolver SHOULD return an error status, following the statuses in the DID Resolution Spec, or fall back to a default media type if appropriate.
 
-Resolution and Dereferecing examples {#examples}
+Resolution and Dereferecing examples {#resolutionanddereferencingexamples}
 =====================
 
-ResourceMetadata and Filter
+ResourceMetadata and Filter {#resourcemetadatafilter}
 ---------------------
 
 This parameter is a filter that spefically returns metadata of one or more resources and can be combined with other filters, for specific filtering. The optional variants are:
@@ -699,7 +699,7 @@ did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceType=exampleSchema&reso
 
 </details>
 
-ResourceId Parameter
+ResourceId Parameter {#resourceidparamater}
 ---------------------
 
 `resourceId` parameter can be used for filtering a particular resource version by specifically identifying its unique ID.
@@ -744,7 +744,7 @@ The resource itself is returned. In this example, we show a returned schema:
 
 </details>
 
-ResourceCollectionId Patameter
+ResourceCollectionId Parameter {#resourcecollectionidparameter}
 ---------------------
 
 `resourceCollectionId` parameter filters all resources linked to a particular DID by the `collectionId` property. It is recommended that this query is only used when there is one resource linked to a DID. If it is used with multiple resources, it is recommended to be combined with another query parameter to act as a filter such as `resourceMetadata=true`. Otherwise, it is likely to result in an ambigous query.
@@ -790,7 +790,7 @@ The resource itself is returned. In this example, we show a returned schema:
 </details>
 
 
-ResourceType Parameter
+ResourceType Parameter {#resourcetypeparameter}
 ---------------------
 
 This parameter is another filter for the `resourceType` property. Again, this should only be used if there is one resource associated with the DID. Otherwise additional filters should be added to avoid ambiguous queries.
@@ -836,8 +836,7 @@ The resource itself is returned. In this example, we show a returned schema:
 </details>
 
 
-
-ResourceName Parameter
+ResourceName Parameter {#resourcenameparameter}
 ---------------------
 
 This parameter is a filter for the `resourceName` property. Again, this should only be used if there is one resource associated with the DID. Otherwise additional filters should be added to avoid ambiguous queries.
@@ -882,7 +881,7 @@ The resource itself is returned. In this example, we show a returned schema:
 
 </details>
 
-ResourceName & ResourceType Parameters
+ResourceName & ResourceType Parameters {#typeandnameparameter}
 ---------------------
 
 This is a combined filter that SHOULD fetch the latest version of the resource, of the same name and type.
@@ -925,7 +924,7 @@ The resource itself is returned. In this example, we show a returned schema:
 
 ```
 
-ResourceVersion Parameter
+ResourceVersion Parameter {#resourceversionparameter}
 ---------------------
 
 This parameter filters by `resourceVersion` field. 
@@ -970,7 +969,7 @@ The resource itself is returned. In this example, we show a returned schema:
 
 </details>
 
-ResourceVersionTime Parameter
+ResourceVersionTime Parameter {#resourceversiontimeparameter}
 ---------------------
 
 <div class="note"> <b>Important:</b> This parameter SHOULD always be accompanied by another resource query qualifier. </div>
@@ -1016,7 +1015,7 @@ did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceVersionTime=2023-02-22T
 
 </details>
 
-Checksum Parameter
+Checksum Parameter {#checksumparameter}
 ---------------------
 
 This parameter can be used to check that the `checksum` is the same as resource's metadata.
