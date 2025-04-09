@@ -3,7 +3,7 @@ Title: DID-Linked Resources
 Shortname: DID-Linked-Resources
 Level: 1
 Status: w3c/CG-DRAFT
-Group: Credentials Community Group
+Group: w3c-ccg
 URL: https://w3c-ccg.github.io/did-linked-resources
 Editor: Alex Tweeddale, https://github.com/tweeddalex
 Editor: Ankur Banerjee, https://github.com/ankurdotb
@@ -86,26 +86,19 @@ The key words MAY, MUST, MUST NOT, OPTIONAL, and SHOULD in this document are to 
 Terminology {#terminology}
 ==========================
 
-<dfn>DID Controller</dfn>
-: As defined in [[DID-CORE]].
+<dfn>DID Controller</dfn>: As defined in [[DID-CORE]].
 
-<dfn>DID Document</dfn>
-: As defined in [[DID-CORE]].
+<dfn>DID Document</dfn>: As defined in [[DID-CORE]].
 
-<dfn>DID URL</dfn>
-: As defined in [[DID-CORE]].
+<dfn>DID URL</dfn>: As defined in [[DID-CORE]].
 
-<dfn>DID URL Dereferencing</dfn>
-: As defined in [[DID-CORE]].
+<dfn>DID URL Dereferencing</dfn>: As defined in [[DID-CORE]].
 
-<dfn>DID-Linked Resource</dfn>
-: Digital files that can be retrieved and referenced using persistent and unique DID URLs.
+<dfn>DID-Linked Resource</dfn>: Digital files that can be retrieved and referenced using persistent and unique DID URLs.
 
-<dfn>Resource Collection</dfn>
-: An organized and structured set of digital resources, collectively and individually identifiable using persistent and unique DID URLs.
+<dfn>Resource Collection</dfn>: An organized and structured set of digital resources, collectively and individually identifiable using persistent and unique DID URLs.
 
-<dfn>Resource ID</dfn>
-: A unique identifier for a specified DID-Linked Resource.
+<dfn>Resource ID</dfn>: A unique identifier for a specified DID-Linked Resource.
 
 DID-Linked Resource URI Syntax {#syntax}
 =====================
