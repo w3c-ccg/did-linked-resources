@@ -50,7 +50,7 @@ Example schema.org address with full URLs:
  }
 ```
 
-Using traditional web endpoints to store digital resources that are critical for a Verifiable Credential to function detracts from the proper functioning and utility that persistently-accessible Decentralized Identifiers offer. This has also resulted in inconsistent and unstandardized approaches to storing, referencing, and retrieving digital resources such as schemas, trust registries and status lists.
+Using traditional web endpoints to store digital resources that are critical for a Verifiable Credential to function detracts from the proper functioning and utility that persistently-accessible Decentralized Identifiers offer. It can also result in inconsistent and unstandardized approaches to storing, referencing, and retrieving digital resources such as schemas, trust registries, and status lists.
 
 A Simple Example {#example}
 ---------------------
