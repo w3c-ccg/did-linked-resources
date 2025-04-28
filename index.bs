@@ -14,9 +14,9 @@ Introduction {#intro}
 
 DID-Linked Resources (DLRs) are digital files that can be retrieved and referenced using a persistent and unique DID URL. 
 
-This specification defines common requirements, patterns, algorithms including their request formats and response formats, architectural options, and various considerations for how DID-Linked Resources SHOULD act as persistent identifiers for referencing and retrieving digital Resources (such as data schemas, status lists, trust registries, governance documents, or policy definitions). This specification complements the <a href="https://w3c-ccg.github.io/did-resolution/">DID Resolution Specification</a>, including its patterns and algorithms for DID URL resolution and dereferencing. 
+This specification defines common requirements, patterns, algorithms including their request formats and response formats, architectural options, and various considerations for how DID-Linked Resources SHOULD act as persistent identifiers for referencing and retrieving digital Resources (such as data schemas, status lists, trust registries, governance documents, or policy definitions). This specification complements the <a href=https://www.w3.org/TR/did-resolution/">DID Resolution Specification</a>, including its patterns and algorithms for DID URL resolution and dereferencing. 
 
-By using DID URLs which remain conformant with W3C Decentralized Identifiers (DIDs) v1.0 Recommendation [[DID-CORE]] and the <a href="https://w3c-ccg.github.io/did-resolution/">DID Resolution Specification</a>, existing DID Resolvers will be able to dereference these DID URLs to retrieve the identified resources using the DID URL query syntax in this specification.
+By using DID URLs which remain conformant with W3C Decentralized Identifiers (DIDs) v1.0 Recommendation [[DID-CORE]] and the <a href="https://www.w3.org/TR/did-resolution/">DID Resolution Specification</a>, existing DID Resolvers will be able to dereference these DID URLs to retrieve the identified resources using the DID URL query syntax in this specification.
 
 <div class="note"> <b>Note:</b> while this specification defines some base-level functionality for DID URL dereferencing, the actual steps required to communicate with a DID's verifiable data registry are defined by the applicable DID method specification. </div>
 
