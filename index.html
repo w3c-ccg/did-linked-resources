@@ -8,7 +8,7 @@
   <meta content="Bikeshed version b25686b9f, updated Fri Mar 14 14:15:20 2025 -0700" name="generator">
   <link href="https://w3c-ccg.github.io/did-linked-resources" rel="canonical">
   <link href="https://www.w3.org/2008/site/images/favicon.ico" rel="icon">
-  <meta content="5571ce607101f73180bd4567e6e370bdc86a76d1" name="revision">
+  <meta content="fbf7a5c1f5107604d80d41aaba6f6a39dd184726" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>/* Boilerplate: style-autolinks */
@@ -866,8 +866,22 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
 </pre>
    <p>Using traditional web endpoints to store digital resources that are critical for a Verifiable Credential to function detracts from the proper functioning and utility that persistently-accessible Decentralized Identifiers offer. It can also result in inconsistent and unstandardized approaches to storing, referencing, and retrieving digital resources such as schemas, trust registries, and status lists.</p>
    <h3 class="heading settled" data-level="1.2" id="example"><span class="secno">1.2. </span><span class="content">A Simple Example</span><a class="self-link" href="#example"></a></h3>
-   <p>To illustrate the concept of <strong>DID-Linked Resources (DLRs)</strong>, one of the core concepts is the <strong>parent-child relationship</strong> between a DID and its resources. Consider the following simple example where <strong>Entity A’s</strong> DID (<code>did:example:entity123</code>) is the <strong>parent</strong>, and its associated resources are the <strong>children</strong>. Each resource is uniquely identified by an identifier, such as a UUID, and is bound to the DID under paths like <code>/resources/{resourceId}</code>. For example, the URI <code>did:example:entity123/resources/41c0f0fe-cd4e-45aa-aec5-754db4a63865</code> points to a specific resource controlled by Entity A.</p>
-   <p>The DID controller, <strong>Entity A</strong>, has authority over these child resources, and each resource is independently addressable by its unique identifier, but remains logically tied to the parent DID. This structure allows flexible management of resources while maintaining the DID as the authoritative identifier.</p>
+   <p>To understand <strong>DID-Linked Resources (DLRs)</strong>, it’s important to grasp the foundational concept of a <strong>parent-child relationship</strong> between a <strong>Decentralized Identifier (DID)</strong> and the resources associated with it.</p>
+   <p>A <abbr title="Decentralized Identifier">DID</abbr> serves as a persistent, authoritative identifier for an entity — for example, a person, organization, device or agent. In the context of DID-Linked Resources, the DID acts as the <strong>parent</strong>, and the resources published under that DID are considered its <strong>children</strong>. These resources might include schemas, status lists, visual assets, trust registries, or any other type of digital object relevant to verifiable credentials and decentralized identity ecosystems.</p>
+   <p>Each resource is assigned a <strong>unique identifier</strong> and is logically scoped beneath the DID.</p>
+   <p>For example, suppose <strong>Entity A</strong> controls the DID:</p>
+<pre><code>did:example:entity123</code></pre>
+   <p>This DID <strong>SHOULD</strong> serve as the root under which various resources are published. A specific resource <strong>MAY</strong> (if UUIDs are used for Resource IDs) be accessible at:</p>
+<pre><code>did:example:entity123/resources/41c0f0fe-cd4e-45aa-aec5-754db4a63865</code></pre>
+   <p>In this case, the resource identified by the <a data-link-type="dfn" href="#resource-identifier" id="ref-for-resource-identifier">Resource Identifier</a> <code>41c0f0fe-cd4e-45aa-aec5-754db4a63865</code> is a child of the <strong>parent DID</strong> and can be individually retrieved and verified.</p>
+   <p>The <strong>DID controller</strong> — in this example, Entity A — controls the DID and has the ability to create, update, or deactivate these resources. While each resource is <strong>independently addressable</strong>, they remain <strong>logically and cryptographically bound</strong> to the DID under which they are published.</p>
+   <p>This structure provides several benefits:</p>
+   <ul>
+    <li>It enables consistent and verifiable anchoring of digital assets to a trusted identity.
+    <li>It supports versioning and fine-grained control over individual resources.
+    <li>It maintains a clear delegation model where the DID acts as the governing authority over its published resources.
+   </ul>
+   <p>In practice, this design allows systems to retrieve, verify, and query about DID-Linked Resources in a decentralized way — without relying on centralized registries or web domains. The DID becomes a trust anchor, and the resources beneath it inherit that trust through cryptographic integrity and logical scoping.</p>
    <h3 class="heading settled" data-level="1.3" id="archoverview"><span class="secno">1.3. </span><span class="content">Architecture Overview</span><a class="self-link" href="#archoverview"></a></h3>
    <p>The relationship between DIDs and DID-Linked Resources is shown in the diagram below:</p>
    <p><img alt="DID-Linked Resources Architecture Overview" height="661" src="./images/did-linked-resources-relationship.png" width="640"></p>
@@ -1007,9 +1021,9 @@ DIGIT             = %x30-39
       <td>A string that identifies the next version of the resource.
    </table>
    <h3 class="heading settled" data-level="5.1" id="resourceuri"><span class="secno">5.1. </span><span class="content">Resource URI</span><a class="self-link" href="#resourceuri"></a></h3>
-   <p>DID-Linked Resources (DLRs) are content-addressable or identifier-addressable resources associated with a Decentralized Identifier (DID). They are represented as URIs rooted at a valid DID. The full DID-Linked Resource URL identifying a Resource <strong>MUST</strong> include a DID and a <a data-link-type="dfn" href="#resource-identifier" id="ref-for-resource-identifier">Resource Identifier</a> <code>resourceId</code>.</p>
+   <p>DID-Linked Resources (DLRs) are content-addressable or identifier-addressable resources associated with a Decentralized Identifier (DID). They are represented as URIs rooted at a valid DID. The full DID-Linked Resource URL identifying a Resource <strong>MUST</strong> include a DID and a <a data-link-type="dfn" href="#resource-identifier" id="ref-for-resource-identifier①">Resource Identifier</a> <code>resourceId</code>.</p>
    <h3 class="heading settled" data-level="5.2" id="resourceid"><span class="secno">5.2. </span><span class="content">Resource Identifiers</span><a class="self-link" href="#resourceid"></a></h3>
-   <p>A <a data-link-type="dfn" href="#resource-identifier" id="ref-for-resource-identifier①">Resource Identifier</a>, or <code>resourceId</code>, <strong>MUST</strong> be a unique identifier for a single resource. Two resources under the same DID method MUST NOT share the same <code>resourceId</code>. <strong>MUST</strong> Resource Collection ID {#resourcecollectionid}</p>
+   <p>A <a data-link-type="dfn" href="#resource-identifier" id="ref-for-resource-identifier②">Resource Identifier</a>, or <code>resourceId</code>, <strong>MUST</strong> be a unique identifier for a single resource. Two resources under the same DID method MUST NOT share the same <code>resourceId</code>. <strong>MUST</strong> Resource Collection ID {#resourcecollectionid}</p>
    <hr>
    <p>The <code>resourceCollectionId</code> property is OPTIONAL. This property is the unique identifier of the DID that the resource is bound to, under which resources are logically collected.</p>
    <p>For example, the following DID:</p>
@@ -1896,7 +1910,7 @@ let dfnPanelData = {
 "did-url": {"dfnID":"did-url","dfnText":"DID URL","external":false,"refSections":[{"refs":[{"id":"ref-for-did-url"}],"title":"1. Introduction"},{"refs":[{"id":"ref-for-did-url\u2460"}],"title":"8. Resolution and Dereferencing"}],"url":"#did-url"},
 "did-url-dereferencing": {"dfnID":"did-url-dereferencing","dfnText":"DID URL dereferencing","external":false,"refSections":[{"refs":[{"id":"ref-for-did-url-dereferencing"}],"title":"1. Introduction"},{"refs":[{"id":"ref-for-did-url-dereferencing\u2460"}],"title":"1.4. Design Principles"},{"refs":[{"id":"ref-for-did-url-dereferencing\u2461"},{"id":"ref-for-did-url-dereferencing\u2462"},{"id":"ref-for-did-url-dereferencing\u2463"}],"title":"8. Resolution and Dereferencing"}],"url":"#did-url-dereferencing"},
 "resource-collection": {"dfnID":"resource-collection","dfnText":"Resource Collection","external":false,"refSections":[{"refs":[{"id":"ref-for-resource-collection"},{"id":"ref-for-resource-collection\u2460"}],"title":"6. Binding to DIDs"}],"url":"#resource-collection"},
-"resource-identifier": {"dfnID":"resource-identifier","dfnText":"Resource Identifier","external":false,"refSections":[{"refs":[{"id":"ref-for-resource-identifier"}],"title":"5.1. Resource URI"},{"refs":[{"id":"ref-for-resource-identifier\u2460"}],"title":"5.2. Resource Identifiers"}],"url":"#resource-identifier"},
+"resource-identifier": {"dfnID":"resource-identifier","dfnText":"Resource Identifier","external":false,"refSections":[{"refs":[{"id":"ref-for-resource-identifier"}],"title":"1.2. A Simple Example"},{"refs":[{"id":"ref-for-resource-identifier\u2460"}],"title":"5.1. Resource URI"},{"refs":[{"id":"ref-for-resource-identifier\u2461"}],"title":"5.2. Resource Identifiers"}],"url":"#resource-identifier"},
 };
 
 document.addEventListener("DOMContentLoaded", ()=>{
