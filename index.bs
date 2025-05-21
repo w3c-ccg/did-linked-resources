@@ -63,7 +63,7 @@ Architecture Overview {#archoverview}
 
 The relationship between DIDs and DID-Linked Resources is shown in the diagram below:
 
-<img src="/did-linked-resources/images/did-linked-resources-relationship.png" alt="DID-Linked Resources Architecture Overview">
+<img src="./images/did-linked-resources-relationship.png" alt="DID-Linked Resources Architecture Overview">
 
 Design Principles {#principles}
 ---------------------
