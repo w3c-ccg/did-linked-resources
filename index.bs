@@ -126,10 +126,12 @@ Terminology {#terminology}
 DID-Linked Resource URL Syntax {#syntax}
 =====================
 
+The following ABNF defines the structure of a <strong>DID-Linked Resource URL</strong>, which is a specific type of <a href="https://www.w3.org/TR/did-core/#did-url-syntax" target="_blank" rel="noopener">DID URL</a> that refers to a resource published under a DID. While the overall syntax is compatible with [[DID-CORE]], this profile defines expected structure and semantics for paths, query parameters, and fragments used in the DID-Linked Resource model.
+
 The following is the ABNF definition using the syntax in [[RFC5234]]. All DID-Linked Resources <strong>MUST</strong> conform to the DID-Linked Resource URL Syntax ABNF Rules.
 
 <aside class="example" id="dlr-abnf">
-  <b>ABNF: DID-Linked Resource URL</b>
+  <b>ABNF: DID-Linked Resource URL (extends DID URL from DID Core)</b>
   <pre class="abnf">
 ; DID-Linked Resource URL
 dlr-url           = did path-abempty [ "?" query ] [ "#" fragment ]
@@ -160,6 +162,7 @@ DIGIT             = %x30-39
   </pre>
 </aside>
 
+The <code>path-abempty</code> component typically includes structured segments such as <code>/resources/{resourceId}</code>, representing a unique identifier scoped to the DID. The <code>query</code> component may include parameters like <code>resourceName</code>, <code>resourceType</code>, or <code>resourceVersion</code>, enabling flexible filtering and referencing of specific resource variants. The optional <code>fragment</code> can refer to a sub-section within the resource, such as a field in a schema or anchor in a document.
 
 Semantics {#semantics}
 =====================
