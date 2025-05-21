@@ -54,9 +54,33 @@ Using traditional web endpoints to store digital resources that are critical for
 A Simple Example {#example}
 ---------------------
 
-To illustrate the concept of <strong>DID-Linked Resources (DLRs)</strong>, one of the core concepts is the <strong>parent-child relationship</strong> between a DID and its resources. Consider the following simple example where <strong>Entity A's</strong> DID (<code>did:example:entity123</code>) is the <strong>parent</strong>, and its associated resources are the <strong>children</strong>. Each resource is uniquely identified by an identifier, such as a UUID, and is bound to the DID under paths like <code>/resources/{resourceId}</code>. For example, the URI <code>did:example:entity123/resources/41c0f0fe-cd4e-45aa-aec5-754db4a63865</code> points to a specific resource controlled by Entity A.
+To understand <strong>DID-Linked Resources (DLRs)</strong>, it's important to grasp the foundational concept of a <strong>parent-child relationship</strong> between a <strong>Decentralized Identifier (DID)</strong> and the resources associated with it.
 
-The DID controller, <strong>Entity A</strong>, has authority over these child resources, and each resource is independently addressable by its unique identifier, but remains logically tied to the parent DID. This structure allows flexible management of resources while maintaining the DID as the authoritative identifier.
+A <abbr title="Decentralized Identifier">DID</abbr> serves as a persistent, authoritative identifier for an entity — for example, a person, organization, device or agent. In the context of DID-Linked Resources, the DID acts as the <strong>parent</strong>, and the resources published under that DID are considered its <strong>children</strong>. These resources might include schemas, status lists, visual assets, trust registries, or any other type of digital object relevant to verifiable credentials and decentralized identity ecosystems.
+
+Each resource is assigned a <strong>unique identifier</strong> and is logically scoped beneath the DID.
+
+For example, suppose <strong>Entity A</strong> controls the DID:
+
+  <pre><code>did:example:entity123</code></pre>
+
+This DID <strong>SHOULD</strong> serve as the root under which various resources are published. A specific resource <strong>MAY</strong> (if UUIDs are used for Resource IDs) be accessible at:
+
+  <pre><code>did:example:entity123/resources/41c0f0fe-cd4e-45aa-aec5-754db4a63865</code></pre>
+
+In this case, the resource identified by the <a>Resource Identifier</a> <code>41c0f0fe-cd4e-45aa-aec5-754db4a63865</code> is a child of the <strong>parent DID</strong> and can be individually retrieved and verified.
+
+The <strong>DID controller</strong> — in this example, Entity A — controls the DID and has the ability to create, update, or deactivate these resources. While each resource is <strong>independently addressable</strong>, they remain <strong>logically and cryptographically bound</strong> to the DID under which they are published.
+
+This structure provides several benefits:
+
+  <ul>
+    <li>It enables consistent and verifiable anchoring of digital assets to a trusted identity.</li>
+    <li>It supports versioning and fine-grained control over individual resources.</li>
+    <li>It maintains a clear delegation model where the DID acts as the governing authority over its published resources.</li>
+  </ul>
+
+In practice, this design allows systems to retrieve, verify, and query about DID-Linked Resources in a decentralized way — without relying on centralized registries or web domains. The DID becomes a trust anchor, and the resources beneath it inherit that trust through cryptographic integrity and logical scoping.
 
 Architecture Overview {#archoverview}
 ---------------------
