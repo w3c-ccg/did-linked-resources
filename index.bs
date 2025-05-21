@@ -12,13 +12,13 @@ Abstract: This specification creates a standardized way of referencing, derefere
 Introduction {#intro}
 =====================
 
-DID-Linked Resources (DLRs) are digital files that can be retrieved and referenced using a persistent and unique DID URL. 
+DID-Linked Resources (DLRs) are digital files that can be retrieved and referenced using a persistent and unique <a>DID URL</a>. 
 
 This specification defines common requirements, patterns, algorithms including their request formats and response formats, architectural options, and various considerations for how DID-Linked Resources SHOULD act as persistent identifiers for referencing and retrieving digital Resources (such as data schemas, status lists, trust registries, governance documents, or policy definitions). This specification complements the <a href="https://www.w3.org/TR/did-resolution/">DID Resolution Specification</a>, including its patterns and algorithms for DID URL resolution and dereferencing. 
 
 By using DID URLs which remain conformant with W3C Decentralized Identifiers (DIDs) v1.0 Recommendation [[DID-CORE]] and the <a href="https://www.w3.org/TR/did-resolution/">DID Resolution Specification</a>, existing DID Resolvers will be able to dereference these DID URLs to retrieve the identified resources using the DID URL query syntax in this specification.
 
-<div class="note"> <b>Note:</b> while this specification defines some base-level functionality for DID URL dereferencing, the actual steps required to communicate with a DID's verifiable data registry are defined by the applicable DID method specification. </div>
+<div class="note"> <b>Note:</b> while this specification defines some base-level functionality for <a>DID URL dereferencing</a>, the actual steps required to communicate with a DID's verifiable data registry are defined by the applicable DID method specification. </div>
 
 Context for Specification {#context}
 ---------------------
@@ -71,7 +71,7 @@ Design Principles {#principles}
 The following design principles should be taken into consideration. DID-Linked Resources SHOULD:
 
 1. Use existing and familiar DID Core Spec patterns where possible.
-2. Support existing DID Resolvers and principles of DID URL dereferencing.
+2. Support existing DID Resolvers and principles of <a>DID URL dereferencing</a>.
 3. Protect against linkrot for long-term retrieval.
 4. Enable resources to be versioned and organized, with individual versions being able to be fetched.
 5. Include semantic linkage between DID documents and associated resources (via metadata or otherwise).
@@ -91,13 +91,13 @@ Terminology {#terminology}
 
 <dfn>DID URL</dfn>: As defined in [[DID-CORE]].
 
-<dfn>DID URL Dereferencing</dfn>: As defined in [[DID-CORE]].
+<dfn>DID URL dereferencing</dfn>: As defined in [[DID-CORE]].
 
 <dfn>DID-Linked Resource</dfn>: Digital files that can be retrieved and referenced using persistent and unique DID URLs.
 
 <dfn>Resource Collection</dfn>: An organized and structured set of digital resources, collectively and individually identifiable using persistent and unique DID URLs.
 
-<dfn>Resource ID</dfn>: A unique identifier for a specified DID-Linked Resource.
+<dfn>Resource Identifier</dfn>: A unique identifier for a specified DID-Linked Resource.
 
 DID-Linked Resource URI Syntax {#syntax}
 =====================
@@ -135,7 +135,7 @@ DIGIT = %x30-39
 
 === Semantics
 
-The components of a DID-Linked Resource URI carry the following semantics:
+The components of a <a>DID-Linked Resource</a> URI carry the following semantics:
 
 * The <code>did</code> component identifies the base Decentralized Identifier (DID) under which the resource is logically scoped.
 * The <code>path</code> identifies the logical or versioned name of the resource. This SHOULD be defined at the DID method level and may represent for example:
@@ -229,12 +229,12 @@ The following tables contain informative references for the core properties defi
 Resource URI {#resourceuri}
 ---------------------
 
-DID-Linked Resources (DLRs) are content-addressable or identifier-addressable resources associated with a Decentralized Identifier (DID). They are represented as URIs rooted at a valid DID. The full Resource URI identifying a Resource MUST include a DID and a Resource Identifier `resourceId`.
+DID-Linked Resources (DLRs) are content-addressable or identifier-addressable resources associated with a Decentralized Identifier (DID). They are represented as URIs rooted at a valid DID. The full Resource URI identifying a Resource MUST include a DID and a <a>Resource Identifier</a> <code>resourceId</code>.
 
 Resource Identifiers {#resourceid}
 ---------------------
 
-A Resource Identifier, or <code>resourceId</code>, MUST be a unique identifier for a single resource. Two resources under the same DID method MUST NOT share the same <code>resourceId</code>.
+A <a>Resource Identifier</a>, or <code>resourceId</code>, MUST be a unique identifier for a single resource. Two resources under the same DID method MUST NOT share the same <code>resourceId</code>.
 
 Resource Collection ID {#resourcecollectionid}
 ---------------------
@@ -253,7 +253,7 @@ will derive the Collection ID:
 0a5b94d0-a417-48ed-a6f5-4abc9e95888d
 ```
 
-<div class="note"> <b>Note:</b> If used, the Collection ID SHOULD take the syntactical form of the DID method that the DID-Linked Resource is associated with. </div>
+<div class="note"> <b>Note:</b> If used, the Collection ID SHOULD take the syntactical form of the DID method that the <a>DID-Linked Resource</a> is associated with. </div>
 
 Resource Name {#resourcename}
 ---------------------
@@ -307,15 +307,15 @@ Binding to DIDs {#binding}
 
 In the context of DID-Linked Resources (DLRs), <strong>binding</strong> refers to the relationship between a resource and a Decentralized Identifier (DID). This binding is OPTIONAL, but it is highly recommended.
 
-A DID acts as the <strong>parent</strong> that has authority over the resource, which is the <strong>child</strong>. The DID controller (the entity controlling the DID) has control over the resource and can modify, update or deprecate it.
+A DID acts as the <strong>parent</strong> that has authority over the resource, which is the <strong>child</strong>. The <a>DID controller</a> (the entity controlling the DID) has control over the resource and can modify, update or deprecate it.
 
-In this context, the DID itself becomes a <strong>collection</strong>, within which one or multiple resources can be referenced.
+In this context, the DID itself becomes a <strong><a>Resource Collection</a></strong>, within which one or multiple resources can be referenced.
 
 In this parent-child relationship:
-- The <strong>DID</strong> is the <strong>parent</strong> entity. It serves as the root identifier for an entity, and a collection for the resources, and has the authority to control or manage resources associated with it.
+- The <strong>DID</strong> is the <strong>parent</strong> entity. It serves as the root identifier for an entity, and a <a>Resource Collection</a> for the resources, and has the authority to control or manage resources associated with it.
 - The <strong>resource</strong> is the <strong>child</strong> entity. A resource is a specific object or piece of data associated with the DID. The resource can include things like schemas, files, metadata, or any other linked data related to the DID.
 
-The binding of a resource to a DID ensures that the DID controller has control over the resource and that the resource is logically scoped within the DID's authority.
+The binding of a resource to a DID ensures that the <a>DID controller</a> has control over the resource and that the resource is logically scoped within the DID's authority.
 
 Multiple resources MAY be bound to the same DID, and each MUST include a unique <code>resourceId</code>.
 
@@ -395,7 +395,7 @@ All required fields defined under Core Properties MUST be included for each Reso
 Resource Representation {#resourcerepresentation}
 ---------------------
 
-Resources linked to a DID via a DID-Linked Resource mechanism MUST be retrievable either individually (by their full resourceId) or in aggregate (by querying resources linked to a given DID, using a particular filter).
+Resources linked to a DID via a <a>DID-Linked Resource</a> mechanism MUST be retrievable either individually (by their full resourceId) or in aggregate (by querying resources linked to a given DID, using a particular filter).
 
 When queried individually, the result MUST return the full Resource representation associated with the provided resourceId.
 
@@ -458,11 +458,11 @@ Resource parameters are completely independent of any specific DID method and fu
 Resolution and Dereferencing {#resolutionanddereferencing}
 =====================
 
-Requests to fetch Resources are considered as a DID URL Dereferencing scenario it uses [DID URL paths](https://w3c.github.io/did-core/#path) to lead to a Resource object, rather than a DIDDoc.
+Requests to fetch Resources are considered as a <a>DID URL dereferencing</a> scenario it uses [DID URL paths](https://w3c.github.io/did-core/#path) to lead to a Resource object, rather than a DIDDoc.
 
-The DID URL dereferencing function dereferences a Resource URI (a type of DID URL), into a resource with contents depending on the DID URL's components, including the DID method, method-specific identifier, path, query, and fragment. This process depends on DID resolution of the DID contained in the DID URL. DID URL dereferencing might involve multiple steps (e.g., when the DID URL being dereferenced includes a fragment), and the function is defined to return the final resource after all steps are completed.
+The <a>DID URL dereferencing</a> function dereferences a Resource URI (a type of DID URL), into a resource with contents depending on the DID URL's components, including the DID method, method-specific identifier, path, query, and fragment. This process depends on DID resolution of the DID contained in the <a>DID URL</a>. DID URL dereferencing might involve multiple steps (e.g., when the DID URL being dereferenced includes a fragment), and the function is defined to return the final resource after all steps are completed.
 
-Normal DID URL dereferencing can be understood as a two-step process:
+Normal <a>DID URL dereferencing</a> can be understood as a two-step process:
 
 1. <strong>Resolution</strong>: The DID is resolved to its corresponding DID Document using the relevant DID method.
 2. <strong>Dereferencing</strong>: A Resource is located using the path, query, and/or fragment components of the DID URL, which point to the Resource either directly or by reference.
@@ -617,7 +617,7 @@ For example:
 
 Here, there is a composite query, requesting the <code>resourceName</code>, <code>resourceType</code> and <code>resourceMetadata=true</code>. This filter returns the metadata of ALL resources of this name and type.
 
-<pre><code>did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceType=exampleSchema&resourceName=exampleResourceName&resourceMetadata=true</code></pre>
+<pre><code>did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceType=exampleSchema&amp;resourceName=exampleResourceName&amp;resourceMetadata=true</code></pre>
 
 </details>
 
@@ -959,7 +959,7 @@ For example:
 
 <summary>Request format</summary>
 
-<pre><code>did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceVersionTime=2023-02-22T06:58:18.61Z&resourceVersion=1.14.41</code></pre>
+<pre><code>did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceVersionTime=2023-02-22T06:58:18.61Z&amp;resourceVersion=1.14.41</code></pre>
 
 </details>
 
@@ -1050,9 +1050,9 @@ To maintain consistency and traceability, resources with the same <code>resource
 Applicability for Web-based DID Methods {#webbasedmethods}
 -----------------------------------------------------------
 
-Web-based DID Methods, such as <code>did:web</code>, present unique constraints due to the stateless and document-centric nature of HTTP infrastructure. For these methods, implementers <strong>SHOULD</strong> define a clear strategy for persisting and updating the DID Document and its associated metadata whenever a new DID-Linked Resource is created or modified.
+Web-based DID Methods, such as <code>did:web</code>, present unique constraints due to the stateless and document-centric nature of HTTP infrastructure. For these methods, implementers <strong>SHOULD</strong> define a clear strategy for persisting and updating the <a>DID Document</a> and its associated metadata whenever a new DID-Linked Resource is created or modified.
 
-This may include publishing an updated JSON file at a well-known URI, leveraging existing content management systems, or adopting tooling that automates updates to <code>didDocumentMetadata</code>. Regardless of the mechanism, web-based methods <strong>MUST</strong> ensure that any addition of `linkedResourceMetadata` is accurately reflected in the published DID Document and adheres to consistency and versioning rules.
+This may include publishing an updated JSON file at a well-known URI, leveraging existing content management systems, or adopting tooling that automates updates to <code>didDocumentMetadata</code>. Regardless of the mechanism, web-based methods <strong>MUST</strong> ensure that any addition of `linkedResourceMetadata` is accurately reflected in the published <a>DID Document</a> and adheres to consistency and versioning rules.
 
 Access Control and Provenance {#accesscontrol}
 ----------------------------------------------
@@ -1067,16 +1067,16 @@ This section discusses the security and integrity considerations associated with
 Proving Control and Binding {#authority}
 ----------------------------------------
 
-To ensure that a DID-Linked Resource is legitimately associated with a DID, DID Methods <strong>MAY</strong> define processes for cryptographically verifying control over the resource. These verification mechanisms <strong>MAY</strong> involve signatures or proofs generated using verification methods referenced in the DID Document. For example, a data integrity proof (e.g., using [[VC-DATA-INTEGRITY]]) <strong>MAY</strong> be used to assert that the resource was authored or approved by the DID controller.
+To ensure that a DID-Linked Resource is legitimately associated with a DID, DID Methods <strong>MAY</strong> define processes for cryptographically verifying control over the resource. These verification mechanisms <strong>MAY</strong> involve signatures or proofs generated using verification methods referenced in the <a>DID Document</a>. For example, a data integrity proof (e.g., using [[VC-DATA-INTEGRITY]]) <strong>MAY</strong> be used to assert that the resource was authored or approved by the <a>DID controller</a>.
 
 Verifying the binding between a DID and its linked resources is essential for establishing trust. Implementations <strong>SHOULD</strong> ensure that any control or update operations over resources are performed only by authorized parties, and that tampering with resource content can be detected through checksum validation or integrity proofs.
 
 Alternative Resource Locations {#alternativelocation}
 -----------------------------------------------------
 
-DID-Linked Resources <strong>MAY</strong> reside at locations different from the storage or resolution infrastructure used by the DID itself. For instance, while a DID Document may be stored on a blockchain, its associated resources might be hosted in IPFS, cloud object storage, or private data vaults.
+DID-Linked Resources <strong>MAY</strong> reside at locations different from the storage or resolution infrastructure used by the DID itself. For instance, while a <a>DID Document</a> may be stored on a blockchain, its associated resources might be hosted in IPFS, cloud object storage, or private data vaults.
 
-In such cases, the external location of a resource <strong>SHOULD</strong> be clearly specified in the <code>resourceURI</code> field within <code>linkedResourceMetadata</code>. If the resource’s address or availability changes, this <strong>MAY</strong> require a DID Document metadata update to reflect the new location, subject to the rules of the corresponding DID Method.
+In such cases, the external location of a resource <strong>SHOULD</strong> be clearly specified in the <code>resourceURI</code> field within <code>linkedResourceMetadata</code>. If the resource’s address or availability changes, this <strong>MAY</strong> require a <a>DID Document</a> metadata update to reflect the new location, subject to the rules of the corresponding DID Method.
 
 Parent DID Deactivation {#diddeactivation}
 ----------------------------------------
@@ -1129,7 +1129,7 @@ To ensure traceability, each version <strong>MAY</strong> include a <code>previo
 Resources in Service Endpoint versus DID Document Metadata {#serviceendpoint}
 ------------------------------------------------------------------------------
 
-The <code>service</code> section of the DID Document is intentionally limited in structure and expressiveness. As such, DID-Linked Resources are NOT referenced through service endpoints. Instead, they are expressed using the <code>linkedResourceMetadata</code> field in the <code>didDocumentMetadata</code> section, which allows for a more expressive and extensible format, including properties such as version history, checksums, creation timestamps, and media types.
+The <code>service</code> section of the <a>DID Document</a> is intentionally limited in structure and expressiveness. As such, DID-Linked Resources are NOT referenced through service endpoints. Instead, they are expressed using the <code>linkedResourceMetadata</code> field in the <code>didDocumentMetadata</code> section, which allows for a more expressive and extensible format, including properties such as version history, checksums, creation timestamps, and media types.
 
 This architectural decision ensures backward compatibility with existing DID resolvers and DID Documents, which are not required to interpret DID-Linked Resources in order to perform DID resolution. Systems that understand DID-Linked Resources can leverage the <code>linkedResourceMetadata</code> field to retrieve and process associated artifacts, while maintaining interoperability with resolvers that only support core DID operations.
 
