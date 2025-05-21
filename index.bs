@@ -56,7 +56,7 @@ A Simple Example {#example}
 
 To illustrate the concept of <strong>DID-Linked Resources (DLRs)</strong>, one of the core concepts is the <strong>parent-child relationship</strong> between a DID and its resources. Consider the following simple example where <strong>Entity A's</strong> DID (<code>did:example:entity123</code>) is the <strong>parent</strong>, and its associated resources are the <strong>children</strong>. Each resource is uniquely identified by an identifier, such as a UUID, and is bound to the DID under paths like <code>/resources/{resourceId}</code>. For example, the URI <code>did:example:entity123/resources/41c0f0fe-cd4e-45aa-aec5-754db4a63865</code> points to a specific resource controlled by Entity A.
 
-The DID controller, Entity A, has authority over these child resources, and each resource is independently addressable by its unique identifier, but remains logically tied to the parent DID. This structure allows flexible management of resources while maintaining the DID as the authoritative identifier.
+The DID controller, <strong>Entity A</strong>, has authority over these child resources, and each resource is independently addressable by its unique identifier, but remains logically tied to the parent DID. This structure allows flexible management of resources while maintaining the DID as the authoritative identifier.
 
 Architecture Overview {#archoverview}
 ---------------------
