@@ -8,7 +8,7 @@
   <meta content="Bikeshed version b25686b9f, updated Fri Mar 14 14:15:20 2025 -0700" name="generator">
   <link href="https://w3c-ccg.github.io/did-linked-resources" rel="canonical">
   <link href="https://www.w3.org/2008/site/images/favicon.ico" rel="icon">
-  <meta content="aa7c4e5077247a7fe13d9d3aae66919dbd8173ef" name="revision">
+  <meta content="6f1ca820b932921f1ad35cf667139b0ae3171ac4" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>/* Boilerplate: style-autolinks */
@@ -732,88 +732,89 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
       <li><a href="#conformance"><span class="secno">1.5</span> <span class="content">Conformance</span></a>
      </ol>
     <li><a href="#terminology"><span class="secno">2</span> <span class="content">Terminology</span></a>
-    <li><a href="#syntax"><span class="secno">3</span> <span class="content">DID-Linked Resource URI Syntax</span></a>
+    <li><a href="#syntax"><span class="secno">3</span> <span class="content">DID-Linked Resource URL Syntax</span></a>
+    <li><a href="#semantics"><span class="secno">4</span> <span class="content">Semantics</span></a>
     <li>
-     <a href="#core"><span class="secno">4</span> <span class="content">Core Properties</span></a>
+     <a href="#core"><span class="secno">5</span> <span class="content">Core Properties</span></a>
      <ol class="toc">
-      <li><a href="#resourceuri"><span class="secno">4.1</span> <span class="content">Resource URI</span></a>
-      <li><a href="#resourceid"><span class="secno">4.2</span> <span class="content">Resource Identifiers</span></a>
-      <li><a href="#resourcecollectionid"><span class="secno">4.3</span> <span class="content">Resource Collection ID</span></a>
-      <li><a href="#resourcename"><span class="secno">4.4</span> <span class="content">Resource Name</span></a>
-      <li><a href="#resourcetype"><span class="secno">4.5</span> <span class="content">Resource Type</span></a>
-      <li><a href="#resourceversion"><span class="secno">4.6</span> <span class="content">Resource Version</span></a>
-      <li><a href="#alternativeuri"><span class="secno">4.7</span> <span class="content">Alternative URI</span></a>
+      <li><a href="#resourceuri"><span class="secno">5.1</span> <span class="content">Resource URI</span></a>
+      <li><a href="#resourceid"><span class="secno">5.2</span> <span class="content">Resource Identifiers</span></a>
+      <li><a href="#resourcecollectionid"><span class="secno">5.3</span> <span class="content">Resource Collection ID</span></a>
+      <li><a href="#resourcename"><span class="secno">5.4</span> <span class="content">Resource Name</span></a>
+      <li><a href="#resourcetype"><span class="secno">5.5</span> <span class="content">Resource Type</span></a>
+      <li><a href="#resourceversion"><span class="secno">5.6</span> <span class="content">Resource Version</span></a>
+      <li><a href="#alternativeuri"><span class="secno">5.7</span> <span class="content">Alternative URI</span></a>
       <li>
-       <a href="#resourceMetadataProperties"><span class="secno">4.8</span> <span class="content">Resource Metadata Properties</span></a>
+       <a href="#resourceMetadataProperties"><span class="secno">5.8</span> <span class="content">Resource Metadata Properties</span></a>
        <ol class="toc">
-        <li><a href="#mediatype"><span class="secno">4.8.1</span> <span class="content">Media Type {#mediatype}</span></a>
-        <li><a href="#checksum"><span class="secno">4.8.2</span> <span class="content">Checksum {#checksum}</span></a>
-        <li><a href="#created"><span class="secno">4.8.3</span> <span class="content">Created {#created}</span></a>
-        <li><a href="#updated"><span class="secno">4.8.4</span> <span class="content">Updated {#updated}</span></a>
-        <li><a href="#previousversionid"><span class="secno">4.8.5</span> <span class="content">PreviousVersionId {#previousversionid}</span></a>
-        <li><a href="#nextversionid"><span class="secno">4.8.6</span> <span class="content">NextVersionId {#nextversionid}</span></a>
+        <li><a href="#mediatype"><span class="secno">5.8.1</span> <span class="content">Media Type {#mediatype}</span></a>
+        <li><a href="#checksum"><span class="secno">5.8.2</span> <span class="content">Checksum {#checksum}</span></a>
+        <li><a href="#created"><span class="secno">5.8.3</span> <span class="content">Created {#created}</span></a>
+        <li><a href="#updated"><span class="secno">5.8.4</span> <span class="content">Updated {#updated}</span></a>
+        <li><a href="#previousversionid"><span class="secno">5.8.5</span> <span class="content">PreviousVersionId {#previousversionid}</span></a>
+        <li><a href="#nextversionid"><span class="secno">5.8.6</span> <span class="content">NextVersionId {#nextversionid}</span></a>
        </ol>
      </ol>
     <li>
-     <a href="#binding"><span class="secno">5</span> <span class="content">Binding to DIDs</span></a>
+     <a href="#binding"><span class="secno">6</span> <span class="content">Binding to DIDs</span></a>
      <ol class="toc">
-      <li><a href="#representations"><span class="secno">5.1</span> <span class="content">Representations</span></a>
-      <li><a href="#diddocmetadata"><span class="secno">5.2</span> <span class="content">Representation within DID Document Metadata</span></a>
-      <li><a href="#resourcerepresentation"><span class="secno">5.3</span> <span class="content">Resource Representation</span></a>
+      <li><a href="#representations"><span class="secno">6.1</span> <span class="content">Representations</span></a>
+      <li><a href="#diddocmetadata"><span class="secno">6.2</span> <span class="content">Representation within DID Document Metadata</span></a>
+      <li><a href="#resourcerepresentation"><span class="secno">6.3</span> <span class="content">Resource Representation</span></a>
      </ol>
-    <li><a href="#resourceparameters"><span class="secno">6</span> <span class="content">Resource Parameters</span></a>
-    <li><a href="#resolutionanddereferencing"><span class="secno">7</span> <span class="content">Resolution and Dereferencing</span></a>
+    <li><a href="#resourceparameters"><span class="secno">7</span> <span class="content">Resource Parameters</span></a>
+    <li><a href="#resolutionanddereferencing"><span class="secno">8</span> <span class="content">Resolution and Dereferencing</span></a>
     <li>
-     <a href="#ambiguity"><span class="secno">8</span> <span class="content">Rules and Logic for Handling Ambiguous Queries</span></a>
+     <a href="#ambiguity"><span class="secno">9</span> <span class="content">Rules and Logic for Handling Ambiguous Queries</span></a>
      <ol class="toc">
-      <li><a href="#ambiguityerror"><span class="secno">8.1</span> <span class="content">Ambiguity Triggers Errors</span></a>
-      <li><a href="#multipleversions"><span class="secno">8.2</span> <span class="content">Multiple Versions of the Same Resource</span></a>
-      <li><a href="#ambiguityplusmetadata"><span class="secno">8.3</span> <span class="content">Ambiguous Query with <code>resourceMetadata=true</code></span></a>
-      <li><a href="#acceptheaders"><span class="secno">8.4</span> <span class="content">HTTP Accept Headers</span></a>
-     </ol>
-    <li>
-     <a href="#resolutionanddereferencingexamples"><span class="secno">9</span> <span class="content">Resolution and Dereferecing examples</span></a>
-     <ol class="toc">
-      <li><a href="#resourcemetadatafilter"><span class="secno">9.1</span> <span class="content">ResourceMetadata and Filter</span></a>
-      <li><a href="#resourceidparamater"><span class="secno">9.2</span> <span class="content">ResourceId Parameter</span></a>
-      <li><a href="#resourcecollectionidparameter"><span class="secno">9.3</span> <span class="content">ResourceCollectionId Parameter</span></a>
-      <li><a href="#resourcetypeparameter"><span class="secno">9.4</span> <span class="content">ResourceType Parameter</span></a>
-      <li><a href="#resourcenameparameter"><span class="secno">9.5</span> <span class="content">ResourceName Parameter</span></a>
-      <li><a href="#typeandnameparameter"><span class="secno">9.6</span> <span class="content">ResourceName and ResourceType Parameters</span></a>
-      <li><a href="#resourceversionparameter"><span class="secno">9.7</span> <span class="content">ResourceVersion Parameter</span></a>
-      <li><a href="#resourceversiontimeparameter"><span class="secno">9.8</span> <span class="content">ResourceVersionTime Parameter</span></a>
-      <li><a href="#checksumparameter"><span class="secno">9.9</span> <span class="content">Checksum Parameter</span></a>
+      <li><a href="#ambiguityerror"><span class="secno">9.1</span> <span class="content">Ambiguity Triggers Errors</span></a>
+      <li><a href="#multipleversions"><span class="secno">9.2</span> <span class="content">Multiple Versions of the Same Resource</span></a>
+      <li><a href="#ambiguityplusmetadata"><span class="secno">9.3</span> <span class="content">Ambiguous Query with <code>resourceMetadata=true</code></span></a>
+      <li><a href="#acceptheaders"><span class="secno">9.4</span> <span class="content">HTTP Accept Headers</span></a>
      </ol>
     <li>
-     <a href="#practicalconsiderations"><span class="secno">10</span> <span class="content">Practical Considerations</span></a>
+     <a href="#resolutionanddereferencingexamples"><span class="secno">10</span> <span class="content">Resolution and Dereferecing examples</span></a>
      <ol class="toc">
-      <li><a href="#resourcecreation"><span class="secno">10.1</span> <span class="content">Creation of a Resource</span></a>
-      <li><a href="#linkedresourcemetadata"><span class="secno">10.2</span> <span class="content">Recommendations for constructing linkedResourceMetadata</span></a>
-      <li><a href="#webbasedmethods"><span class="secno">10.3</span> <span class="content">Applicability for Web-based DID Methods</span></a>
-      <li><a href="#accesscontrol"><span class="secno">10.4</span> <span class="content">Access Control and Provenance</span></a>
+      <li><a href="#resourcemetadatafilter"><span class="secno">10.1</span> <span class="content">ResourceMetadata and Filter</span></a>
+      <li><a href="#resourceidparamater"><span class="secno">10.2</span> <span class="content">ResourceId Parameter</span></a>
+      <li><a href="#resourcecollectionidparameter"><span class="secno">10.3</span> <span class="content">ResourceCollectionId Parameter</span></a>
+      <li><a href="#resourcetypeparameter"><span class="secno">10.4</span> <span class="content">ResourceType Parameter</span></a>
+      <li><a href="#resourcenameparameter"><span class="secno">10.5</span> <span class="content">ResourceName Parameter</span></a>
+      <li><a href="#typeandnameparameter"><span class="secno">10.6</span> <span class="content">ResourceName and ResourceType Parameters</span></a>
+      <li><a href="#resourceversionparameter"><span class="secno">10.7</span> <span class="content">ResourceVersion Parameter</span></a>
+      <li><a href="#resourceversiontimeparameter"><span class="secno">10.8</span> <span class="content">ResourceVersionTime Parameter</span></a>
+      <li><a href="#checksumparameter"><span class="secno">10.9</span> <span class="content">Checksum Parameter</span></a>
      </ol>
     <li>
-     <a href="#securityconsiderations"><span class="secno">11</span> <span class="content">Security Considerations</span></a>
+     <a href="#practicalconsiderations"><span class="secno">11</span> <span class="content">Practical Considerations</span></a>
      <ol class="toc">
-      <li><a href="#authority"><span class="secno">11.1</span> <span class="content">Proving Control and Binding</span></a>
-      <li><a href="#alternativelocation"><span class="secno">11.2</span> <span class="content">Alternative Resource Locations</span></a>
-      <li><a href="#diddeactivation"><span class="secno">11.3</span> <span class="content">Parent DID Deactivation</span></a>
-      <li><a href="#persistence"><span class="secno">11.4</span> <span class="content">Persistence after Broken Link with DID</span></a>
+      <li><a href="#resourcecreation"><span class="secno">11.1</span> <span class="content">Creation of a Resource</span></a>
+      <li><a href="#linkedresourcemetadata"><span class="secno">11.2</span> <span class="content">Recommendations for constructing linkedResourceMetadata</span></a>
+      <li><a href="#webbasedmethods"><span class="secno">11.3</span> <span class="content">Applicability for Web-based DID Methods</span></a>
+      <li><a href="#accesscontrol"><span class="secno">11.4</span> <span class="content">Access Control and Provenance</span></a>
      </ol>
     <li>
-     <a href="#privacy"><span class="secno">12</span> <span class="content">Privacy Considerations</span></a>
+     <a href="#securityconsiderations"><span class="secno">12</span> <span class="content">Security Considerations</span></a>
      <ol class="toc">
-      <li><a href="#pseudonymity"><span class="secno">12.1</span> <span class="content">Linkability and Pseudonymity</span></a>
-      <li><a href="#immutability"><span class="secno">12.2</span> <span class="content">Immutability</span></a>
-      <li><a href="#encryption"><span class="secno">12.3</span> <span class="content">Encrypted Data in Resources</span></a>
+      <li><a href="#authority"><span class="secno">12.1</span> <span class="content">Proving Control and Binding</span></a>
+      <li><a href="#alternativelocation"><span class="secno">12.2</span> <span class="content">Alternative Resource Locations</span></a>
+      <li><a href="#diddeactivation"><span class="secno">12.3</span> <span class="content">Parent DID Deactivation</span></a>
+      <li><a href="#persistence"><span class="secno">12.4</span> <span class="content">Persistence after Broken Link with DID</span></a>
      </ol>
     <li>
-     <a href="#architectural"><span class="secno">13</span> <span class="content">Architectural Considerations</span></a>
+     <a href="#privacy"><span class="secno">13</span> <span class="content">Privacy Considerations</span></a>
      <ol class="toc">
-      <li><a href="#versioning"><span class="secno">13.1</span> <span class="content">Resource Versioning</span></a>
-      <li><a href="#serviceendpoint"><span class="secno">13.2</span> <span class="content">Resources in Service Endpoint versus DID Document Metadata</span></a>
-      <li><a href="#resourcedeactivation"><span class="secno">13.3</span> <span class="content">Resource Deactivation or Deprecation</span></a>
-      <li><a href="#extensions"><span class="secno">13.4</span> <span class="content">Resource Extensions</span></a>
+      <li><a href="#pseudonymity"><span class="secno">13.1</span> <span class="content">Linkability and Pseudonymity</span></a>
+      <li><a href="#immutability"><span class="secno">13.2</span> <span class="content">Immutability</span></a>
+      <li><a href="#encryption"><span class="secno">13.3</span> <span class="content">Encrypted Data in Resources</span></a>
+     </ol>
+    <li>
+     <a href="#architectural"><span class="secno">14</span> <span class="content">Architectural Considerations</span></a>
+     <ol class="toc">
+      <li><a href="#versioning"><span class="secno">14.1</span> <span class="content">Resource Versioning</span></a>
+      <li><a href="#serviceendpoint"><span class="secno">14.2</span> <span class="content">Resources in Service Endpoint versus DID Document Metadata</span></a>
+      <li><a href="#resourcedeactivation"><span class="secno">14.3</span> <span class="content">Resource Deactivation or Deprecation</span></a>
+      <li><a href="#extensions"><span class="secno">14.4</span> <span class="content">Resource Extensions</span></a>
      </ol>
     <li>
      <a href="#w3c-conformance"><span class="secno"></span> <span class="content">Conformance</span></a>
@@ -896,37 +897,40 @@ The key words MAY, MUST, MUST NOT, OPTIONAL, and SHOULD in this document are to 
    <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="did-linked-resource">DID-Linked Resource</dfn>: Digital files that can be retrieved and referenced using persistent and unique DID URLs.</p>
    <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="resource-collection">Resource Collection</dfn>: An organized and structured set of digital resources, collectively and individually identifiable using persistent and unique DID URLs.</p>
    <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="resource-identifier">Resource Identifier</dfn>: A unique identifier for a specified DID-Linked Resource.</p>
-   <h2 class="heading settled" data-level="3" id="syntax"><span class="secno">3. </span><span class="content">DID-Linked Resource URI Syntax</span><a class="self-link" href="#syntax"></a></h2>
-   <p>The following is the ABNF definition using the syntax in <a data-link-type="biblio" href="#biblio-rfc5234" title="Augmented BNF for Syntax Specifications: ABNF">[RFC5234]</a>. All DID-Linked Resources MUST conform to the DID-Linked Resource URI Syntax ABNF Rules.</p>
-<pre class="abnf">; DID-Linked Resource URI
-dlr-uri = did path-abempty [ "?" query ] [ "#" fragment ]
+   <h2 class="heading settled" data-level="3" id="syntax"><span class="secno">3. </span><span class="content">DID-Linked Resource URL Syntax</span><a class="self-link" href="#syntax"></a></h2>
+   <p>The following is the ABNF definition using the syntax in <a data-link-type="biblio" href="#biblio-rfc5234" title="Augmented BNF for Syntax Specifications: ABNF">[RFC5234]</a>. All DID-Linked Resources <strong>MUST</strong> conform to the DID-Linked Resource URL Syntax ABNF Rules.</p>
+   <aside class="example" id="dlr-abnf">
+    <a class="self-link" href="#dlr-abnf"></a> <b>ABNF: DID-Linked Resource URL</b> 
+<pre class="abnf">; DID-Linked Resource URL
+dlr-url           = did path-abempty [ "?" query ] [ "#" fragment ]
 
-; DID (per W3C DID Core)
-did = "did:" method ":" method-specific-id
-method = 1*method-char
-method-char = ALPHA / DIGIT / "-"
+; Decentralized Identifier (per W3C DID Core)
+did               = "did:" method ":" method-specific-id
+method            = 1*method-char
+method-char       = ALPHA / DIGIT / "-"
 method-specific-id = 1*( idchar / ":" )
-idchar = ALPHA / DIGIT / "." / "-" / "_" / pct-encoded
-pct-encoded = "%" HEXDIG HEXDIG
+idchar            = ALPHA / DIGIT / "." / "-" / "_" / pct-encoded
+pct-encoded       = "%" HEXDIG HEXDIG
 
-; Resource path
-path-abempty = *( "/" segment )
-segment = *pchar
+; Path component
+path-abempty      = *( "/" segment )
+segment           = *pchar
 
 ; Optional query and fragment (RFC 3986)
-query = *( pchar / "/" / "?" )
-fragment = *( pchar / "/" / "?" )
+query             = *( pchar / "/" / "?" )
+fragment          = *( pchar / "/" / "?" )
 
-; Character classes
-pchar = unreserved / pct-encoded / sub-delims / ":" / "@"
-unreserved = ALPHA / DIGIT / "-" / "." / "_" / "~"
-sub-delims = "!" / "$" / "&amp;" / "'" / "(" / ")" / "*" / "+" / "," / ";" / "="
-HEXDIG = DIGIT / "A" / "B" / "C" / "D" / "E" / "F"
-ALPHA = %x41-5A / %x61-7A
-DIGIT = %x30-39
+; Core character classes
+pchar             = unreserved / pct-encoded / sub-delims / ":" / "@"
+unreserved        = ALPHA / DIGIT / "-" / "." / "_" / "~"
+sub-delims        = "!" / "$" / "&amp;" / "'" / "(" / ")" / "*" / "+" / "," / ";" / "="
+HEXDIG            = DIGIT / "A" / "B" / "C" / "D" / "E" / "F"
+ALPHA             = %x41-5A / %x61-7A
+DIGIT             = %x30-39
 </pre>
-   <p>=== Semantics</p>
-   <p>The components of a <a data-link-type="dfn" href="#did-linked-resource" id="ref-for-did-linked-resource">DID-Linked Resource</a> URI carry the following semantics:</p>
+   </aside>
+   <h2 class="heading settled" data-level="4" id="semantics"><span class="secno">4. </span><span class="content">Semantics</span><a class="self-link" href="#semantics"></a></h2>
+   <p>The components of a DID-Linked Resource URL carry the following semantics:</p>
    <ul>
     <li data-md>
      <p>The <code>did</code> component identifies the base Decentralized Identifier (DID) under which the resource is logically scoped.</p>
@@ -941,7 +945,7 @@ DIGIT = %x30-39
     <li data-md>
      <p>The <code>fragment</code> MAY refer to a sub-component within the resource (e.g., a specific field in a schema, or a section in a document).</p>
    </ul>
-   <h2 class="heading settled" data-level="4" id="core"><span class="secno">4. </span><span class="content">Core Properties</span><a class="self-link" href="#core"></a></h2>
+   <h2 class="heading settled" data-level="5" id="core"><span class="secno">5. </span><span class="content">Core Properties</span><a class="self-link" href="#core"></a></h2>
    <p>The following tables contain informative references for the core properties defined by this specification, with expected values, and whether or not they are required. The property names in the tables are linked to the normative definitions and more detailed descriptions of each property.</p>
    <table>
     <thead>
@@ -1003,11 +1007,11 @@ DIGIT = %x30-39
       <td>no
       <td>A string that identifies the next version of the resource.
    </table>
-   <h3 class="heading settled" data-level="4.1" id="resourceuri"><span class="secno">4.1. </span><span class="content">Resource URI</span><a class="self-link" href="#resourceuri"></a></h3>
-   <p>DID-Linked Resources (DLRs) are content-addressable or identifier-addressable resources associated with a Decentralized Identifier (DID). They are represented as URIs rooted at a valid DID. The full Resource URI identifying a Resource MUST include a DID and a <a data-link-type="dfn" href="#resource-identifier" id="ref-for-resource-identifier">Resource Identifier</a> <code>resourceId</code>.</p>
-   <h3 class="heading settled" data-level="4.2" id="resourceid"><span class="secno">4.2. </span><span class="content">Resource Identifiers</span><a class="self-link" href="#resourceid"></a></h3>
+   <h3 class="heading settled" data-level="5.1" id="resourceuri"><span class="secno">5.1. </span><span class="content">Resource URI</span><a class="self-link" href="#resourceuri"></a></h3>
+   <p>DID-Linked Resources (DLRs) are content-addressable or identifier-addressable resources associated with a Decentralized Identifier (DID). They are represented as URIs rooted at a valid DID. The full DID-Linked Resource URL identifying a Resource <strong>MUST</strong> include a DID and a <a data-link-type="dfn" href="#resource-identifier" id="ref-for-resource-identifier">Resource Identifier</a> <code>resourceId</code>.</p>
+   <h3 class="heading settled" data-level="5.2" id="resourceid"><span class="secno">5.2. </span><span class="content">Resource Identifiers</span><a class="self-link" href="#resourceid"></a></h3>
    <p>A <a data-link-type="dfn" href="#resource-identifier" id="ref-for-resource-identifier①">Resource Identifier</a>, or <code>resourceId</code>, MUST be a unique identifier for a single resource. Two resources under the same DID method MUST NOT share the same <code>resourceId</code>.</p>
-   <h3 class="heading settled" data-level="4.3" id="resourcecollectionid"><span class="secno">4.3. </span><span class="content">Resource Collection ID</span><a class="self-link" href="#resourcecollectionid"></a></h3>
+   <h3 class="heading settled" data-level="5.3" id="resourcecollectionid"><span class="secno">5.3. </span><span class="content">Resource Collection ID</span><a class="self-link" href="#resourcecollectionid"></a></h3>
    <p>The <code>resourceCollectionId</code> property is OPTIONAL. This property is the unique identifier of the DID that the resource is bound to, under which resources are logically collected.</p>
    <p>For example, the following DID:</p>
 <pre class="language-json highlight">did<c- p>:</c->example<c- p>:</c-><c- mi>0</c->a<c- mi>5</c->b<c- mi>94</c->d<c- mi>0-</c->a<c- mf>417-48e</c->d<c- mi>-</c->a<c- mi>6</c-><c- kc>f</c-><c- mi>5-4</c->abc<c- mf>9e95888</c->d
@@ -1015,29 +1019,29 @@ DIGIT = %x30-39
    <p>will derive the Collection ID:</p>
 <pre class="language-json highlight"><c- mi>0</c->a<c- mi>5</c->b<c- mi>94</c->d<c- mi>0-</c->a<c- mf>417-48e</c->d<c- mi>-</c->a<c- mi>6</c-><c- kc>f</c-><c- mi>5-4</c->abc<c- mf>9e95888</c->d
 </pre>
-   <div class="note" role="note"> <b>Note:</b> If used, the Collection ID SHOULD take the syntactical form of the DID method that the <a data-link-type="dfn" href="#did-linked-resource" id="ref-for-did-linked-resource①">DID-Linked Resource</a> is associated with. </div>
-   <h3 class="heading settled" data-level="4.4" id="resourcename"><span class="secno">4.4. </span><span class="content">Resource Name</span><a class="self-link" href="#resourcename"></a></h3>
+   <div class="note" role="note"> <b>Note:</b> If used, the Collection ID SHOULD take the syntactical form of the DID method that the <a data-link-type="dfn" href="#did-linked-resource" id="ref-for-did-linked-resource">DID-Linked Resource</a> is associated with. </div>
+   <h3 class="heading settled" data-level="5.4" id="resourcename"><span class="secno">5.4. </span><span class="content">Resource Name</span><a class="self-link" href="#resourcename"></a></h3>
    <p>The <code>resourceName</code> property is OPTIONAL. If present, the value of the type property MUST be expressed as an [ASCII string](https://infra.spec.whatwg.org/#ascii-string).</p>
-   <h3 class="heading settled" data-level="4.5" id="resourcetype"><span class="secno">4.5. </span><span class="content">Resource Type</span><a class="self-link" href="#resourcetype"></a></h3>
+   <h3 class="heading settled" data-level="5.5" id="resourcetype"><span class="secno">5.5. </span><span class="content">Resource Type</span><a class="self-link" href="#resourcetype"></a></h3>
    <p>The <code>resourceType</code> property is OPTIONAL. If present, the value of the type property MUST be expressed as an [ASCII string](https://infra.spec.whatwg.org/#ascii-string). In order to maximize interoperability, the resource type and its associated properties SHOULD be registered in the DID Specification Registries <a data-link-type="biblio" href="#biblio-did-spec-registries" title="Decentralized Identifier Extensions">[DID-SPEC-REGISTRIES]</a>.</p>
-   <h3 class="heading settled" data-level="4.6" id="resourceversion"><span class="secno">4.6. </span><span class="content">Resource Version</span><a class="self-link" href="#resourceversion"></a></h3>
+   <h3 class="heading settled" data-level="5.6" id="resourceversion"><span class="secno">5.6. </span><span class="content">Resource Version</span><a class="self-link" href="#resourceversion"></a></h3>
    <p>The <code>resourceVersion</code> property is OPTIONAL. If present, the value of the type property be expressed as an [ASCII string](https://infra.spec.whatwg.org/#ascii-string).</p>
-   <h3 class="heading settled" data-level="4.7" id="alternativeuri"><span class="secno">4.7. </span><span class="content">Alternative URI</span><a class="self-link" href="#alternativeuri"></a></h3>
+   <h3 class="heading settled" data-level="5.7" id="alternativeuri"><span class="secno">5.7. </span><span class="content">Alternative URI</span><a class="self-link" href="#alternativeuri"></a></h3>
    <p>The <code>alternativeUri</code> property is OPTIONAL. If present, the value MUST be a set where each item in the set is a URI conforming to <a data-link-type="biblio" href="#biblio-rfc3986" title="Uniform Resource Identifier (URI): Generic Syntax">[RFC3986]</a>.</p>
-   <h3 class="heading settled" data-level="4.8" id="resourceMetadataProperties"><span class="secno">4.8. </span><span class="content">Resource Metadata Properties</span><a class="self-link" href="#resourceMetadataProperties"></a></h3>
-   <h4 class="heading settled" data-level="4.8.1" id="mediatype"><span class="secno">4.8.1. </span><span class="content">Media Type {#mediatype}</span><a class="self-link" href="#mediatype"></a></h4>
+   <h3 class="heading settled" data-level="5.8" id="resourceMetadataProperties"><span class="secno">5.8. </span><span class="content">Resource Metadata Properties</span><a class="self-link" href="#resourceMetadataProperties"></a></h3>
+   <h4 class="heading settled" data-level="5.8.1" id="mediatype"><span class="secno">5.8.1. </span><span class="content">Media Type {#mediatype}</span><a class="self-link" href="#mediatype"></a></h4>
    <p>The <code>mediaType</code> property is OPTIONAL. If present, the value must be expressed as an [ASCII string](https://infra.spec.whatwg.org/#ascii-string) and SHOULD match the underlying IANA media type of the file of the resource identified by the resourceId.</p>
-   <h4 class="heading settled" data-level="4.8.2" id="checksum"><span class="secno">4.8.2. </span><span class="content">Checksum {#checksum}</span><a class="self-link" href="#checksum"></a></h4>
+   <h4 class="heading settled" data-level="5.8.2" id="checksum"><span class="secno">5.8.2. </span><span class="content">Checksum {#checksum}</span><a class="self-link" href="#checksum"></a></h4>
    <p>The <code>checksum</code> property is OPTIONAL. If present, the value SHOULD be an equivalent representation of the resource identified by the resourceId.</p>
-   <h4 class="heading settled" data-level="4.8.3" id="created"><span class="secno">4.8.3. </span><span class="content">Created {#created}</span><a class="self-link" href="#created"></a></h4>
+   <h4 class="heading settled" data-level="5.8.3" id="created"><span class="secno">5.8.3. </span><span class="content">Created {#created}</span><a class="self-link" href="#created"></a></h4>
    <p>The <code>created</code> property is OPTIONAL. If present, the value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision. For example: 2020-12-20T19:17:47Z.</p>
-   <h4 class="heading settled" data-level="4.8.4" id="updated"><span class="secno">4.8.4. </span><span class="content">Updated {#updated}</span><a class="self-link" href="#updated"></a></h4>
+   <h4 class="heading settled" data-level="5.8.4" id="updated"><span class="secno">5.8.4. </span><span class="content">Updated {#updated}</span><a class="self-link" href="#updated"></a></h4>
    <p>The <code>updated</code> property is OPTIONAL. If present, the value of the property MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision. For example: 2020-12-20T19:17:47Z.</p>
-   <h4 class="heading settled" data-level="4.8.5" id="previousversionid"><span class="secno">4.8.5. </span><span class="content">PreviousVersionId {#previousversionid}</span><a class="self-link" href="#previousversionid"></a></h4>
+   <h4 class="heading settled" data-level="5.8.5" id="previousversionid"><span class="secno">5.8.5. </span><span class="content">PreviousVersionId {#previousversionid}</span><a class="self-link" href="#previousversionid"></a></h4>
    <p>The <code>previousVersionId</code> property is OPTIONAL. If present, the value should reference the directly previous version of the resource. The value of the property MUST be an ASCII string.</p>
-   <h4 class="heading settled" data-level="4.8.6" id="nextversionid"><span class="secno">4.8.6. </span><span class="content">NextVersionId {#nextversionid}</span><a class="self-link" href="#nextversionid"></a></h4>
+   <h4 class="heading settled" data-level="5.8.6" id="nextversionid"><span class="secno">5.8.6. </span><span class="content">NextVersionId {#nextversionid}</span><a class="self-link" href="#nextversionid"></a></h4>
    <p>The <code>nextVersionId</code> property is OPTIONAL. If present, the value should reference the directly next version of the resource. The value of the property MUST be an ASCII string.</p>
-   <h2 class="heading settled" data-level="5" id="binding"><span class="secno">5. </span><span class="content">Binding to DIDs</span><a class="self-link" href="#binding"></a></h2>
+   <h2 class="heading settled" data-level="6" id="binding"><span class="secno">6. </span><span class="content">Binding to DIDs</span><a class="self-link" href="#binding"></a></h2>
    <p>In the context of DID-Linked Resources (DLRs), <strong>binding</strong> refers to the relationship between a resource and a Decentralized Identifier (DID). This binding is OPTIONAL, but it is highly recommended.</p>
    <p>A DID acts as the <strong>parent</strong> that has authority over the resource, which is the <strong>child</strong>. The <a data-link-type="dfn" href="#did-controller" id="ref-for-did-controller">DID controller</a> (the entity controlling the DID) has control over the resource and can modify, update or deprecate it.</p>
    <p>In this context, the DID itself becomes a <strong><a data-link-type="dfn" href="#resource-collection" id="ref-for-resource-collection">Resource Collection</a></strong>, within which one or multiple resources can be referenced.</p>
@@ -1051,11 +1055,11 @@ DIGIT = %x30-39
    <p>The binding of a resource to a DID ensures that the <a data-link-type="dfn" href="#did-controller" id="ref-for-did-controller①">DID controller</a> has control over the resource and that the resource is logically scoped within the DID’s authority.</p>
    <p>Multiple resources MAY be bound to the same DID, and each MUST include a unique <code>resourceId</code>.</p>
    <p>This relationship MAY be enforced and validated by the underlying infrastructure (such as a distributed ledger consensus mechanism), or through other cryptographic techniques, defined by the DID Method implementing DID-Linked Resources.</p>
-   <h3 class="heading settled" data-level="5.1" id="representations"><span class="secno">5.1. </span><span class="content">Representations</span><a class="self-link" href="#representations"></a></h3>
+   <h3 class="heading settled" data-level="6.1" id="representations"><span class="secno">6.1. </span><span class="content">Representations</span><a class="self-link" href="#representations"></a></h3>
    <p>Resources linked to a DID should be represented in a way that maintains a verifiable association with that DID. The metadata describing each Resource SHOULD be included as part of the DID Document Metadata, rather than within the DID Document itself. This allows for clear delineation between identity-related data and externally linked Resources.</p>
    <p>To ensure the integrity and traceability of Resources associated with a DID, the <code>didDocumentMetadata</code> object MAY include a <code>linkedResourceMetadata</code> array. Each entry in this array corresponds to a distinct Resource that is logically bound to the DID. Resources MAY be grouped or indexed by name and type, allowing multiple different resources (not necessarily different versions of the same one) to be managed within a single logical collection.</p>
    <p>This approach provides flexibility for DID controllers to organize and track various types of linked Resources while preserving clear versioning relationships and semantic meaning.</p>
-   <h3 class="heading settled" data-level="5.2" id="diddocmetadata"><span class="secno">5.2. </span><span class="content">Representation within DID Document Metadata</span><a class="self-link" href="#diddocmetadata"></a></h3>
+   <h3 class="heading settled" data-level="6.2" id="diddocmetadata"><span class="secno">6.2. </span><span class="content">Representation within DID Document Metadata</span><a class="self-link" href="#diddocmetadata"></a></h3>
    <p>The <code>linkedResourceMetadata</code> array is used to track these resources, where each entry corresponds to a specific resource within the collection. Each resource metadata entry SHOULD includes the properties included in the Core Properties, including links to previous and subsequent versions (if applicable). This allows for a clear versioning and management system while supporting the inclusion of different types of resources in a single collection.</p>
    <p>The syntax of the <code>didDocumentMetadata</code> including <code>linkedResourceMetadata</code> is as follows:</p>
 <pre class="language-json highlight"><c- f>"didDocumentMetadata"</c-><c- p>:</c-> <c- p>{</c->
@@ -1110,11 +1114,11 @@ DIGIT = %x30-39
 </pre>
    <div class="note" role="note"> <b>Note:</b> The <code>didDocumentMetadata</code> SHOULD NOT be populated with the actual resource, but instead, populated with only the <strong>Resource Metadata</strong> which contains all the metadata about the associated resources. </div>
    <p>All required fields defined under Core Properties MUST be included for each Resource Metadata entry.</p>
-   <h3 class="heading settled" data-level="5.3" id="resourcerepresentation"><span class="secno">5.3. </span><span class="content">Resource Representation</span><a class="self-link" href="#resourcerepresentation"></a></h3>
-   <p>Resources linked to a DID via a <a data-link-type="dfn" href="#did-linked-resource" id="ref-for-did-linked-resource②">DID-Linked Resource</a> mechanism MUST be retrievable either individually (by their full resourceId) or in aggregate (by querying resources linked to a given DID, using a particular filter).</p>
+   <h3 class="heading settled" data-level="6.3" id="resourcerepresentation"><span class="secno">6.3. </span><span class="content">Resource Representation</span><a class="self-link" href="#resourcerepresentation"></a></h3>
+   <p>Resources linked to a DID via a <a data-link-type="dfn" href="#did-linked-resource" id="ref-for-did-linked-resource①">DID-Linked Resource</a> mechanism MUST be retrievable either individually (by their full resourceId) or in aggregate (by querying resources linked to a given DID, using a particular filter).</p>
    <p>When queried individually, the result MUST return the full Resource representation associated with the provided resourceId.</p>
    <p>When queried in aggregate, the result MUST return an array of Resource Metadata entries, each describing a distinct Resource or version of the same resource. These metadata entries provide an overview of the linked Resources without including the Resources’ full content or returning the DID Document itself.</p>
-   <h2 class="heading settled" data-level="6" id="resourceparameters"><span class="secno">6. </span><span class="content">Resource Parameters</span><a class="self-link" href="#resourceparameters"></a></h2>
+   <h2 class="heading settled" data-level="7" id="resourceparameters"><span class="secno">7. </span><span class="content">Resource Parameters</span><a class="self-link" href="#resourceparameters"></a></h2>
    <p>The Resource URI syntax supports a simple format for parameters (see section Query in <a data-link-type="biblio" href="#biblio-did-core" title="Decentralized Identifiers (DIDs) v1.0">[DID-CORE]</a>). Adding a resource parameter to a Resource URI means that the parameter becomes part of the identifier for a resource.</p>
    <p>Resource parameters are completely independent of any specific DID method and function the same way for all DIDs.</p>
    <table>
@@ -1153,7 +1157,7 @@ DIGIT = %x30-39
       <td><a href="https://infra.spec.whatwg.org/#booleans">Boolean</a>.
       <td>Used to fetch metadata related to a specific resource or group of resources.
    </table>
-   <h2 class="heading settled" data-level="7" id="resolutionanddereferencing"><span class="secno">7. </span><span class="content">Resolution and Dereferencing</span><a class="self-link" href="#resolutionanddereferencing"></a></h2>
+   <h2 class="heading settled" data-level="8" id="resolutionanddereferencing"><span class="secno">8. </span><span class="content">Resolution and Dereferencing</span><a class="self-link" href="#resolutionanddereferencing"></a></h2>
    <p>Requests to fetch Resources are considered as a <a data-link-type="dfn" href="#did-url-dereferencing" id="ref-for-did-url-dereferencing②">DID URL dereferencing</a> scenario it uses [DID URL paths](https://w3c.github.io/did-core/#path) to lead to a Resource object, rather than a DIDDoc.</p>
    <p>The <a data-link-type="dfn" href="#did-url-dereferencing" id="ref-for-did-url-dereferencing③">DID URL dereferencing</a> function dereferences a Resource URI (a type of DID URL), into a resource with contents depending on the DID URL’s components, including the DID method, method-specific identifier, path, query, and fragment. This process depends on DID resolution of the DID contained in the <a data-link-type="dfn" href="#did-url" id="ref-for-did-url①">DID URL</a>. DID URL dereferencing might involve multiple steps (e.g., when the DID URL being dereferenced includes a fragment), and the function is defined to return the final resource after all steps are completed.</p>
    <p>Normal <a data-link-type="dfn" href="#did-url-dereferencing" id="ref-for-did-url-dereferencing④">DID URL dereferencing</a> can be understood as a two-step process:</p>
@@ -1189,15 +1193,15 @@ DIGIT = %x30-39
       <c- p>}]</c->
 <c- p>}</c->
 </pre>
-   <h2 class="heading settled" data-level="8" id="ambiguity"><span class="secno">8. </span><span class="content">Rules and Logic for Handling Ambiguous Queries</span><a class="self-link" href="#ambiguity"></a></h2>
+   <h2 class="heading settled" data-level="9" id="ambiguity"><span class="secno">9. </span><span class="content">Rules and Logic for Handling Ambiguous Queries</span><a class="self-link" href="#ambiguity"></a></h2>
    <p>This section describes how the resolver handles complex or ambiguous dereferencing requests. The resolver applies consistent logic and default behaviors to ensure predictable outcomes for clients.</p>
-   <h3 class="heading settled" data-level="8.1" id="ambiguityerror"><span class="secno">8.1. </span><span class="content">Ambiguity Triggers Errors</span><a class="self-link" href="#ambiguityerror"></a></h3>
+   <h3 class="heading settled" data-level="9.1" id="ambiguityerror"><span class="secno">9.1. </span><span class="content">Ambiguity Triggers Errors</span><a class="self-link" href="#ambiguityerror"></a></h3>
    <p>If a query results in multiple matching resources and does not include sufficient parameters to disambiguate between them, the resolver MUST return an error.</p>
    <p>For example, a query that specifies a <code>resourceType</code> where multiple resources share that type but differ in <code>resourceName</code> will result in an error due to ambiguity.</p>
-   <h3 class="heading settled" data-level="8.2" id="multipleversions"><span class="secno">8.2. </span><span class="content">Multiple Versions of the Same Resource</span><a class="self-link" href="#multipleversions"></a></h3>
+   <h3 class="heading settled" data-level="9.2" id="multipleversions"><span class="secno">9.2. </span><span class="content">Multiple Versions of the Same Resource</span><a class="self-link" href="#multipleversions"></a></h3>
    <p>If multiple versions of a single resource exist—meaning the resources have the same <code>resourceType</code> and <code>resourceName</code>, but different <code>versionId</code> values—and no specific version is requested, the resolver MUST default to returning the latest version.</p>
    <p>This situation is not considered ambiguous, as the resource identity is clear; only the version is unspecified.</p>
-   <h3 class="heading settled" data-level="8.3" id="ambiguityplusmetadata"><span class="secno">8.3. </span><span class="content">Ambiguous Query with <code>resourceMetadata=true</code></span><a class="self-link" href="#ambiguityplusmetadata"></a></h3>
+   <h3 class="heading settled" data-level="9.3" id="ambiguityplusmetadata"><span class="secno">9.3. </span><span class="content">Ambiguous Query with <code>resourceMetadata=true</code></span><a class="self-link" href="#ambiguityplusmetadata"></a></h3>
    <p>When a query is ambiguous, but includes the <code>resourceMetadata=true</code> parameter, the resolver SHOULD return metadata for all matching resources that could be the intended target.</p>
    <p>This enables clients to inspect available options and decide which resource to dereference.</p>
    <p>For example, the following request would return metadata for all resources matching the specified <code>resourceType</code>, regardless of differing <code>resourceName</code> values.:</p>
@@ -1255,11 +1259,11 @@ DIGIT = %x30-39
 <c- p>}</c->
 </pre>
    </details>
-   <h3 class="heading settled" data-level="8.4" id="acceptheaders"><span class="secno">8.4. </span><span class="content">HTTP Accept Headers</span><a class="self-link" href="#acceptheaders"></a></h3>
+   <h3 class="heading settled" data-level="9.4" id="acceptheaders"><span class="secno">9.4. </span><span class="content">HTTP Accept Headers</span><a class="self-link" href="#acceptheaders"></a></h3>
    <p>Clients MAY use the <code>Accept</code> HTTP header to express a preference for the media type of the dereferenced resource.</p>
    <p>The resolver MUST respect the <code>Accept</code> header if possible and return a resource representation that matches the requested media type. If no exact match is found, the resolver SHOULD return an error status, following the statuses in the DID Resolution Spec, or fall back to a default media type if appropriate.</p>
-   <h2 class="heading settled" data-level="9" id="resolutionanddereferencingexamples"><span class="secno">9. </span><span class="content">Resolution and Dereferecing examples</span><a class="self-link" href="#resolutionanddereferencingexamples"></a></h2>
-   <h3 class="heading settled" data-level="9.1" id="resourcemetadatafilter"><span class="secno">9.1. </span><span class="content">ResourceMetadata and Filter</span><a class="self-link" href="#resourcemetadatafilter"></a></h3>
+   <h2 class="heading settled" data-level="10" id="resolutionanddereferencingexamples"><span class="secno">10. </span><span class="content">Resolution and Dereferecing examples</span><a class="self-link" href="#resolutionanddereferencingexamples"></a></h2>
+   <h3 class="heading settled" data-level="10.1" id="resourcemetadatafilter"><span class="secno">10.1. </span><span class="content">ResourceMetadata and Filter</span><a class="self-link" href="#resourcemetadatafilter"></a></h3>
    <p>This parameter is a filter that specifically returns metadata of one or more resources and can be combined with other filters, for specific filtering. The optional variants are:</p>
    <ul>
     <li data-md>
@@ -1335,7 +1339,7 @@ DIGIT = %x30-39
 <c- p>}</c->
 </pre>
    </details>
-   <h3 class="heading settled" data-level="9.2" id="resourceidparamater"><span class="secno">9.2. </span><span class="content">ResourceId Parameter</span><a class="self-link" href="#resourceidparamater"></a></h3>
+   <h3 class="heading settled" data-level="10.2" id="resourceidparamater"><span class="secno">10.2. </span><span class="content">ResourceId Parameter</span><a class="self-link" href="#resourceidparamater"></a></h3>
    <p><code>resourceId</code> parameter can be used for filtering a particular resource version by specifically identifying its unique ID.</p>
    <p>For example:</p>
    <details>
@@ -1364,7 +1368,7 @@ DIGIT = %x30-39
 
 </pre>
    </details>
-   <h3 class="heading settled" data-level="9.3" id="resourcecollectionidparameter"><span class="secno">9.3. </span><span class="content">ResourceCollectionId Parameter</span><a class="self-link" href="#resourcecollectionidparameter"></a></h3>
+   <h3 class="heading settled" data-level="10.3" id="resourcecollectionidparameter"><span class="secno">10.3. </span><span class="content">ResourceCollectionId Parameter</span><a class="self-link" href="#resourcecollectionidparameter"></a></h3>
    <p><code>resourceCollectionId</code> parameter filters all resources linked to a particular DID by the <code>collectionId</code> property. It is recommended that this query is only used when there is one resource linked to a DID. If it is used with multiple resources, it is recommended to be combined with another query parameter to act as a filter such as <code>resourceMetadata=true</code>. Otherwise, it is likely to result in an ambigous query.</p>
    <p>For example:</p>
    <details>
@@ -1393,7 +1397,7 @@ DIGIT = %x30-39
 
 </pre>
    </details>
-   <h3 class="heading settled" data-level="9.4" id="resourcetypeparameter"><span class="secno">9.4. </span><span class="content">ResourceType Parameter</span><a class="self-link" href="#resourcetypeparameter"></a></h3>
+   <h3 class="heading settled" data-level="10.4" id="resourcetypeparameter"><span class="secno">10.4. </span><span class="content">ResourceType Parameter</span><a class="self-link" href="#resourcetypeparameter"></a></h3>
    <p>This parameter is another filter for the <code>resourceType</code> property. Again, this should only be used if there is one resource associated with the DID. Otherwise additional filters should be added to avoid ambiguous queries.</p>
    <p>For example:</p>
    <details>
@@ -1422,7 +1426,7 @@ DIGIT = %x30-39
 
 </pre>
    </details>
-   <h3 class="heading settled" data-level="9.5" id="resourcenameparameter"><span class="secno">9.5. </span><span class="content">ResourceName Parameter</span><a class="self-link" href="#resourcenameparameter"></a></h3>
+   <h3 class="heading settled" data-level="10.5" id="resourcenameparameter"><span class="secno">10.5. </span><span class="content">ResourceName Parameter</span><a class="self-link" href="#resourcenameparameter"></a></h3>
    <p>This parameter is a filter for the <code>resourceName</code> property. Again, this should only be used if there is one resource associated with the DID. Otherwise additional filters should be added to avoid ambiguous queries.</p>
    <p>For example:</p>
    <details>
@@ -1451,7 +1455,7 @@ DIGIT = %x30-39
 
 </pre>
    </details>
-   <h3 class="heading settled" data-level="9.6" id="typeandnameparameter"><span class="secno">9.6. </span><span class="content">ResourceName and ResourceType Parameters</span><a class="self-link" href="#typeandnameparameter"></a></h3>
+   <h3 class="heading settled" data-level="10.6" id="typeandnameparameter"><span class="secno">10.6. </span><span class="content">ResourceName and ResourceType Parameters</span><a class="self-link" href="#typeandnameparameter"></a></h3>
    <p>This is a combined filter that SHOULD fetch the latest version of the resource, of the same name and type.</p>
    <p>For example:</p>
    <details>
@@ -1479,7 +1483,7 @@ DIGIT = %x30-39
 <c- p>}</c->
 
 </pre>
-    <h3 class="heading settled" data-level="9.7" id="resourceversionparameter"><span class="secno">9.7. </span><span class="content">ResourceVersion Parameter</span><a class="self-link" href="#resourceversionparameter"></a></h3>
+    <h3 class="heading settled" data-level="10.7" id="resourceversionparameter"><span class="secno">10.7. </span><span class="content">ResourceVersion Parameter</span><a class="self-link" href="#resourceversionparameter"></a></h3>
     <p>This parameter filters by <code>resourceVersion</code> field.</p>
     <p>For example:</p>
     <details>
@@ -1508,7 +1512,7 @@ DIGIT = %x30-39
 
 </pre>
     </details>
-    <h3 class="heading settled" data-level="9.8" id="resourceversiontimeparameter"><span class="secno">9.8. </span><span class="content">ResourceVersionTime Parameter</span><a class="self-link" href="#resourceversiontimeparameter"></a></h3>
+    <h3 class="heading settled" data-level="10.8" id="resourceversiontimeparameter"><span class="secno">10.8. </span><span class="content">ResourceVersionTime Parameter</span><a class="self-link" href="#resourceversiontimeparameter"></a></h3>
     <div class="note" role="note"> <b>Important:</b> This parameter SHOULD always be accompanied by another resource query qualifier. </div>
     <p>This parameter filters to the nearest resource for <code>resourceVersionTime</code> value.</p>
     <p>For example:</p>
@@ -1538,7 +1542,7 @@ DIGIT = %x30-39
 
 </pre>
     </details>
-    <h3 class="heading settled" data-level="9.9" id="checksumparameter"><span class="secno">9.9. </span><span class="content">Checksum Parameter</span><a class="self-link" href="#checksumparameter"></a></h3>
+    <h3 class="heading settled" data-level="10.9" id="checksumparameter"><span class="secno">10.9. </span><span class="content">Checksum Parameter</span><a class="self-link" href="#checksumparameter"></a></h3>
     <p>This parameter can be used to check that the <code>checksum</code> is the same as resource’s metadata.</p>
     <p>For example:</p>
     <details>
@@ -1567,53 +1571,53 @@ DIGIT = %x30-39
 
 </pre>
     </details>
-    <h2 class="heading settled" data-level="10" id="practicalconsiderations"><span class="secno">10. </span><span class="content">Practical Considerations</span><a class="self-link" href="#practicalconsiderations"></a></h2>
-    <h3 class="heading settled" data-level="10.1" id="resourcecreation"><span class="secno">10.1. </span><span class="content">Creation of a Resource</span><a class="self-link" href="#resourcecreation"></a></h3>
+    <h2 class="heading settled" data-level="11" id="practicalconsiderations"><span class="secno">11. </span><span class="content">Practical Considerations</span><a class="self-link" href="#practicalconsiderations"></a></h2>
+    <h3 class="heading settled" data-level="11.1" id="resourcecreation"><span class="secno">11.1. </span><span class="content">Creation of a Resource</span><a class="self-link" href="#resourcecreation"></a></h3>
     <p>The creation of a DID-Linked Resource is defined by the specific capabilities and constraints of the corresponding DID Method. Each method <strong>MAY</strong> define its own procedures and required parameters for resource creation, provided that the resulting metadata includes the required core properties. These properties <strong>MUST</strong> be represented in a valid form of <code>linkedResourceMetadata</code> so that the resource can be effectively discovered, dereferenced, and versioned.</p>
-    <h3 class="heading settled" data-level="10.2" id="linkedresourcemetadata"><span class="secno">10.2. </span><span class="content">Recommendations for constructing linkedResourceMetadata</span><a class="self-link" href="#linkedresourcemetadata"></a></h3>
+    <h3 class="heading settled" data-level="11.2" id="linkedresourcemetadata"><span class="secno">11.2. </span><span class="content">Recommendations for constructing linkedResourceMetadata</span><a class="self-link" href="#linkedresourcemetadata"></a></h3>
     <p>DID Methods that support DID-Linked Resources SHOULD define how <code>linkedResourceMetadata</code> entries are constructed and maintained. This includes how resources are named, typed, versioned, and referenced. Some DID Methods MAY require an explicit update operation to populate the <code>linkedResourceMetadata</code> in the <code>didDocumentMetadata</code>. Other methods <strong>MAY</strong> automate this process via the underlying protocol logic, such as smart contract events or system-level triggers.</p>
     <p>To maintain consistency and traceability, resources with the same <code>resourceName</code> and <code>resourceType</code> <strong>MAY</strong> be grouped as different versions of the same logical resource, while resources with distinct names and types <strong>MAY</strong> coexist within the same <code>resourceCollectionId</code> to support broader groupings.</p>
-    <h3 class="heading settled" data-level="10.3" id="webbasedmethods"><span class="secno">10.3. </span><span class="content">Applicability for Web-based DID Methods</span><a class="self-link" href="#webbasedmethods"></a></h3>
+    <h3 class="heading settled" data-level="11.3" id="webbasedmethods"><span class="secno">11.3. </span><span class="content">Applicability for Web-based DID Methods</span><a class="self-link" href="#webbasedmethods"></a></h3>
     <p>Web-based DID Methods, such as <code>did:web</code>, present unique constraints due to the stateless and document-centric nature of HTTP infrastructure. For these methods, implementers <strong>SHOULD</strong> define a clear strategy for persisting and updating the <a data-link-type="dfn" href="#did-document" id="ref-for-did-document">DID Document</a> and its associated metadata whenever a new DID-Linked Resource is created or modified.</p>
     <p>This may include publishing an updated JSON file at a well-known URI, leveraging existing content management systems, or adopting tooling that automates updates to <code>didDocumentMetadata</code>. Regardless of the mechanism, web-based methods <strong>MUST</strong> ensure that any addition of `linkedResourceMetadata` is accurately reflected in the published <a data-link-type="dfn" href="#did-document" id="ref-for-did-document①">DID Document</a> and adheres to consistency and versioning rules.</p>
-    <h3 class="heading settled" data-level="10.4" id="accesscontrol"><span class="secno">10.4. </span><span class="content">Access Control and Provenance</span><a class="self-link" href="#accesscontrol"></a></h3>
+    <h3 class="heading settled" data-level="11.4" id="accesscontrol"><span class="secno">11.4. </span><span class="content">Access Control and Provenance</span><a class="self-link" href="#accesscontrol"></a></h3>
     <p>Each DID Method or implementation <strong>MAY</strong> also define mechanisms to ensure the authenticity, authorization, and integrity of linked resources. This <strong>MAY</strong> include cryptographic proofs within the metadata, DID-based access control lists (ACLs), or binding to verifiable credentials. Provenance and auditability of resource updates SHOULD be considered, particularly when supporting mutable resources or collaborative workflows.</p>
-    <h2 class="heading settled" data-level="11" id="securityconsiderations"><span class="secno">11. </span><span class="content">Security Considerations</span><a class="self-link" href="#securityconsiderations"></a></h2>
+    <h2 class="heading settled" data-level="12" id="securityconsiderations"><span class="secno">12. </span><span class="content">Security Considerations</span><a class="self-link" href="#securityconsiderations"></a></h2>
     <p>This section discusses the security and integrity considerations associated with the creation, linking, dereferencing, and management of DID-Linked Resources.</p>
-    <h3 class="heading settled" data-level="11.1" id="authority"><span class="secno">11.1. </span><span class="content">Proving Control and Binding</span><a class="self-link" href="#authority"></a></h3>
+    <h3 class="heading settled" data-level="12.1" id="authority"><span class="secno">12.1. </span><span class="content">Proving Control and Binding</span><a class="self-link" href="#authority"></a></h3>
     <p>To ensure that a DID-Linked Resource is legitimately associated with a DID, DID Methods <strong>MAY</strong> define processes for cryptographically verifying control over the resource. These verification mechanisms <strong>MAY</strong> involve signatures or proofs generated using verification methods referenced in the <a data-link-type="dfn" href="#did-document" id="ref-for-did-document②">DID Document</a>. For example, a data integrity proof (e.g., using <a data-link-type="biblio" href="#biblio-vc-data-integrity" title="Verifiable Credential Data Integrity 1.0">[VC-DATA-INTEGRITY]</a>) <strong>MAY</strong> be used to assert that the resource was authored or approved by the <a data-link-type="dfn" href="#did-controller" id="ref-for-did-controller②">DID controller</a>.</p>
     <p>Verifying the binding between a DID and its linked resources is essential for establishing trust. Implementations <strong>SHOULD</strong> ensure that any control or update operations over resources are performed only by authorized parties, and that tampering with resource content can be detected through checksum validation or integrity proofs.</p>
-    <h3 class="heading settled" data-level="11.2" id="alternativelocation"><span class="secno">11.2. </span><span class="content">Alternative Resource Locations</span><a class="self-link" href="#alternativelocation"></a></h3>
+    <h3 class="heading settled" data-level="12.2" id="alternativelocation"><span class="secno">12.2. </span><span class="content">Alternative Resource Locations</span><a class="self-link" href="#alternativelocation"></a></h3>
     <p>DID-Linked Resources <strong>MAY</strong> reside at locations different from the storage or resolution infrastructure used by the DID itself. For instance, while a <a data-link-type="dfn" href="#did-document" id="ref-for-did-document③">DID Document</a> may be stored on a blockchain, its associated resources might be hosted in IPFS, cloud object storage, or private data vaults.</p>
     <p>In such cases, the external location of a resource <strong>SHOULD</strong> be clearly specified in the <code>resourceURI</code> field within <code>linkedResourceMetadata</code>. If the resource’s address or availability changes, this <strong>MAY</strong> require a <a data-link-type="dfn" href="#did-document" id="ref-for-did-document④">DID Document</a> metadata update to reflect the new location, subject to the rules of the corresponding DID Method.</p>
-    <h3 class="heading settled" data-level="11.3" id="diddeactivation"><span class="secno">11.3. </span><span class="content">Parent DID Deactivation</span><a class="self-link" href="#diddeactivation"></a></h3>
+    <h3 class="heading settled" data-level="12.3" id="diddeactivation"><span class="secno">12.3. </span><span class="content">Parent DID Deactivation</span><a class="self-link" href="#diddeactivation"></a></h3>
     <p>If a <strong>parent</strong> DID is deactivated, the status of its associated DID-Linked Resources must be clearly defined by the DID Method. It is <strong>RECOMMENDED</strong> that child resources automatically inherit the deactivated status of the parent DID. This ensures that resources can no longer be dereferenced or trusted under the assumption that they are still associated with an active DID.</p>
     <p>However, some use cases <strong>MAY</strong> require resources to persist or remain accessible after DID deactivation (e.g., for audit or archival purposes). In such cases, implementations MUST clearly distinguish between active and inactive resources, and <strong>SHOULD</strong> ensure that clients understand the deactivated state when dereferencing.</p>
-    <h3 class="heading settled" data-level="11.4" id="persistence"><span class="secno">11.4. </span><span class="content">Persistence after Broken Link with DID</span><a class="self-link" href="#persistence"></a></h3>
+    <h3 class="heading settled" data-level="12.4" id="persistence"><span class="secno">12.4. </span><span class="content">Persistence after Broken Link with DID</span><a class="self-link" href="#persistence"></a></h3>
     <p>There are scenarios in which a resource may become logically detached from its parent DID—for example, when keys used to control the resource are removed from the DID Document, or if a controller relationship is revoked.</p>
     <p>In such cases, it is up to the DID Method to decide whether the resource remains referenced in the <code>linkedResourceMetadata</code>. DID Methods <strong>SHOULD</strong> clearly define policies for handling orphaned or stale resources, including whether they are retained, archived, or purged.</p>
     <p>Regardless of the decision, implementations <strong>SHOULD</strong> clearly indicate when a linked resource is no longer actively bound to the DID, either through metadata flags or dereferencing responses.</p>
-    <h2 class="heading settled" data-level="12" id="privacy"><span class="secno">12. </span><span class="content">Privacy Considerations</span><a class="self-link" href="#privacy"></a></h2>
+    <h2 class="heading settled" data-level="13" id="privacy"><span class="secno">13. </span><span class="content">Privacy Considerations</span><a class="self-link" href="#privacy"></a></h2>
     <p>This section explores the privacy considerations associated with DID-Linked Resources.</p>
-    <h3 class="heading settled" data-level="12.1" id="pseudonymity"><span class="secno">12.1. </span><span class="content">Linkability and Pseudonymity</span><a class="self-link" href="#pseudonymity"></a></h3>
+    <h3 class="heading settled" data-level="13.1" id="pseudonymity"><span class="secno">13.1. </span><span class="content">Linkability and Pseudonymity</span><a class="self-link" href="#pseudonymity"></a></h3>
     <p>Resources <strong>SHOULD</strong> not contain personally identifiable information. This is particularly the case for ledger-based DID methods.</p>
-    <h3 class="heading settled" data-level="12.2" id="immutability"><span class="secno">12.2. </span><span class="content">Immutability</span><a class="self-link" href="#immutability"></a></h3>
-    <h3 class="heading settled" data-level="12.3" id="encryption"><span class="secno">12.3. </span><span class="content">Encrypted Data in Resources</span><a class="self-link" href="#encryption"></a></h3>
+    <h3 class="heading settled" data-level="13.2" id="immutability"><span class="secno">13.2. </span><span class="content">Immutability</span><a class="self-link" href="#immutability"></a></h3>
+    <h3 class="heading settled" data-level="13.3" id="encryption"><span class="secno">13.3. </span><span class="content">Encrypted Data in Resources</span><a class="self-link" href="#encryption"></a></h3>
     <p>DID Methods <strong>MAY</strong> introduce encryption for their resources, to protect the information contained in the resource or to gate access to the resource.</p>
-    <h2 class="heading settled" data-level="13" id="architectural"><span class="secno">13. </span><span class="content">Architectural Considerations</span><a class="self-link" href="#architectural"></a></h2>
+    <h2 class="heading settled" data-level="14" id="architectural"><span class="secno">14. </span><span class="content">Architectural Considerations</span><a class="self-link" href="#architectural"></a></h2>
     <p>This section outlines architectural design principles and best practices for implementing DID-Linked Resources across various DID Methods.</p>
-    <h3 class="heading settled" data-level="13.1" id="versioning"><span class="secno">13.1. </span><span class="content">Resource Versioning</span><a class="self-link" href="#versioning"></a></h3>
+    <h3 class="heading settled" data-level="14.1" id="versioning"><span class="secno">14.1. </span><span class="content">Resource Versioning</span><a class="self-link" href="#versioning"></a></h3>
     <p>Multiple resources can be stored within a collection and linked to the same DID. These resources <strong>MAY</strong> represent either new versions of the same logical resource (e.g., a credential schema) or entirely different artifacts (e.g., terms of service, logos, templates). This structure supports the evolution of resources over time and enables granular management of linked data assets.</p>
     <p>Resources that contain both a <code>resourceName</code> and a <code>resourceType</code> <strong>SHOULD</strong> be treated as part of a versioning sequence. DID Methods <strong>SHOULD</strong> treat resources with identical <code>resourceName</code> and <code>resourceType</code> as sequential versions when accompanied by differing <code>resourceId</code> values. This provides clarity in dereferencing operations and allows consumers to trace the lineage of a resource across updates.</p>
     <p>To ensure traceability, each version <strong>MAY</strong> include a <code>previousVersionId</code> and a <code>nextVersionId</code> that form a linked list across time, enabling version chaining and safe traversal.</p>
-    <h3 class="heading settled" data-level="13.2" id="serviceendpoint"><span class="secno">13.2. </span><span class="content">Resources in Service Endpoint versus DID Document Metadata</span><a class="self-link" href="#serviceendpoint"></a></h3>
+    <h3 class="heading settled" data-level="14.2" id="serviceendpoint"><span class="secno">14.2. </span><span class="content">Resources in Service Endpoint versus DID Document Metadata</span><a class="self-link" href="#serviceendpoint"></a></h3>
     <p>The <code>service</code> section of the <a data-link-type="dfn" href="#did-document" id="ref-for-did-document⑤">DID Document</a> is intentionally limited in structure and expressiveness. As such, DID-Linked Resources are NOT referenced through service endpoints. Instead, they are expressed using the <code>linkedResourceMetadata</code> field in the <code>didDocumentMetadata</code> section, which allows for a more expressive and extensible format, including properties such as version history, checksums, creation timestamps, and media types.</p>
     <p>This architectural decision ensures backward compatibility with existing DID resolvers and DID Documents, which are not required to interpret DID-Linked Resources in order to perform DID resolution. Systems that understand DID-Linked Resources can leverage the <code>linkedResourceMetadata</code> field to retrieve and process associated artifacts, while maintaining interoperability with resolvers that only support core DID operations.</p>
-    <h3 class="heading settled" data-level="13.3" id="resourcedeactivation"><span class="secno">13.3. </span><span class="content">Resource Deactivation or Deprecation</span><a class="self-link" href="#resourcedeactivation"></a></h3>
+    <h3 class="heading settled" data-level="14.3" id="resourcedeactivation"><span class="secno">14.3. </span><span class="content">Resource Deactivation or Deprecation</span><a class="self-link" href="#resourcedeactivation"></a></h3>
     <p>DID Methods <strong>MAY</strong> support additional metadata properties that indicate the deactivation or deprecation status of a resource. This allows resource publishers to signal that a given version (or all versions) of a resource is no longer valid, should not be used, or has been replaced.</p>
     <p>For example, a <code>deprecated: true</code> or <code>deactivated: true</code> flag within the resource metadata can alert consuming systems not to rely on the resource without requiring immediate deletion. This pattern is useful for managing lifecycle transitions, such as phasing out an old schema or rotating public keys associated with the DID.</p>
     <p>Implementations <strong>SHOULD</strong> continue to support dereferencing of deprecated resources for archival and verification purposes, unless policy or security requirements dictate otherwise.</p>
-    <h3 class="heading settled" data-level="13.4" id="extensions"><span class="secno">13.4. </span><span class="content">Resource Extensions</span><a class="self-link" href="#extensions"></a></h3>
+    <h3 class="heading settled" data-level="14.4" id="extensions"><span class="secno">14.4. </span><span class="content">Resource Extensions</span><a class="self-link" href="#extensions"></a></h3>
     <p>The base structure of <code>linkedResourceMetadata</code> is intentionally flexible to support evolving use cases. Future specifications or community registries <strong>MAY</strong> define extensions—optional properties that enhance the resource metadata model with additional semantics.</p>
     <p>For example, future extensions MAY include:</p>
     <ul>
@@ -1889,13 +1893,13 @@ function parseHTML(markup) {
 "use strict";
 {
 let dfnPanelData = {
-"did-controller": {"dfnID":"did-controller","dfnText":"DID Controller","external":false,"refSections":[{"refs":[{"id":"ref-for-did-controller"},{"id":"ref-for-did-controller\u2460"}],"title":"5. Binding to DIDs"},{"refs":[{"id":"ref-for-did-controller\u2461"}],"title":"11.1. Proving Control and Binding"}],"url":"#did-controller"},
-"did-document": {"dfnID":"did-document","dfnText":"DID Document","external":false,"refSections":[{"refs":[{"id":"ref-for-did-document"},{"id":"ref-for-did-document\u2460"}],"title":"10.3. Applicability for Web-based DID Methods"},{"refs":[{"id":"ref-for-did-document\u2461"}],"title":"11.1. Proving Control and Binding"},{"refs":[{"id":"ref-for-did-document\u2462"},{"id":"ref-for-did-document\u2463"}],"title":"11.2. Alternative Resource Locations"},{"refs":[{"id":"ref-for-did-document\u2464"}],"title":"13.2. Resources in Service Endpoint versus DID Document Metadata"}],"url":"#did-document"},
-"did-linked-resource": {"dfnID":"did-linked-resource","dfnText":"DID-Linked Resource","external":false,"refSections":[{"refs":[{"id":"ref-for-did-linked-resource"}],"title":"3. DID-Linked Resource URI Syntax"},{"refs":[{"id":"ref-for-did-linked-resource\u2460"}],"title":"4.3. Resource Collection ID"},{"refs":[{"id":"ref-for-did-linked-resource\u2461"}],"title":"5.3. Resource Representation"}],"url":"#did-linked-resource"},
-"did-url": {"dfnID":"did-url","dfnText":"DID URL","external":false,"refSections":[{"refs":[{"id":"ref-for-did-url"}],"title":"1. Introduction"},{"refs":[{"id":"ref-for-did-url\u2460"}],"title":"7. Resolution and Dereferencing"}],"url":"#did-url"},
-"did-url-dereferencing": {"dfnID":"did-url-dereferencing","dfnText":"DID URL dereferencing","external":false,"refSections":[{"refs":[{"id":"ref-for-did-url-dereferencing"}],"title":"1. Introduction"},{"refs":[{"id":"ref-for-did-url-dereferencing\u2460"}],"title":"1.4. Design Principles"},{"refs":[{"id":"ref-for-did-url-dereferencing\u2461"},{"id":"ref-for-did-url-dereferencing\u2462"},{"id":"ref-for-did-url-dereferencing\u2463"}],"title":"7. Resolution and Dereferencing"}],"url":"#did-url-dereferencing"},
-"resource-collection": {"dfnID":"resource-collection","dfnText":"Resource Collection","external":false,"refSections":[{"refs":[{"id":"ref-for-resource-collection"},{"id":"ref-for-resource-collection\u2460"}],"title":"5. Binding to DIDs"}],"url":"#resource-collection"},
-"resource-identifier": {"dfnID":"resource-identifier","dfnText":"Resource Identifier","external":false,"refSections":[{"refs":[{"id":"ref-for-resource-identifier"}],"title":"4.1. Resource URI"},{"refs":[{"id":"ref-for-resource-identifier\u2460"}],"title":"4.2. Resource Identifiers"}],"url":"#resource-identifier"},
+"did-controller": {"dfnID":"did-controller","dfnText":"DID Controller","external":false,"refSections":[{"refs":[{"id":"ref-for-did-controller"},{"id":"ref-for-did-controller\u2460"}],"title":"6. Binding to DIDs"},{"refs":[{"id":"ref-for-did-controller\u2461"}],"title":"12.1. Proving Control and Binding"}],"url":"#did-controller"},
+"did-document": {"dfnID":"did-document","dfnText":"DID Document","external":false,"refSections":[{"refs":[{"id":"ref-for-did-document"},{"id":"ref-for-did-document\u2460"}],"title":"11.3. Applicability for Web-based DID Methods"},{"refs":[{"id":"ref-for-did-document\u2461"}],"title":"12.1. Proving Control and Binding"},{"refs":[{"id":"ref-for-did-document\u2462"},{"id":"ref-for-did-document\u2463"}],"title":"12.2. Alternative Resource Locations"},{"refs":[{"id":"ref-for-did-document\u2464"}],"title":"14.2. Resources in Service Endpoint versus DID Document Metadata"}],"url":"#did-document"},
+"did-linked-resource": {"dfnID":"did-linked-resource","dfnText":"DID-Linked Resource","external":false,"refSections":[{"refs":[{"id":"ref-for-did-linked-resource"}],"title":"5.3. Resource Collection ID"},{"refs":[{"id":"ref-for-did-linked-resource\u2460"}],"title":"6.3. Resource Representation"}],"url":"#did-linked-resource"},
+"did-url": {"dfnID":"did-url","dfnText":"DID URL","external":false,"refSections":[{"refs":[{"id":"ref-for-did-url"}],"title":"1. Introduction"},{"refs":[{"id":"ref-for-did-url\u2460"}],"title":"8. Resolution and Dereferencing"}],"url":"#did-url"},
+"did-url-dereferencing": {"dfnID":"did-url-dereferencing","dfnText":"DID URL dereferencing","external":false,"refSections":[{"refs":[{"id":"ref-for-did-url-dereferencing"}],"title":"1. Introduction"},{"refs":[{"id":"ref-for-did-url-dereferencing\u2460"}],"title":"1.4. Design Principles"},{"refs":[{"id":"ref-for-did-url-dereferencing\u2461"},{"id":"ref-for-did-url-dereferencing\u2462"},{"id":"ref-for-did-url-dereferencing\u2463"}],"title":"8. Resolution and Dereferencing"}],"url":"#did-url-dereferencing"},
+"resource-collection": {"dfnID":"resource-collection","dfnText":"Resource Collection","external":false,"refSections":[{"refs":[{"id":"ref-for-resource-collection"},{"id":"ref-for-resource-collection\u2460"}],"title":"6. Binding to DIDs"}],"url":"#resource-collection"},
+"resource-identifier": {"dfnID":"resource-identifier","dfnText":"Resource Identifier","external":false,"refSections":[{"refs":[{"id":"ref-for-resource-identifier"}],"title":"5.1. Resource URI"},{"refs":[{"id":"ref-for-resource-identifier\u2460"}],"title":"5.2. Resource Identifiers"}],"url":"#resource-identifier"},
 };
 
 document.addEventListener("DOMContentLoaded", ()=>{
