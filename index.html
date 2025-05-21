@@ -8,7 +8,7 @@
   <meta content="Bikeshed version b25686b9f, updated Fri Mar 14 14:15:20 2025 -0700" name="generator">
   <link href="https://w3c-ccg.github.io/did-linked-resources" rel="canonical">
   <link href="https://www.w3.org/2008/site/images/favicon.ico" rel="icon">
-  <meta content="fbf7a5c1f5107604d80d41aaba6f6a39dd184726" name="revision">
+  <meta content="98d05d25361708b29279f4c9afb67ec0ffcaab15" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>/* Boilerplate: style-autolinks */
@@ -911,9 +911,10 @@ The key words MAY, MUST, MUST NOT, OPTIONAL, and SHOULD in this document are to 
    <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="resource-collection">Resource Collection</dfn>: An organized and structured set of digital resources, collectively and individually identifiable using persistent and unique DID URLs.</p>
    <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="resource-identifier">Resource Identifier</dfn>: A unique identifier for a specified DID-Linked Resource.</p>
    <h2 class="heading settled" data-level="3" id="syntax"><span class="secno">3. </span><span class="content">DID-Linked Resource URL Syntax</span><a class="self-link" href="#syntax"></a></h2>
+   <p>The following ABNF defines the structure of a <strong>DID-Linked Resource URL</strong>, which is a specific type of <a href="https://www.w3.org/TR/did-core/#did-url-syntax" rel="noopener" target="_blank">DID URL</a> that refers to a resource published under a DID. While the overall syntax is compatible with <a data-link-type="biblio" href="#biblio-did-core" title="Decentralized Identifiers (DIDs) v1.0">[DID-CORE]</a>, this profile defines expected structure and semantics for paths, query parameters, and fragments used in the DID-Linked Resource model.</p>
    <p>The following is the ABNF definition using the syntax in <a data-link-type="biblio" href="#biblio-rfc5234" title="Augmented BNF for Syntax Specifications: ABNF">[RFC5234]</a>. All DID-Linked Resources <strong>MUST</strong> conform to the DID-Linked Resource URL Syntax ABNF Rules.</p>
    <aside class="example" id="dlr-abnf">
-    <a class="self-link" href="#dlr-abnf"></a> <b>ABNF: DID-Linked Resource URL</b> 
+    <a class="self-link" href="#dlr-abnf"></a> <b>ABNF: DID-Linked Resource URL (extends DID URL from DID Core)</b> 
 <pre class="abnf">; DID-Linked Resource URL
 dlr-url           = did path-abempty [ "?" query ] [ "#" fragment ]
 
@@ -942,6 +943,7 @@ ALPHA             = %x41-5A / %x61-7A
 DIGIT             = %x30-39
 </pre>
    </aside>
+   <p>The <code>path-abempty</code> component typically includes structured segments such as <code>/resources/{resourceId}</code>, representing a unique identifier scoped to the DID. The <code>query</code> component may include parameters like <code>resourceName</code>, <code>resourceType</code>, or <code>resourceVersion</code>, enabling flexible filtering and referencing of specific resource variants. The optional <code>fragment</code> can refer to a sub-section within the resource, such as a field in a schema or anchor in a document.</p>
    <h2 class="heading settled" data-level="4" id="semantics"><span class="secno">4. </span><span class="content">Semantics</span><a class="self-link" href="#semantics"></a></h2>
    <p>The components of a DID-Linked Resource URL carry the following semantics:</p>
    <ul>
