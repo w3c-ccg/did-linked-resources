@@ -99,43 +99,48 @@ Terminology {#terminology}
 
 <dfn>Resource Identifier</dfn>: A unique identifier for a specified DID-Linked Resource.
 
-DID-Linked Resource URI Syntax {#syntax}
+DID-Linked Resource URL Syntax {#syntax}
 =====================
 
-The following is the ABNF definition using the syntax in [[RFC5234]]. All DID-Linked Resources MUST conform to the DID-Linked Resource URI Syntax ABNF Rules.
+The following is the ABNF definition using the syntax in [[RFC5234]]. All DID-Linked Resources <strong>MUST</strong> conform to the DID-Linked Resource URL Syntax ABNF Rules.
 
-<pre class=abnf>
-; DID-Linked Resource URI
-dlr-uri = did path-abempty [ "?" query ] [ "#" fragment ]
+<aside class="example" id="dlr-abnf">
+  <b>ABNF: DID-Linked Resource URL</b>
+  <pre class="abnf">
+; DID-Linked Resource URL
+dlr-url           = did path-abempty [ "?" query ] [ "#" fragment ]
 
-; DID (per W3C DID Core)
-did = "did:" method ":" method-specific-id
-method = 1*method-char
-method-char = ALPHA / DIGIT / "-"
+; Decentralized Identifier (per W3C DID Core)
+did               = "did:" method ":" method-specific-id
+method            = 1*method-char
+method-char       = ALPHA / DIGIT / "-"
 method-specific-id = 1*( idchar / ":" )
-idchar = ALPHA / DIGIT / "." / "-" / "_" / pct-encoded
-pct-encoded = "%" HEXDIG HEXDIG
+idchar            = ALPHA / DIGIT / "." / "-" / "_" / pct-encoded
+pct-encoded       = "%" HEXDIG HEXDIG
 
-; Resource path
-path-abempty = *( "/" segment )
-segment = *pchar
+; Path component
+path-abempty      = *( "/" segment )
+segment           = *pchar
 
 ; Optional query and fragment (RFC 3986)
-query = *( pchar / "/" / "?" )
-fragment = *( pchar / "/" / "?" )
+query             = *( pchar / "/" / "?" )
+fragment          = *( pchar / "/" / "?" )
 
-; Character classes
-pchar = unreserved / pct-encoded / sub-delims / ":" / "@"
-unreserved = ALPHA / DIGIT / "-" / "." / "_" / "~"
-sub-delims = "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / ";" / "="
-HEXDIG = DIGIT / "A" / "B" / "C" / "D" / "E" / "F"
-ALPHA = %x41-5A / %x61-7A
-DIGIT = %x30-39
-</pre>
+; Core character classes
+pchar             = unreserved / pct-encoded / sub-delims / ":" / "@"
+unreserved        = ALPHA / DIGIT / "-" / "." / "_" / "~"
+sub-delims        = "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / ";" / "="
+HEXDIG            = DIGIT / "A" / "B" / "C" / "D" / "E" / "F"
+ALPHA             = %x41-5A / %x61-7A
+DIGIT             = %x30-39
+  </pre>
+</aside>
 
-=== Semantics
 
-The components of a <a>DID-Linked Resource</a> URI carry the following semantics:
+Semantics {#semantics}
+=====================
+
+The components of a DID-Linked Resource URL carry the following semantics:
 
 * The <code>did</code> component identifies the base Decentralized Identifier (DID) under which the resource is logically scoped.
 * The <code>path</code> identifies the logical or versioned name of the resource. This SHOULD be defined at the DID method level and may represent for example:
@@ -229,7 +234,7 @@ The following tables contain informative references for the core properties defi
 Resource URI {#resourceuri}
 ---------------------
 
-DID-Linked Resources (DLRs) are content-addressable or identifier-addressable resources associated with a Decentralized Identifier (DID). They are represented as URIs rooted at a valid DID. The full Resource URI identifying a Resource MUST include a DID and a <a>Resource Identifier</a> <code>resourceId</code>.
+DID-Linked Resources (DLRs) are content-addressable or identifier-addressable resources associated with a Decentralized Identifier (DID). They are represented as URIs rooted at a valid DID. The full DID-Linked Resource URL identifying a Resource <strong>MUST</strong> include a DID and a <a>Resource Identifier</a> <code>resourceId</code>.
 
 Resource Identifiers {#resourceid}
 ---------------------
