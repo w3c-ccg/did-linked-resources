@@ -8,7 +8,7 @@
   <meta content="Bikeshed version b25686b9f, updated Fri Mar 14 14:15:20 2025 -0700" name="generator">
   <link href="https://w3c-ccg.github.io/did-linked-resources" rel="canonical">
   <link href="https://www.w3.org/2008/site/images/favicon.ico" rel="icon">
-  <meta content="98d05d25361708b29279f4c9afb67ec0ffcaab15" name="revision">
+  <meta content="c1f73a965eac493810fdc42fd7459c557283e20d" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>/* Boilerplate: style-autolinks */
@@ -691,7 +691,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">DID-Linked Resources</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-05-21">21 May 2025</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-05-22">22 May 2025</time></p>
    <details open>
     <summary>More details about this document</summary>
     <div data-fill-with="spec-metadata">
@@ -739,19 +739,20 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
      <ol class="toc">
       <li><a href="#resourceuri"><span class="secno">5.1</span> <span class="content">Resource URI</span></a>
       <li><a href="#resourceid"><span class="secno">5.2</span> <span class="content">Resource Identifiers</span></a>
-      <li><a href="#resourcename"><span class="secno">5.3</span> <span class="content">Resource Name</span></a>
-      <li><a href="#resourcetype"><span class="secno">5.4</span> <span class="content">Resource Type</span></a>
-      <li><a href="#resourceversion"><span class="secno">5.5</span> <span class="content">Resource Version</span></a>
-      <li><a href="#alternativeuri"><span class="secno">5.6</span> <span class="content">Alternative URI</span></a>
+      <li><a href="#resourcecollectionid"><span class="secno">5.3</span> <span class="content">Resource Collection ID</span></a>
+      <li><a href="#resourcename"><span class="secno">5.4</span> <span class="content">Resource Name</span></a>
+      <li><a href="#resourcetype"><span class="secno">5.5</span> <span class="content">Resource Type</span></a>
+      <li><a href="#resourceversion"><span class="secno">5.6</span> <span class="content">Resource Version</span></a>
+      <li><a href="#alternativeuri"><span class="secno">5.7</span> <span class="content">Alternative URI</span></a>
       <li>
-       <a href="#resourceMetadataProperties"><span class="secno">5.7</span> <span class="content">Resource Metadata Properties</span></a>
+       <a href="#resourceMetadataProperties"><span class="secno">5.8</span> <span class="content">Resource Metadata Properties</span></a>
        <ol class="toc">
-        <li><a href="#mediatype"><span class="secno">5.7.1</span> <span class="content">Media Type {#mediatype}</span></a>
-        <li><a href="#checksum"><span class="secno">5.7.2</span> <span class="content">Checksum {#checksum}</span></a>
-        <li><a href="#created"><span class="secno">5.7.3</span> <span class="content">Created {#created}</span></a>
-        <li><a href="#updated"><span class="secno">5.7.4</span> <span class="content">Updated {#updated}</span></a>
-        <li><a href="#previousversionid"><span class="secno">5.7.5</span> <span class="content">PreviousVersionId {#previousversionid}</span></a>
-        <li><a href="#nextversionid"><span class="secno">5.7.6</span> <span class="content">NextVersionId {#nextversionid}</span></a>
+        <li><a href="#mediatype"><span class="secno">5.8.1</span> <span class="content">Media Type {#mediatype}</span></a>
+        <li><a href="#checksum"><span class="secno">5.8.2</span> <span class="content">Checksum {#checksum}</span></a>
+        <li><a href="#created"><span class="secno">5.8.3</span> <span class="content">Created {#created}</span></a>
+        <li><a href="#updated"><span class="secno">5.8.4</span> <span class="content">Updated {#updated}</span></a>
+        <li><a href="#previousversionid"><span class="secno">5.8.5</span> <span class="content">PreviousVersionId {#previousversionid}</span></a>
+        <li><a href="#nextversionid"><span class="secno">5.8.6</span> <span class="content">NextVersionId {#nextversionid}</span></a>
        </ol>
      </ol>
     <li>
@@ -1025,34 +1026,34 @@ DIGIT             = %x30-39
    <h3 class="heading settled" data-level="5.1" id="resourceuri"><span class="secno">5.1. </span><span class="content">Resource URI</span><a class="self-link" href="#resourceuri"></a></h3>
    <p>DID-Linked Resources (DLRs) are content-addressable or identifier-addressable resources associated with a Decentralized Identifier (DID). They are represented as URIs rooted at a valid DID. The full DID-Linked Resource URL identifying a Resource <strong>MUST</strong> include a DID and a <a data-link-type="dfn" href="#resource-identifier" id="ref-for-resource-identifier①">Resource Identifier</a> <code>resourceId</code>.</p>
    <h3 class="heading settled" data-level="5.2" id="resourceid"><span class="secno">5.2. </span><span class="content">Resource Identifiers</span><a class="self-link" href="#resourceid"></a></h3>
-   <p>A <a data-link-type="dfn" href="#resource-identifier" id="ref-for-resource-identifier②">Resource Identifier</a>, or <code>resourceId</code>, <strong>MUST</strong> be a unique identifier for a single resource. Two resources under the same DID method MUST NOT share the same <code>resourceId</code>. <strong>MUST</strong> Resource Collection ID {#resourcecollectionid}</p>
-   <hr>
+   <p>A <a data-link-type="dfn" href="#resource-identifier" id="ref-for-resource-identifier②">Resource Identifier</a>, or <code>resourceId</code>, <strong>MUST</strong> be a unique identifier for a single resource. Two resources under the same DID method <strong>MUST NOT</strong> share the same <code>resourceId</code>.</p>
+   <h3 class="heading settled" data-level="5.3" id="resourcecollectionid"><span class="secno">5.3. </span><span class="content">Resource Collection ID</span><a class="self-link" href="#resourcecollectionid"></a></h3>
    <p>The <code>resourceCollectionId</code> property is OPTIONAL. This property is the unique identifier of the DID that the resource is bound to, under which resources are logically collected.</p>
    <p>For example, the following DID:</p>
 <pre><code>did:example:0a5b94d0-a417-48ed-a6f5-4abc9e95888d</code></pre>
    <p>will derive the Resource Collection ID:</p>
 <pre><code>0a5b94d0-a417-48ed-a6f5-4abc9e95888d</code></pre>
    <div class="note" role="note"> <b>Note:</b> If used, the Collection ID <strong>SHOULD</strong> take the syntactical form of the DID method that the <a data-link-type="dfn" href="#did-linked-resource" id="ref-for-did-linked-resource">DID-Linked Resource</a> is associated with. </div>
-   <h3 class="heading settled" data-level="5.3" id="resourcename"><span class="secno">5.3. </span><span class="content">Resource Name</span><a class="self-link" href="#resourcename"></a></h3>
+   <h3 class="heading settled" data-level="5.4" id="resourcename"><span class="secno">5.4. </span><span class="content">Resource Name</span><a class="self-link" href="#resourcename"></a></h3>
    <p>The <code>resourceName</code> property is OPTIONAL. If present, the value of the type property <strong>MUST</strong> be expressed as an [ASCII string](https://infra.spec.whatwg.org/#ascii-string).</p>
-   <h3 class="heading settled" data-level="5.4" id="resourcetype"><span class="secno">5.4. </span><span class="content">Resource Type</span><a class="self-link" href="#resourcetype"></a></h3>
+   <h3 class="heading settled" data-level="5.5" id="resourcetype"><span class="secno">5.5. </span><span class="content">Resource Type</span><a class="self-link" href="#resourcetype"></a></h3>
    <p>The <code>resourceType</code> property is OPTIONAL. If present, the value of the type property <strong>MUST</strong> be expressed as an [ASCII string](https://infra.spec.whatwg.org/#ascii-string). In order to maximize interoperability, the resource type and its associated properties <strong>SHOULD</strong> be registered in the DID Specification Registries <a data-link-type="biblio" href="#biblio-did-spec-registries" title="Decentralized Identifier Extensions">[DID-SPEC-REGISTRIES]</a>.</p>
-   <h3 class="heading settled" data-level="5.5" id="resourceversion"><span class="secno">5.5. </span><span class="content">Resource Version</span><a class="self-link" href="#resourceversion"></a></h3>
+   <h3 class="heading settled" data-level="5.6" id="resourceversion"><span class="secno">5.6. </span><span class="content">Resource Version</span><a class="self-link" href="#resourceversion"></a></h3>
    <p>The <code>resourceVersion</code> property is OPTIONAL. If present, the value of the type property be expressed as an [ASCII string](https://infra.spec.whatwg.org/#ascii-string).</p>
-   <h3 class="heading settled" data-level="5.6" id="alternativeuri"><span class="secno">5.6. </span><span class="content">Alternative URI</span><a class="self-link" href="#alternativeuri"></a></h3>
+   <h3 class="heading settled" data-level="5.7" id="alternativeuri"><span class="secno">5.7. </span><span class="content">Alternative URI</span><a class="self-link" href="#alternativeuri"></a></h3>
    <p>The <code>alternativeUri</code> property is OPTIONAL. If present, the value <strong>MUST</strong> be a set where each item in the set is a URI conforming to <a data-link-type="biblio" href="#biblio-rfc3986" title="Uniform Resource Identifier (URI): Generic Syntax">[RFC3986]</a>.</p>
-   <h3 class="heading settled" data-level="5.7" id="resourceMetadataProperties"><span class="secno">5.7. </span><span class="content">Resource Metadata Properties</span><a class="self-link" href="#resourceMetadataProperties"></a></h3>
-   <h4 class="heading settled" data-level="5.7.1" id="mediatype"><span class="secno">5.7.1. </span><span class="content">Media Type {#mediatype}</span><a class="self-link" href="#mediatype"></a></h4>
+   <h3 class="heading settled" data-level="5.8" id="resourceMetadataProperties"><span class="secno">5.8. </span><span class="content">Resource Metadata Properties</span><a class="self-link" href="#resourceMetadataProperties"></a></h3>
+   <h4 class="heading settled" data-level="5.8.1" id="mediatype"><span class="secno">5.8.1. </span><span class="content">Media Type {#mediatype}</span><a class="self-link" href="#mediatype"></a></h4>
    <p>The <code>mediaType</code> property is OPTIONAL. If present, the value <strong>MUST</strong> be expressed as an [ASCII string](https://infra.spec.whatwg.org/#ascii-string) and <strong>SHOULD</strong> match the underlying IANA media type of the file of the resource identified by the resourceId.</p>
-   <h4 class="heading settled" data-level="5.7.2" id="checksum"><span class="secno">5.7.2. </span><span class="content">Checksum {#checksum}</span><a class="self-link" href="#checksum"></a></h4>
+   <h4 class="heading settled" data-level="5.8.2" id="checksum"><span class="secno">5.8.2. </span><span class="content">Checksum {#checksum}</span><a class="self-link" href="#checksum"></a></h4>
    <p>The <code>checksum</code> property is OPTIONAL. If present, the value <strong>SHOULD</strong> be an equivalent representation of the resource identified by the resourceId.</p>
-   <h4 class="heading settled" data-level="5.7.3" id="created"><span class="secno">5.7.3. </span><span class="content">Created {#created}</span><a class="self-link" href="#created"></a></h4>
+   <h4 class="heading settled" data-level="5.8.3" id="created"><span class="secno">5.8.3. </span><span class="content">Created {#created}</span><a class="self-link" href="#created"></a></h4>
    <p>The <code>created</code> property is OPTIONAL. If present, the value of the property <strong>MUST</strong> be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision. For example: 2020-12-20T19:17:47Z.</p>
-   <h4 class="heading settled" data-level="5.7.4" id="updated"><span class="secno">5.7.4. </span><span class="content">Updated {#updated}</span><a class="self-link" href="#updated"></a></h4>
+   <h4 class="heading settled" data-level="5.8.4" id="updated"><span class="secno">5.8.4. </span><span class="content">Updated {#updated}</span><a class="self-link" href="#updated"></a></h4>
    <p>The <code>updated</code> property is OPTIONAL. If present, the value of the property <strong>MUST</strong> be a string formatted as an XML Datetime normalized to UTC 00:00:00 and without sub-second decimal precision. For example: 2020-12-20T19:17:47Z.</p>
-   <h4 class="heading settled" data-level="5.7.5" id="previousversionid"><span class="secno">5.7.5. </span><span class="content">PreviousVersionId {#previousversionid}</span><a class="self-link" href="#previousversionid"></a></h4>
+   <h4 class="heading settled" data-level="5.8.5" id="previousversionid"><span class="secno">5.8.5. </span><span class="content">PreviousVersionId {#previousversionid}</span><a class="self-link" href="#previousversionid"></a></h4>
    <p>The <code>previousVersionId</code> property is OPTIONAL. If present, the value <strong>SHOULD</strong> reference the directly previous version of the resource. The value of the property <strong>MUST</strong> be an ASCII string.</p>
-   <h4 class="heading settled" data-level="5.7.6" id="nextversionid"><span class="secno">5.7.6. </span><span class="content">NextVersionId {#nextversionid}</span><a class="self-link" href="#nextversionid"></a></h4>
+   <h4 class="heading settled" data-level="5.8.6" id="nextversionid"><span class="secno">5.8.6. </span><span class="content">NextVersionId {#nextversionid}</span><a class="self-link" href="#nextversionid"></a></h4>
    <p>The <code>nextVersionId</code> property is OPTIONAL. If present, the value <strong>SHOULD</strong> reference the directly next version of the resource. The value of the property <strong>MUST</strong> be an ASCII string.</p>
    <h2 class="heading settled" data-level="6" id="binding"><span class="secno">6. </span><span class="content">Binding to DIDs</span><a class="self-link" href="#binding"></a></h2>
    <p>In the context of DID-Linked Resources (DLRs), <strong>binding</strong> refers to the relationship between a resource and a Decentralized Identifier (DID). This binding is OPTIONAL, but it is highly recommended.</p>
@@ -1908,7 +1909,7 @@ function parseHTML(markup) {
 let dfnPanelData = {
 "did-controller": {"dfnID":"did-controller","dfnText":"DID Controller","external":false,"refSections":[{"refs":[{"id":"ref-for-did-controller"},{"id":"ref-for-did-controller\u2460"}],"title":"6. Binding to DIDs"},{"refs":[{"id":"ref-for-did-controller\u2461"}],"title":"12.1. Proving Control and Binding"}],"url":"#did-controller"},
 "did-document": {"dfnID":"did-document","dfnText":"DID Document","external":false,"refSections":[{"refs":[{"id":"ref-for-did-document"},{"id":"ref-for-did-document\u2460"}],"title":"11.3. Applicability for Web-based DID Methods"},{"refs":[{"id":"ref-for-did-document\u2461"}],"title":"12.1. Proving Control and Binding"},{"refs":[{"id":"ref-for-did-document\u2462"},{"id":"ref-for-did-document\u2463"}],"title":"12.2. Alternative Resource Locations"},{"refs":[{"id":"ref-for-did-document\u2464"}],"title":"14.2. Resources in Service Endpoint versus DID Document Metadata"}],"url":"#did-document"},
-"did-linked-resource": {"dfnID":"did-linked-resource","dfnText":"DID-Linked Resource","external":false,"refSections":[{"refs":[{"id":"ref-for-did-linked-resource"}],"title":"5.2. Resource Identifiers"},{"refs":[{"id":"ref-for-did-linked-resource\u2460"}],"title":"6.3. Resource Representation"}],"url":"#did-linked-resource"},
+"did-linked-resource": {"dfnID":"did-linked-resource","dfnText":"DID-Linked Resource","external":false,"refSections":[{"refs":[{"id":"ref-for-did-linked-resource"}],"title":"5.3. Resource Collection ID"},{"refs":[{"id":"ref-for-did-linked-resource\u2460"}],"title":"6.3. Resource Representation"}],"url":"#did-linked-resource"},
 "did-url": {"dfnID":"did-url","dfnText":"DID URL","external":false,"refSections":[{"refs":[{"id":"ref-for-did-url"}],"title":"1. Introduction"},{"refs":[{"id":"ref-for-did-url\u2460"}],"title":"8. Resolution and Dereferencing"}],"url":"#did-url"},
 "did-url-dereferencing": {"dfnID":"did-url-dereferencing","dfnText":"DID URL dereferencing","external":false,"refSections":[{"refs":[{"id":"ref-for-did-url-dereferencing"}],"title":"1. Introduction"},{"refs":[{"id":"ref-for-did-url-dereferencing\u2460"}],"title":"1.4. Design Principles"},{"refs":[{"id":"ref-for-did-url-dereferencing\u2461"},{"id":"ref-for-did-url-dereferencing\u2462"},{"id":"ref-for-did-url-dereferencing\u2463"}],"title":"8. Resolution and Dereferencing"}],"url":"#did-url-dereferencing"},
 "resource-collection": {"dfnID":"resource-collection","dfnText":"Resource Collection","external":false,"refSections":[{"refs":[{"id":"ref-for-resource-collection"},{"id":"ref-for-resource-collection\u2460"}],"title":"6. Binding to DIDs"}],"url":"#resource-collection"},
