@@ -8,7 +8,7 @@
   <meta content="Bikeshed version b25686b9f, updated Fri Mar 14 14:15:20 2025 -0700" name="generator">
   <link href="https://w3c-ccg.github.io/did-linked-resources" rel="canonical">
   <link href="https://www.w3.org/2008/site/images/favicon.ico" rel="icon">
-  <meta content="c1f73a965eac493810fdc42fd7459c557283e20d" name="revision">
+  <meta content="63db9618d1a0d6c96119e815bd6fc481e22ffac9" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>/* Boilerplate: style-autolinks */
@@ -973,11 +973,11 @@ DIGIT             = %x30-39
      <tr>
       <td><strong><code>resourceUri</code></strong>
       <td>yes
-      <td>A string that conforms to a method-specific supported unique identifier format. For example, a UUID: <code>46e2af9a-2ea0-4815-999d-730a6778227c</code>.
+      <td>A string or a map that conforms to the rules of <a href="https://tools.ietf.org/html/rfc3986" target="_blank">[[RFC3986]]</a> URIs which <strong>MUST</strong> directly lead to a location where the resource can be accessed.
      <tr>
       <td><strong><code>resourceId</code></strong>
       <td>yes
-      <td>A string or a map that conforms to the rules of <a href="https://tools.ietf.org/html/rfc3986" target="_blank">[[RFC3986]]</a> URIs which <strong>MUST</strong> directly lead to a location where the resource can be accessed.
+      <td>A string that conforms to a method-specific supported unique identifier format. For example, a UUID: <code>46e2af9a-2ea0-4815-999d-730a6778227c</code>.
      <tr>
       <td><strong><code>resourceCollectionId</code></strong>
       <td>no
