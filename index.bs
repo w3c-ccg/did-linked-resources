@@ -266,8 +266,8 @@ DID-Linked Resources (DLRs) are content-addressable or identifier-addressable re
 Resource Identifiers {#resourceid}
 ---------------------
 
-A <a>Resource Identifier</a>, or <code>resourceId</code>, <strong>MUST</strong> be a unique identifier for a single resource. Two resources under the same DID method MUST NOT share the same <code>resourceId</code>.
-<strong>MUST</strong>
+A <a>Resource Identifier</a>, or <code>resourceId</code>, <strong>MUST</strong> be a unique identifier for a single resource. Two resources under the same DID method <strong>MUST NOT</strong> share the same <code>resourceId</code>.
+
 Resource Collection ID {#resourcecollectionid}
 ---------------------
 
