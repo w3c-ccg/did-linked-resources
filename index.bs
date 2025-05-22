@@ -193,12 +193,12 @@ The following tables contain informative references for the core properties defi
     <tr>
       <td><strong><code>resourceUri</code></strong></td>
       <td>yes</td>
-      <td>A string that conforms to a method-specific supported unique identifier format. For example, a UUID: <code>46e2af9a-2ea0-4815-999d-730a6778227c</code>.</td>
+      <td>A string or a map that conforms to the rules of <a href="https://tools.ietf.org/html/rfc3986" target="_blank">[[RFC3986]]</a> URIs which <strong>MUST</strong> directly lead to a location where the resource can be accessed.</td>    
     </tr>
     <tr>
       <td><strong><code>resourceId</code></strong></td>
       <td>yes</td>
-      <td>A string or a map that conforms to the rules of <a href="https://tools.ietf.org/html/rfc3986" target="_blank">[[RFC3986]]</a> URIs which <strong>MUST</strong> directly lead to a location where the resource can be accessed.</td>    
+      <td>A string that conforms to a method-specific supported unique identifier format. For example, a UUID: <code>46e2af9a-2ea0-4815-999d-730a6778227c</code>.</td>
     </tr>
     <tr>
       <td><strong><code>resourceCollectionId</code></strong></td>
