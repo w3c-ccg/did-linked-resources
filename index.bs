@@ -389,7 +389,7 @@ The syntax of the <code>didDocumentMetadata</code> including <code>linkedResourc
         },
       { // Second version of a Resource called PassportSchema
         "resourceURI": "did:example:13d5ad44-9e99-428f-81e9-274458cefddc/resources/bb2118f3-5e55-4510-b420-33ef9e1726d2",
-        "": "13d5ad44-9e99-428f-81e9-274458cefddc", // Common collection ID
+        "resourceCollectionId": "13d5ad44-9e99-428f-81e9-274458cefddc", // Common collection ID
         "resourceId": "bb2118f3-5e55-4510-b420-33ef9e1726d2", // New Resource ID and version number
         "resourceName": "PassportSchema", // Resource name must remain the same
         "resourceType": "JSONSchema2020", // Resource type must remain the same
