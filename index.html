@@ -5,10 +5,10 @@
   <title>DID-Linked Resources</title>
   <meta content="CG-DRAFT" name="w3c-status">
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version b25686b9f, updated Fri Mar 14 14:15:20 2025 -0700" name="generator">
+  <meta content="Bikeshed version 3f621ba99, updated Mon Jul 28 15:38:36 2025 -0700" name="generator">
   <link href="https://w3c-ccg.github.io/did-linked-resources" rel="canonical">
   <link href="https://www.w3.org/2008/site/images/favicon.ico" rel="icon">
-  <meta content="1f285911a8cfe5265b9cc27c205690e124b7a32c" name="revision">
+  <meta content="664cf222a4a7ce798819a5b1a18fac2fd876be1b" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>/* Boilerplate: style-autolinks */
@@ -689,9 +689,13 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
 </style>
  <body class="h-entry">
   <div class="head">
-   <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
+   <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/">
+    <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72">
+</a>
+</p>
    <h1 class="p-name no-ref" id="title">DID-Linked Resources</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-05-22">22 May 2025</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>,
+    <time class="dt-updated" datetime="2025-08-21">21 August 2025</time></p>
    <details open>
     <summary>More details about this document</summary>
     <div data-fill-with="spec-metadata">
@@ -707,7 +711,8 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
     </div>
    </details>
    <div data-fill-with="warning"></div>
-   <p class="copyright" data-fill-with="copyright"><a href="https://www.w3.org/policies/#copyright">Copyright</a> © 2025 <a href="https://www.w3.org/">World Wide Web Consortium</a>. <abbr title="World Wide Web Consortium">W3C</abbr><sup>®</sup> <a href="https://www.w3.org/policies/#Legal_Disclaimer">liability</a>, <a href="https://www.w3.org/policies/#W3C_Trademarks">trademark</a> and <a href="https://www.w3.org/copyright/software-license/" rel="license" title="W3C Software and Document License">permissive document license</a> rules apply. </p>
+   <p class="copyright" data-fill-with="copyright"><a href="https://www.w3.org/policies/#copyright">Copyright</a> © 2025 <a href="https://www.w3.org/">World Wide Web Consortium</a>. <abbr title="World Wide Web Consortium">W3C</abbr><sup>®</sup> <a href="https://www.w3.org/policies/#Legal_Disclaimer">liability</a>, <a href="https://www.w3.org/policies/#W3C_Trademarks">trademark</a> and <a href="https://www.w3.org/copyright/software-license/" rel="license" title="W3C Software and Document License">permissive document license</a> rules apply.
+</p>
    <hr title="Separator for header">
   </div>
   <div class="p-summary" data-fill-with="abstract">
@@ -915,7 +920,9 @@ The key words MAY, MUST, MUST NOT, OPTIONAL, and SHOULD in this document are to 
    <p>The following ABNF defines the structure of a <strong>DID-Linked Resource URL</strong>, which is a specific type of <a href="https://www.w3.org/TR/did-core/#did-url-syntax" rel="noopener" target="_blank">DID URL</a> that refers to a resource published under a DID. While the overall syntax is compatible with <a data-link-type="biblio" href="#biblio-did-core" title="Decentralized Identifiers (DIDs) v1.0">[DID-CORE]</a>, this profile defines expected structure and semantics for paths, query parameters, and fragments used in the DID-Linked Resource model.</p>
    <p>The following is the ABNF definition using the syntax in <a data-link-type="biblio" href="#biblio-rfc5234" title="Augmented BNF for Syntax Specifications: ABNF">[RFC5234]</a>. All DID-Linked Resources <strong>MUST</strong> conform to the DID-Linked Resource URL Syntax ABNF Rules.</p>
    <aside class="example" id="dlr-abnf">
-    <a class="self-link" href="#dlr-abnf"></a> <b>ABNF: DID-Linked Resource URL (extends DID URL from DID Core)</b> 
+    <a class="self-link" href="#dlr-abnf"></a>
+  <b>ABNF: DID-Linked Resource URL (extends DID URL from DID Core)</b>
+  
 <pre class="abnf">; DID-Linked Resource URL
 dlr-url           = did path-abempty [ "?" query ] [ "#" fragment ]
 
@@ -1657,21 +1664,31 @@ DIGIT             = %x30-39
     in the normative parts of this document
     are to be interpreted as described in RFC 2119.
     However, for readability,
-    these words do not appear in all uppercase letters in this specification. </p>
+    these words do not appear in all uppercase letters in this specification.
+
+    </p>
    <p>All of the text of this specification is normative
-    except sections explicitly marked as non-normative, examples, and notes. <a data-link-type="biblio" href="#biblio-rfc2119" title="Key words for use in RFCs to Indicate Requirement Levels">[RFC2119]</a> </p>
+    except sections explicitly marked as non-normative, examples, and notes. <a data-link-type="biblio" href="#biblio-rfc2119" title="Key words for use in RFCs to Indicate Requirement Levels">[RFC2119]</a>
+
+    </p>
    <p>Examples in this specification are introduced with the words “for example”
     or are set apart from the normative text
     with <code>class="example"</code>,
-    like this: </p>
+    like this:
+
+    </p>
    <div class="example" id="w3c-example">
-    <a class="self-link" href="#w3c-example"></a> 
-    <p>This is an example of an informative example. </p>
+    <a class="self-link" href="#w3c-example"></a>
+        
+    <p>This is an example of an informative example.
+    </p>
    </div>
    <p>Informative notes begin with the word “Note”
     and are set apart from the normative text
     with <code>class="note"</code>,
-    like this: </p>
+    like this:
+
+    </p>
    <p class="note" role="note">Note, this is an informative note.</p>
   </div>
   <script src="https://www.w3.org/scripts/TR/2021/fixup.js"></script>
