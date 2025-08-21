@@ -181,7 +181,7 @@ Core Properties {#core}
 
 The following tables contain informative references for the core properties defined by this specification, with expected values, and whether or not they are required. The property names in the tables are linked to the normative definitions and more detailed descriptions of each property.
 
-<table>
+<table class="simple">
   <thead>
     <tr>
       <th>Property</th>
