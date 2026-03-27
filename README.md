@@ -12,7 +12,7 @@ Please find the formatted specification at: **https://w3c-ccg.github.io/did-link
 
 This specification defines a standardized way of referencing, dereferencing, and fetching digital resources, including schemas, status lists, trust registries, governance documents, and visual representations of Verifiable Credentials. It associates digital resources with Decentralized Identifiers (DIDs), where each individual resource is identifiable through its own DID URL.
 
-The specification complements the [DID Resolution Specification](https://w3c-ccg.github.io/did-resolution/), defining a method-agnostic set of query parameters for DID-Linked Resources. It is built using existing, familiar [DID Core](https://www.w3.org/TR/did-core/) patterns:
+The specification complements the [DID Resolution Specification](https://www.w3.org/TR/did-resolution/), defining a method-agnostic set of query parameters for DID-Linked Resources. It is built using existing, familiar [DID Core](https://www.w3.org/TR/did-core/) patterns:
 
 - Support existing DID Resolvers and principles of [DID URL dereferencing](https://www.w3.org/TR/did-core/#did-url-dereferencing)
 - Protect against link-rot for long-term retrieval
