@@ -1,0 +1,2751 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DID-Linked Resources</title>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <script
+    src="https://www.w3.org/Tools/respec/respec-w3c"
+    class="remove"
+  ></script>
+  <script type="text/javascript" class="remove">
+    var respecConfig = {
+      specStatus: "CG-DRAFT",
+      shortName: "did-linked-resources",
+      group: "credentials",
+
+      edDraftURI: "https://w3c-ccg.github.io/did-linked-resources/",
+
+      editors: [
+        {
+          name: "Alex Tweeddale",
+          company: "Cheqd",
+          companyURL: "https://cheqd.io"
+        },
+        {
+          name: "Ankur Banerjee",
+          company: "Cheqd",
+          companyURL: "https://cheqd.io"
+        }
+      ],
+
+      github: "https://github.com/w3c-ccg/did-linked-resources/",
+
+      wg: "Credentials Community Group",
+      wgURI: "https://www.w3.org/community/credentials/",
+      wgPublicList: "public-credentials",
+      wgPatentURI: "https://www.w3.org/community/about/agreements/cla/",
+
+      maxTocLevel: 4,
+
+      xref: ["DID-CORE", "INFRA", "URL"],
+
+      localBiblio: {
+        "DID-RESOLUTION": {
+          title: "DID Resolution",
+          href: "https://w3c-ccg.github.io/did-resolution/",
+          authors: ["Markus Sabadello", "Dmitri Zagidulin"],
+          publisher: "W3C CCG"
+        },
+        "DID-SPEC-REGISTRIES": {
+          title: "DID Specification Registries",
+          href: "https://www.w3.org/TR/did-extensions/",
+          authors: ["Manu Sporny", "Markus Sabadello"],
+          publisher: "W3C"
+        },
+        "DID-WEB": {
+          title: "did:web Method Specification",
+          href: "https://w3c-ccg.github.io/did-method-web/",
+          publisher: "W3C CCG"
+        },
+        "DID-WEBVH": {
+          title: "The did:webvh DID Method",
+          href: "https://identity.foundation/didwebvh/",
+          publisher: "Decentralized Identity Foundation"
+        },
+        "DID-ETHR": {
+          title: "did:ethr Method Specification",
+          href: "https://github.com/decentralized-identity/ethr-did-resolver/blob/master/doc/did-method-spec.md",
+          publisher: "Decentralized Identity Foundation"
+        },
+        "DID-EBSI": {
+          title: "EBSI DID Method",
+          href: "https://ec.europa.eu/digital-building-blocks/sites/display/EBSI/EBSI+DID+Method",
+          publisher: "European Blockchain Services Infrastructure"
+        },
+        "BITSTRING-STATUS-LIST": {
+          title: "Bitstring Status List v1.0",
+          href: "https://www.w3.org/TR/vc-bitstring-status-list/",
+          authors: [
+            "Manu Sporny",
+            "Dave Longley",
+            "Orie Steele",
+            "Mike Prorock",
+            "Mahmoud Alkhraishi"
+          ],
+          status: "W3C Candidate Recommendation",
+          publisher: "W3C"
+        },
+        "LINKED-VP": {
+          title: "Linked Verifiable Presentations",
+          href: "https://identity.foundation/linked-vp/",
+          authors: ["Tobias Looker", "Oliver Terbu"],
+          status: "DIF Ratified Specification",
+          publisher: "Decentralized Identity Foundation"
+        },
+        "VC-DATA-INTEGRITY": {
+          title: "Verifiable Credential Data Integrity 1.0",
+          href: "https://www.w3.org/TR/vc-data-integrity/",
+          authors: ["Manu Sporny", "Dave Longley", "Greg Bernstein"],
+          status: "W3C Candidate Recommendation",
+          publisher: "W3C"
+        },
+        "MULTIHASH": {
+          title: "Multihash — Self-describing hashes",
+          href: "https://multiformats.io/multihash/",
+          publisher: "Protocol Labs"
+        }
+      }
+    };
+  </script>
+  <style>
+    code {
+      color: rgb(199, 73, 0);
+      font-weight: bold;
+    }
+    pre {
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+    pre .highlight {
+      font-weight: bold;
+      color: Green;
+    }
+    pre .comment {
+      font-weight: bold;
+      color: SteelBlue;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+    ol.algorithm {
+      counter-reset: numsection;
+      list-style-type: none;
+    }
+    ol.algorithm li {
+      margin: 0.5em 0;
+    }
+    ol.algorithm li:before {
+      font-weight: bold;
+      counter-increment: numsection;
+      content: counters(numsection, ".") ") ";
+    }
+    table.simple {
+      border-collapse: collapse;
+      margin: 25px 0;
+      min-width: 400px;
+      border: 1px solid #dddddd;
+    }
+    table.simple thead tr {
+      background-color: #005a9c;
+      color: #ffffff;
+      text-align: left;
+    }
+    table.simple th,
+    table.simple td {
+      padding: 12px 15px;
+      vertical-align: top;
+      text-align: left;
+    }
+    table.simple tbody tr {
+      border-bottom: 1px solid #dddddd;
+    }
+    table.simple tbody tr:nth-of-type(even) {
+      background-color: #00000008;
+    }
+    table.simple tbody tr:last-of-type {
+      border-bottom: 2px solid #005a9c;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── ABSTRACT ──────────────────────────────────────────────────── -->
+<section id="abstract">
+  <p>
+    This specification creates a standardized way of referencing, dereferencing,
+    and fetching digital resources. This includes associating digital resources
+    with <a data-cite="DID-CORE#dfn-decentralized-identifier">Decentralized
+    Identifiers (DIDs)</a>, where each individual resource is identifiable
+    through its own <a data-cite="DID-CORE#dfn-did-url">DID URL</a>.
+  </p>
+</section>
+
+<!-- ── STATUS OF THIS DOCUMENT ───────────────────────────────────── -->
+<section id="sotd">
+  <p>
+    This document is a Draft Community Group Report produced by the
+    <a href="https://www.w3.org/community/credentials/">W3C Credentials
+    Community Group</a>. It is an experimental specification undergoing
+    regular revisions and is not yet fit for production deployment.
+  </p>
+  <p>
+    Comments and contributions are welcome via the
+    <a href="https://github.com/w3c-ccg/did-linked-resources/issues">GitHub
+    issue tracker</a> or the
+    <a href="mailto:public-credentials@w3.org">public-credentials</a>
+    mailing list.
+  </p>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     §1  INTRODUCTION
+════════════════════════════════════════════════════════════════════ -->
+<section id="introduction">
+  <h2>Introduction</h2>
+
+  <p>
+    <dfn class="lint-ignore">DID-Linked Resources</dfn> (DLRs) are digital
+    files that can be retrieved and referenced using a persistent and unique
+    <a data-cite="DID-CORE#dfn-did-url">DID URL</a>.
+  </p>
+
+  <p>
+    This specification defines common requirements, patterns, algorithms
+    including their request formats and response formats, architectural options,
+    and various considerations for how [=DID-Linked Resources=] SHOULD act as
+    persistent identifiers for referencing and retrieving digital resources
+    (such as data schemas, status lists, trust registries, governance documents,
+    or policy definitions). This specification complements the
+    [[DID-RESOLUTION]] specification, including its patterns and algorithms for
+    DID URL resolution and dereferencing.
+  </p>
+
+  <p>
+    By using DID URLs which remain conformant with the W3C
+    [[DID-CORE]] Recommendation and [[DID-RESOLUTION]], existing DID Resolvers
+    will be able to dereference these DID URLs to retrieve the identified
+    resources using the DID URL query syntax defined in this specification.
+  </p>
+
+  <div class="note">
+    While this specification defines some base-level functionality for DID URL
+    dereferencing, the actual steps required to communicate with a DID's
+    verifiable data registry are defined by the applicable DID method
+    specification.
+  </div>
+
+  <!-- §1.1 -->
+  <section id="context">
+    <h3>Context for Specification</h3>
+
+    <p>
+      The [[DID-CORE]] specification defines an interoperable standard for DID
+      documents and associated core properties; however, it does not currently
+      have a standardized way to specify properties of resources associated with
+      DIDs, nor how to consistently reference or retrieve them.
+    </p>
+
+    <p>
+      Digital resources are generally stored on traditional centralized-storage
+      endpoints, but this comes with certain drawbacks:
+    </p>
+
+    <ol>
+      <li>
+        <strong>Digital resources could be tampered with by compromising the
+        hosting provider.</strong> Resources stored at a centralized web
+        endpoint can be replaced by malicious actors.
+      </li>
+      <li>
+        <strong>Hosting providers could unilaterally cease to host particular
+        clients.</strong> Providers may terminate accounts due to non-payment,
+        violation of Terms of Service, or other factors.
+      </li>
+      <li>
+        <strong>Single point of failure (SPOF).</strong> Even with
+        highly-trusted hosting providers, a service outage can make a resource
+        inaccessible.
+      </li>
+    </ol>
+
+    <p>
+      Despite these issues, many decentralized identity and digital credential
+      implementations, even those that use ledgers or other distributed systems
+      for DIDs, often use centralized storage. Using traditional web endpoints
+      to store digital resources that are critical for a Verifiable Credential
+      to function detracts from the utility that persistently-accessible
+      Decentralized Identifiers offer.
+    </p>
+
+    <pre class="example json" title="Schema.org address with full URLs (W3C VC Implementation Guide)">
+{
+  "@type": "http://schema.org/Person",
+  "http://schema.org/address": {
+    "@type": "http://schema.org/PostalAddress",
+    "http://schema.org/streetAddress": "123 Main St.",
+    "http://schema.org/addressLocality": "Blacksburg",
+    "http://schema.org/addressRegion": "VA",
+    "http://schema.org/postalCode": "24060",
+    "http://schema.org/addressCountry": "US"
+  }
+}
+    </pre>
+  </section>
+
+  <!-- §1.2 -->
+  <section id="a-simple-example">
+    <h3>A Simple Example</h3>
+
+    <p>
+      To understand [=DID-Linked Resources=], it is important to grasp the
+      foundational concept of a <strong>parent-child relationship</strong>
+      between a <a data-cite="DID-CORE#dfn-decentralized-identifier">DID</a>
+      and the resources associated with it.
+    </p>
+
+    <p>
+      A DID serves as a persistent, authoritative identifier for an entity,
+      for example a person, organization, device, or agent. In the context of
+      [=DID-Linked Resources=], the DID acts as the <strong>parent</strong>,
+      and the resources published under that DID are considered its
+      <strong>children</strong>. These resources might include schemas, status
+      lists, visual assets, trust registries, or any other type of digital
+      object relevant to verifiable credentials and decentralized identity
+      ecosystems.
+    </p>
+
+    <p>
+      For example, suppose <strong>Entity A</strong> controls the DID:
+    </p>
+
+    <pre class="example" title="Parent DID">did:example:entity123</pre>
+
+    <p>
+      This DID SHOULD serve as the root under which various resources are
+      published. A specific resource MAY (if UUIDs are used for resource IDs)
+      be accessible at:
+    </p>
+
+    <pre class="example" title="DID-Linked Resource URL">did:example:entity123/resources/41c0f0fe-cd4e-45aa-aec5-754db4a63865</pre>
+
+    <p>
+      The <a data-cite="DID-CORE#dfn-did-controller">DID controller</a> (Entity
+      A) controls the DID and has the ability to create, update, or deactivate
+      these resources. While each resource is
+      <strong>independently addressable</strong>, they remain
+      <strong>logically and cryptographically bound</strong> to the DID under
+      which they are published.
+    </p>
+
+    <p>This structure provides several benefits:</p>
+    <ul>
+      <li>
+        It enables consistent and verifiable anchoring of digital assets to a
+        trusted identity.
+      </li>
+      <li>
+        It supports versioning and fine-grained control over individual
+        resources.
+      </li>
+      <li>
+        It maintains a clear delegation model where the DID acts as the
+        governing authority over its published resources.
+      </li>
+    </ul>
+  </section>
+
+  <!-- §1.3 -->
+  <section id="architecture-overview">
+    <h3>Architecture Overview</h3>
+
+    <p>
+      The relationship between DIDs and [=DID-Linked Resources=] is shown in
+      the diagram below.
+    </p>
+
+    <figure id="fig-architecture">
+      <img
+        src="https://w3c-ccg.github.io/did-linked-resources/images/did-linked-resources-relationship.png"
+        alt="DID-Linked Resources architecture diagram showing parent DID and child resources"
+        style="max-width: 100%;"
+      />
+      <figcaption>DID-Linked Resources &mdash; Architecture Overview</figcaption>
+    </figure>
+  </section>
+
+  <!-- §1.4 -->
+  <section id="design-principles">
+    <h3>Design Principles</h3>
+
+    <p>
+      The following design principles SHOULD be taken into consideration.
+      [=DID-Linked Resources=] SHOULD:
+    </p>
+
+    <ol>
+      <li>Use existing and familiar [[DID-CORE]] patterns where possible.</li>
+      <li>
+        Support existing DID Resolvers and principles of
+        <a data-cite="DID-CORE#dfn-did-url-dereferencing">DID URL
+        dereferencing</a>.
+      </li>
+      <li>Protect against link-rot for long-term retrieval.</li>
+      <li>
+        Enable resources to be versioned and organized, with individual versions
+        being able to be fetched.
+      </li>
+      <li>
+        Include semantic linkage between DID documents and associated resources
+        (via metadata or otherwise).
+      </li>
+      <li>
+        Be method-agnostic: the specification SHOULD be implementable by any DID
+        method, whether backed by a distributed ledger, a web server, a
+        peer-to-peer protocol, or any other verifiable data registry.
+      </li>
+    </ol>
+  </section>
+
+  <!-- §1.5 -->
+  <section id="conformance">
+    <h3>Conformance</h3>
+
+    <p>
+      A <dfn>conforming DLR Producer</dfn> is a system that creates, updates,
+      or deactivates [=DID-Linked Resources=]. A conforming DLR Producer MUST:
+    </p>
+    <ul>
+      <li>Generate a unique <code>resourceId</code> for each resource.</li>
+      <li>
+        Populate <code>resourceUri</code> and <code>resourceId</code> (the
+        required core properties) for every resource.
+      </li>
+      <li>
+        Ensure that the <code>linkedResourceMetadata</code> array in
+        <code>didDocumentMetadata</code> is updated when a resource is created,
+        updated, or deactivated.
+      </li>
+      <li>
+        Provide a binding verification mechanism as described in
+        <a href="#binding-verification-mechanisms"></a> appropriate to the DID
+        method in use.
+      </li>
+    </ul>
+
+    <p>
+      A <dfn>conforming DLR Consumer</dfn> is a system that resolves,
+      dereferences, or verifies [=DID-Linked Resources=]. A conforming DLR
+      Consumer MUST:
+    </p>
+    <ul>
+      <li>
+        Parse DID-Linked Resource URLs conforming to the ABNF in
+        <a href="#did-linked-resource-url-syntax"></a>.
+      </li>
+      <li>
+        Support the dereferencing algorithm described in
+        <a href="#dereferencing-algorithm"></a>.
+      </li>
+      <li>
+        Apply the ambiguity resolution rules described in
+        <a href="#rules-and-logic-for-handling-ambiguous-queries"></a>.
+      </li>
+      <li>
+        Validate the binding between a resource and its parent DID using the
+        mechanism indicated by the DID method (see
+        <a href="#binding-verification-mechanisms"></a>), when a verification
+        mechanism is present.
+      </li>
+    </ul>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     §2  TERMINOLOGY
+════════════════════════════════════════════════════════════════════ -->
+<section id="terminology">
+  <h2>Terminology</h2>
+
+  <p>
+    The following terms are used throughout this specification. Terms defined
+    in [[DID-CORE]] are used as defined there.
+  </p>
+
+  <dl>
+    <dt><dfn data-cite="DID-CORE#dfn-did-controller">DID Controller</dfn></dt>
+    <dd>As defined in [[DID-CORE]].</dd>
+
+    <dt><dfn data-cite="DID-CORE#dfn-did-document">DID Document</dfn></dt>
+    <dd>As defined in [[DID-CORE]].</dd>
+
+    <dt><dfn data-cite="DID-CORE#dfn-did-url">DID URL</dfn></dt>
+    <dd>As defined in [[DID-CORE]].</dd>
+
+    <dt><dfn data-cite="DID-CORE#dfn-did-url-dereferencing">DID URL dereferencing</dfn></dt>
+    <dd>As defined in [[DID-CORE]].</dd>
+
+    <dt><dfn>Resource Collection</dfn></dt>
+    <dd>
+      An organized and structured set of digital resources, collectively and
+      individually identifiable using persistent and unique DID URLs.
+    </dd>
+
+    <dt><dfn>Resource Identifier</dfn></dt>
+    <dd>A unique identifier for a specified [=DID-Linked Resource=].</dd>
+
+    <dt><dfn>Binding Verification Mechanism</dfn></dt>
+    <dd>
+      A process by which a [=conforming DLR Consumer=] can confirm that a
+      [=DID-Linked Resource=] was authorized by the
+      <a data-cite="DID-CORE#dfn-did-controller">DID controller</a>. Different
+      DID methods employ different binding verification mechanisms (see
+      <a href="#binding-verification-mechanisms"></a>).
+    </dd>
+  </dl>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     §3  DID-LINKED RESOURCE URL SYNTAX
+════════════════════════════════════════════════════════════════════ -->
+<section id="did-linked-resource-url-syntax">
+  <h2>DID-Linked Resource URL Syntax</h2>
+
+  <p>
+    The following ABNF defines the structure of a
+    <dfn>DID-Linked Resource URL</dfn>, which is a specific type of
+    <a data-cite="DID-CORE#dfn-did-url">DID URL</a> that refers to a resource
+    published under a DID. While the overall syntax is compatible with
+    [[DID-CORE]], this profile defines expected structure and semantics for
+    paths, query parameters, and fragments used in the [=DID-Linked Resource=]
+    model.
+  </p>
+
+  <p>
+    The following is the ABNF definition using the syntax in [[RFC5234]]. All
+    [=DID-Linked Resources=] MUST conform to the DID-Linked Resource URL Syntax
+    ABNF Rules.
+  </p>
+
+  <pre class="abnf" title="DID-Linked Resource URL (extends DID URL from DID Core)">
+; DID-Linked Resource URL
+dlr-url            = did path-abempty [ "?" query ] [ "#" fragment ]
+
+; Decentralized Identifier (per W3C DID Core)
+did                = "did:" method ":" method-specific-id
+method             = 1*method-char
+method-char        = ALPHA / DIGIT / "-"
+method-specific-id = 1*( idchar / ":" )
+idchar             = ALPHA / DIGIT / "." / "-" / "_" / pct-encoded
+pct-encoded        = "%" HEXDIG HEXDIG
+
+; Path component
+path-abempty       = *( "/" segment )
+segment            = *pchar
+
+; Optional query and fragment (RFC 3986)
+query              = *( pchar / "/" / "?" )
+fragment           = *( pchar / "/" / "?" )
+
+; Core character classes
+pchar              = unreserved / pct-encoded / sub-delims / ":" / "@"
+unreserved         = ALPHA / DIGIT / "-" / "." / "_" / "~"
+sub-delims         = "!" / "$" / "&amp;" / "'" / "(" / ")" / "*"
+                   / "+" / "," / ";" / "="
+HEXDIG             = DIGIT / "A" / "B" / "C" / "D" / "E" / "F"
+ALPHA              = %x41-5A / %x61-7A
+DIGIT              = %x30-39
+  </pre>
+
+  <p>
+    The <code>path-abempty</code> component typically includes structured
+    segments such as <code>/resources/{resourceId}</code>, representing a unique
+    identifier scoped to the DID. The <code>query</code> component may include
+    parameters like <code>resourceName</code>, <code>resourceType</code>, or
+    <code>resourceVersion</code>, enabling flexible filtering and referencing of
+    specific resource variants. The optional <code>fragment</code> can refer to
+    a sub-section within the resource, such as a field in a schema or an anchor
+    in a document.
+  </p>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     §4  SEMANTICS
+════════════════════════════════════════════════════════════════════ -->
+<section id="semantics">
+  <h2>Semantics</h2>
+
+  <p>
+    The components of a [=DID-Linked Resource URL=] carry the following
+    semantics:
+  </p>
+
+  <ul>
+    <li>
+      The <code>did</code> component identifies the base Decentralized Identifier
+      under which the resource is logically scoped.
+    </li>
+    <li>
+      The <code>path</code> identifies the logical or versioned name of the
+      resource. This SHOULD be defined at the DID method level and may represent,
+      for example:
+      <ul>
+        <li>A generalized resource (<code>/resources/1234</code>)</li>
+        <li>A specific resource such as a schema (<code>/schema/1234</code>)</li>
+        <li>A different attachment or file (e.g., <code>/assets/image.png</code>)</li>
+      </ul>
+    </li>
+    <li>
+      The <code>fragment</code> MAY refer to a sub-component within the resource
+      (e.g., a specific field in a schema, or a section in a document).
+    </li>
+  </ul>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     §5  CORE PROPERTIES
+════════════════════════════════════════════════════════════════════ -->
+<section id="core-properties">
+  <h2>Core Properties</h2>
+
+  <p>
+    The following table contains informative references for the core properties
+    defined by this specification, with expected values and whether or not they
+    are required.
+  </p>
+
+  <table class="simple">
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th>Required?</th>
+        <th>Value Constraints</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>resourceUri</code></td>
+        <td>yes</td>
+        <td>
+          A string or map conforming to [[RFC3986]] URI rules that MUST directly
+          lead to a location where the resource can be accessed.
+        </td>
+      </tr>
+      <tr>
+        <td><code>resourceId</code></td>
+        <td>yes</td>
+        <td>
+          A string that conforms to a method-specific supported unique identifier
+          format. For example, a UUID:
+          <code>46e2af9a-2ea0-4815-999d-730a6778227c</code>.
+        </td>
+      </tr>
+      <tr>
+        <td><code>resourceCollectionId</code></td>
+        <td>no</td>
+        <td>
+          A string that identifies the DID associated with the resource. If
+          omitted, the value SHOULD default to the method-specific-id portion of
+          the parent DID.
+        </td>
+      </tr>
+      <tr>
+        <td><code>resourceName</code></td>
+        <td>no</td>
+        <td>
+          A string that uniquely names and identifies a resource. Together with
+          <code>resourceType</code>, it can be used to track version changes.
+        </td>
+      </tr>
+      <tr>
+        <td><code>resourceType</code></td>
+        <td>no</td>
+        <td>
+          A string that identifies the type of resource. Together with
+          <code>resourceName</code>, it can be used to track version changes.
+          Not to be confused with <code>mediaType</code>.
+        </td>
+      </tr>
+      <tr>
+        <td><code>resourceVersion</code></td>
+        <td>no</td>
+        <td>
+          A string that identifies the version of the resource. This property is
+          provided by the client and can be any value.
+        </td>
+      </tr>
+      <tr>
+        <td><code>alternativeUri</code></td>
+        <td>no</td>
+        <td>An array that describes alternative URIs for the resource.</td>
+      </tr>
+      <tr>
+        <td><code>mediaType</code></td>
+        <td>no</td>
+        <td>
+          A string that identifies the IANA media type of the resource.
+        </td>
+      </tr>
+      <tr>
+        <td><code>created</code></td>
+        <td>no</td>
+        <td>
+          A string identifying the date and time the resource was created, as an
+          XML Datetime.
+        </td>
+      </tr>
+      <tr>
+        <td><code>updated</code></td>
+        <td>no</td>
+        <td>
+          A string identifying the time the resource was updated, as an XML
+          Datetime.
+        </td>
+      </tr>
+      <tr>
+        <td><code>checksum</code></td>
+        <td>no</td>
+        <td>
+          A string formatted as
+          <code>&lt;algorithm-id&gt;:&lt;hex-encoded-hash&gt;</code> that may be
+          used to verify the resource has not been tampered with. See
+          <a href="#checksum"></a>.
+        </td>
+      </tr>
+      <tr>
+        <td><code>previousVersionId</code></td>
+        <td>no</td>
+        <td>A string identifying the previous version of the resource.</td>
+      </tr>
+      <tr>
+        <td><code>nextVersionId</code></td>
+        <td>no</td>
+        <td>A string identifying the next version of the resource.</td>
+      </tr>
+      <tr>
+        <td><code>proof</code></td>
+        <td>no</td>
+        <td>
+          An object or array of objects containing cryptographic proof(s) that
+          the resource was authorized by the
+          <a data-cite="DID-CORE#dfn-did-controller">DID controller</a>. See
+          <a href="#proof"></a>.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- §5.1 -->
+  <section id="resource-uri">
+    <h3>Resource URI</h3>
+    <p>
+      [=DID-Linked Resources=] are content-addressable or
+      identifier-addressable resources associated with a Decentralized
+      Identifier (DID). They are represented as URIs rooted at a valid DID. The
+      full [=DID-Linked Resource URL=] identifying a resource MUST include a DID
+      and a [=Resource Identifier=] (<code>resourceId</code>).
+    </p>
+  </section>
+
+  <!-- §5.2 -->
+  <section id="resource-identifiers">
+    <h3>Resource Identifiers</h3>
+    <p>
+      A [=Resource Identifier=], or <code>resourceId</code>, MUST be a unique
+      identifier for a single resource. Two resources under the same DID method
+      MUST NOT share the same <code>resourceId</code>.
+    </p>
+  </section>
+
+  <!-- §5.3 -->
+  <section id="resource-collection-id">
+    <h3>Resource Collection ID</h3>
+    <p>
+      The <code>resourceCollectionId</code> property is OPTIONAL. This property
+      identifies the DID under which resources are logically collected. If
+      omitted from the resource metadata, the <code>resourceCollectionId</code>
+      SHOULD default to the method-specific-id portion of the parent DID.
+    </p>
+
+    <pre class="example" title="Parent DID">did:example:0a5b94d0-a417-48ed-a6f5-4abc9e95888d</pre>
+
+    <p>
+      For the DID above, the default Resource Collection ID would be:
+      <code>0a5b94d0-a417-48ed-a6f5-4abc9e95888d</code>.
+    </p>
+
+    <div class="note">
+      If explicitly set, the Collection ID SHOULD take the syntactical form of
+      the DID method that the [=DID-Linked Resource=] is associated with.
+    </div>
+  </section>
+
+  <!-- §5.4 -->
+  <section id="resource-name">
+    <h3>Resource Name</h3>
+    <p>
+      The <code>resourceName</code> property is OPTIONAL. If present, the value
+      MUST be expressed as an
+      <a data-cite="INFRA#ascii-string">ASCII string</a>.
+    </p>
+  </section>
+
+  <!-- §5.5 -->
+  <section id="resource-type">
+    <h3>Resource Type</h3>
+    <p>
+      The <code>resourceType</code> property is OPTIONAL. If present, the value
+      MUST be expressed as an
+      <a data-cite="INFRA#ascii-string">ASCII string</a>. In order to maximize
+      interoperability, the resource type and its associated properties SHOULD be
+      registered in the DID Specification Registries [[DID-SPEC-REGISTRIES]].
+    </p>
+
+    <p>
+      The following resource types are RECOMMENDED for common use cases.
+      Implementations MAY define additional types as needed.
+    </p>
+
+    <table class="simple">
+      <thead>
+        <tr>
+          <th>Resource Type String</th>
+          <th>Description</th>
+          <th>Typical Media Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>JSONSchema2020</code></td>
+          <td>
+            A JSON Schema (2020-12 draft or later) used to validate credential
+            subjects.
+          </td>
+          <td><code>application/json</code></td>
+        </tr>
+        <tr>
+          <td><code>BitstringStatusList</code></td>
+          <td>
+            A W3C Bitstring Status List [[BITSTRING-STATUS-LIST]] used for
+            credential revocation or suspension. This replaces the deprecated
+            <code>StatusList2021</code> type; implementers SHOULD migrate to
+            this value.
+          </td>
+          <td><code>application/json</code></td>
+        </tr>
+        <tr>
+          <td><code>TrustRegistry</code></td>
+          <td>
+            A trust registry describing trusted issuers, verifiers, or
+            governance rules.
+          </td>
+          <td><code>application/json</code></td>
+        </tr>
+        <tr>
+          <td><code>GovernanceFramework</code></td>
+          <td>
+            A governance document describing policies, procedures, or rules.
+          </td>
+          <td><code>application/json</code> or <code>application/pdf</code></td>
+        </tr>
+        <tr>
+          <td><code>VisualPresentation</code></td>
+          <td>
+            A visual representation associated with a DID (e.g., logo, icon,
+            branding).
+          </td>
+          <td><code>image/png</code>, <code>image/svg+xml</code></td>
+        </tr>
+        <tr>
+          <td><code>CL-Schema</code></td>
+          <td>A Hyperledger AnonCreds CL-Schema.</td>
+          <td><code>application/json</code></td>
+        </tr>
+        <tr>
+          <td><code>CredentialDefinition</code></td>
+          <td>A Hyperledger AnonCreds Credential Definition.</td>
+          <td><code>application/json</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note">
+      This table is informative. The authoritative registry for resource types
+      is maintained in [[DID-SPEC-REGISTRIES]]. Implementations SHOULD register
+      new types there to promote interoperability.
+    </div>
+  </section>
+
+  <!-- §5.6 -->
+  <section id="resource-version">
+    <h3>Resource Version</h3>
+    <p>
+      The <code>resourceVersion</code> property is OPTIONAL. If present, the
+      value MUST be expressed as an
+      <a data-cite="INFRA#ascii-string">ASCII string</a>. The format of the
+      value is not constrained by this specification; implementations MAY use
+      semantic versioning, date-based strings, or other schemes.
+    </p>
+  </section>
+
+  <!-- §5.7 -->
+  <section id="alternative-uri">
+    <h3>Alternative URI</h3>
+    <p>
+      The <code>alternativeUri</code> property is OPTIONAL. If present, the
+      value MUST be a set where each item is a URI conforming to [[RFC3986]].
+    </p>
+  </section>
+
+  <!-- §5.8 -->
+  <section id="resource-metadata-properties">
+    <h3>Resource Metadata Properties</h3>
+
+    <section id="media-type">
+      <h4>Media Type</h4>
+      <p>
+        The <code>mediaType</code> property is OPTIONAL. If present, the value
+        MUST be expressed as an ASCII string and SHOULD match the underlying IANA
+        media type of the resource file identified by the
+        <code>resourceId</code>.
+      </p>
+    </section>
+
+    <section id="checksum">
+      <h4>Checksum</h4>
+
+      <p>
+        The <code>checksum</code> property is OPTIONAL. If present, the value
+        MUST be formatted as follows:
+      </p>
+
+      <pre class="abnf" title="Checksum value syntax">
+checksum-value  = algorithm-id ":" hex-string
+algorithm-id    = 1*( ALPHA / DIGIT / "-" )
+hex-string      = 1*HEXDIG
+      </pre>
+
+      <p>
+        The <code>algorithm-id</code> component is a lowercase identifier for
+        the hash algorithm used. The <code>hex-string</code> component is the
+        lowercase hexadecimal encoding of the hash output.
+      </p>
+
+      <p>
+        The following algorithm identifiers are defined by this specification:
+      </p>
+
+      <table class="simple">
+        <thead>
+          <tr>
+            <th>Algorithm ID</th>
+            <th>Hash Function</th>
+            <th>Output Length</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>sha256</code></td>
+            <td>SHA-256 (FIPS 180-4)</td>
+            <td>256 bits (64 hex characters)</td>
+            <td>RECOMMENDED (baseline)</td>
+          </tr>
+          <tr>
+            <td><code>sha384</code></td>
+            <td>SHA-384 (FIPS 180-4)</td>
+            <td>384 bits (96 hex characters)</td>
+            <td>OPTIONAL</td>
+          </tr>
+          <tr>
+            <td><code>sha512</code></td>
+            <td>SHA-512 (FIPS 180-4)</td>
+            <td>512 bits (128 hex characters)</td>
+            <td>OPTIONAL</td>
+          </tr>
+          <tr>
+            <td><code>sha3-256</code></td>
+            <td>SHA3-256 (FIPS 202)</td>
+            <td>256 bits (64 hex characters)</td>
+            <td>OPTIONAL</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        [=Conforming DLR Producers=] MUST use <code>sha256</code> unless the
+        DID method specification or deployment context requires a different
+        algorithm. [=Conforming DLR Consumers=] MUST support <code>sha256</code>
+        and SHOULD support any additional algorithms listed above.
+      </p>
+
+      <p>
+        If a [=conforming DLR Consumer=] encounters an <code>algorithm-id</code>
+        it does not recognize, it MUST NOT treat the checksum as valid and SHOULD
+        report the algorithm as unsupported.
+      </p>
+
+      <p>
+        DID methods or communities MAY define additional algorithm identifiers
+        beyond those listed here. Implementations that wish to support content-
+        addressable identifiers (e.g., CIDv1 from IPFS) MAY use the
+        [[MULTIHASH]] self-describing format as an alternative encoding, provided
+        the DID method specification documents this choice.
+      </p>
+
+      <pre class="example" title="Example checksum values">
+"checksum": "sha256:a7c369ee9da8b25a2d6e93973fa8ca939b75abb6c39799d879a929ebea1adc0a"
+
+"checksum": "sha3-256:9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"
+      </pre>
+
+      <div class="note">
+        Checksum values that do not include an algorithm prefix (i.e., bare hex
+        strings without a colon separator) are considered non-conforming. Legacy
+        implementations that omit the prefix SHOULD be updated. A
+        [=conforming DLR Consumer=] that encounters a bare hex string MAY
+        attempt to interpret it as SHA-256 for backward compatibility but MUST
+        NOT treat the result as a verified checksum.
+      </div>
+    </section>
+
+    <section id="created">
+      <h4>Created</h4>
+      <p>
+        The <code>created</code> property is OPTIONAL. If present, the value
+        MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00
+        and without sub-second decimal precision. For example:
+        <code>2020-12-20T19:17:47Z</code>.
+      </p>
+    </section>
+
+    <section id="updated">
+      <h4>Updated</h4>
+      <p>
+        The <code>updated</code> property is OPTIONAL. If present, the value
+        MUST be a string formatted as an XML Datetime normalized to UTC 00:00:00
+        and without sub-second decimal precision.
+      </p>
+    </section>
+
+    <section id="previousversionid">
+      <h4>PreviousVersionId</h4>
+      <p>
+        The <code>previousVersionId</code> property is OPTIONAL. If present, the
+        value SHOULD reference the directly previous version of the resource. The
+        value MUST be an ASCII string.
+      </p>
+    </section>
+
+    <section id="nextversionid">
+      <h4>NextVersionId</h4>
+      <p>
+        The <code>nextVersionId</code> property is OPTIONAL. If present, the
+        value SHOULD reference the directly next version of the resource. The
+        value MUST be an ASCII string.
+      </p>
+    </section>
+  </section>
+
+  <!-- §5.9 -->
+  <section id="proof">
+    <h3>Proof</h3>
+    <p>
+      The <code>proof</code> property is OPTIONAL. If present, the value MUST be
+      an object or an array of objects, where each object contains a
+      cryptographic proof that the resource was authorized by the
+      <a data-cite="DID-CORE#dfn-did-controller">DID controller</a>.
+    </p>
+
+    <p>
+      This property is particularly important for DID methods that do not rely
+      on a distributed ledger or other verifiable data registry to enforce the
+      binding between a DID and its resources (see
+      <a href="#binding-verification-mechanisms"></a>).
+    </p>
+
+    <p>
+      When present, the <code>proof</code> object SHOULD conform to the
+      [[VC-DATA-INTEGRITY]] specification and SHOULD include at minimum the
+      following properties:
+    </p>
+
+    <table class="simple">
+      <thead>
+        <tr>
+          <th>Property</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>type</code></td>
+          <td>The type of proof (e.g., <code>DataIntegrityProof</code>).</td>
+        </tr>
+        <tr>
+          <td><code>cryptosuite</code></td>
+          <td>
+            The cryptographic suite used (e.g., <code>eddsa-jcs-2022</code>,
+            <code>ecdsa-jcs-2019</code>).
+          </td>
+        </tr>
+        <tr>
+          <td><code>verificationMethod</code></td>
+          <td>
+            A DID URL referencing a verification method in the DID Document of
+            the DID controller.
+          </td>
+        </tr>
+        <tr>
+          <td><code>created</code></td>
+          <td>The date-time at which the proof was created.</td>
+        </tr>
+        <tr>
+          <td><code>proofPurpose</code></td>
+          <td>
+            The purpose of the proof (e.g., <code>assertionMethod</code>).
+          </td>
+        </tr>
+        <tr>
+          <td><code>proofValue</code></td>
+          <td>The encoded proof value.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <pre class="example json" title="Resource metadata with proof (did:web)">
+{
+  "resourceUri": "did:web:example.com/resources/abc123",
+  "resourceId": "abc123",
+  "resourceCollectionId": "example.com",
+  "resourceName": "PassportSchema",
+  "resourceType": "JSONSchema2020",
+  "mediaType": "application/json",
+  "created": "2024-06-15T10:30:00Z",
+  "checksum": "sha256:a7c369ee9da8b25a2d6e93973fa8ca939b75abb6c39799d879a929ebea1adc0a",
+  "previousVersionId": "",
+  "nextVersionId": "",
+  "proof": {
+    "type": "DataIntegrityProof",
+    "cryptosuite": "eddsa-jcs-2022",
+    "verificationMethod": "did:web:example.com#key-1",
+    "created": "2024-06-15T10:30:00Z",
+    "proofPurpose": "assertionMethod",
+    "proofValue": "z3FXQjecWufY46...yVDm1FRCVb"
+  }
+}
+    </pre>
+
+    <div class="note">
+      For DID methods where the verifiable data registry enforces the binding
+      between DID and resource through its consensus mechanism, the
+      <code>proof</code> property MAY be omitted. In such cases, the ledger
+      transaction itself serves as the proof of authorization. See
+      <a href="#ledger-validated-binding"></a>.
+    </div>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     §6  BINDING TO DIDs
+════════════════════════════════════════════════════════════════════ -->
+<section id="binding-to-dids">
+  <h2>Binding to DIDs</h2>
+
+  <p>
+    In the context of [=DID-Linked Resources=],
+    <dfn>binding</dfn> refers to the relationship between a resource and a
+    Decentralized Identifier (DID). This binding is OPTIONAL but is highly
+    recommended.
+  </p>
+
+  <p>
+    A DID acts as the <strong>parent</strong> that has authority over the
+    resource, which is the <strong>child</strong>. The DID controller has
+    control over the resource and can modify, update, or deprecate it. In this
+    context, the DID itself becomes a [=Resource Collection=], within which one
+    or multiple resources can be referenced.
+  </p>
+
+  <p>
+    Multiple resources MAY be bound to the same DID, and each MUST include a
+    unique <code>resourceId</code>.
+  </p>
+
+  <!-- §6.1 -->
+  <section id="representations">
+    <h3>Representations</h3>
+    <p>
+      Resources linked to a DID SHOULD be represented in a way that maintains a
+      verifiable association with that DID. The metadata describing each
+      resource SHOULD be included as part of the DID Document Metadata, rather
+      than within the DID Document itself. This allows for clear delineation
+      between identity-related data and externally linked resources.
+    </p>
+
+    <p>
+      To ensure the integrity and traceability of resources associated with a
+      DID, the <code>didDocumentMetadata</code> object MAY include a
+      <code>linkedResourceMetadata</code> array. Each entry in this array
+      corresponds to a distinct resource that is logically bound to the DID.
+      Resources MAY be grouped or indexed by name and type, allowing multiple
+      different resources to be managed within a single logical collection.
+    </p>
+  </section>
+
+  <!-- §6.2 -->
+  <section id="representation-within-did-document-metadata">
+    <h3>Representation within DID Document Metadata</h3>
+    <p>
+      The <code>linkedResourceMetadata</code> array is used to track resources,
+      where each entry corresponds to a specific resource within the collection.
+      Each entry SHOULD include the properties defined in
+      <a href="#core-properties"></a>, including links to previous and
+      subsequent versions where applicable.
+    </p>
+
+    <pre class="example json" title="didDocumentMetadata with linkedResourceMetadata">
+{
+  "didDocumentMetadata": {
+    "created": "2020-12-20T19:17:47Z",
+    "updated": "",
+    "deactivated": false,
+    "versionId": "bdab59b0-66f5-42d3-b809-1829bdcc0408",
+    "previousVersion": "",
+    "nextVersion": "",
+    "linkedResourceMetadata": [
+      {
+        "resourceURI": "did:example:13d5ad44-9e99-428f-81e9-274458cefddc/resources/44547089-170b-4f5a-bcbc-06e46e0089e4",
+        "resourceCollectionId": "13d5ad44-9e99-428f-81e9-274458cefddc",
+        "resourceId": "44547089-170b-4f5a-bcbc-06e46e0089e4",
+        "resourceName": "PassportSchema",
+        "resourceType": "CL-Schema",
+        "resourceVersion": "1.0.1",
+        "mediaType": "application/json",
+        "created": "2022-07-19T08:40:00Z",
+        "checksum": "sha256:7b2022636f6e74656e74223a202274657374206461746122207d0ae3b0c44298",
+        "previousVersionId": "",
+        "nextVersionId": "bb2118f3-5e55-4510-b420-33ef9e1726d2"
+      },
+      {
+        "resourceURI": "did:example:13d5ad44-9e99-428f-81e9-274458cefddc/resources/bb2118f3-5e55-4510-b420-33ef9e1726d2",
+        "resourceCollectionId": "13d5ad44-9e99-428f-81e9-274458cefddc",
+        "resourceId": "bb2118f3-5e55-4510-b420-33ef9e1726d2",
+        "resourceName": "PassportSchema",
+        "resourceType": "JSONSchema2020",
+        "resourceVersion": "2.0.0",
+        "mediaType": "application/json",
+        "created": "2022-08-07T08:40:00Z",
+        "checksum": "sha256:9123dcbb0b42652b0e105956c68d3ca2ff34584f324fa41a29aedd32b883e131",
+        "previousVersionId": "44547089-170b-4f5a-bcbc-06e46e0089e4",
+        "nextVersionId": "0be87654-4a48-4f8e-8789-15ec3589ccdd"
+      }
+    ]
+  }
+}
+    </pre>
+
+    <div class="note">
+      The <code>didDocumentMetadata</code> SHOULD NOT be populated with the
+      actual resource content, but instead with only the resource metadata,
+      which contains all metadata about the associated resources.
+    </div>
+  </section>
+
+  <!-- §6.3 -->
+  <section id="resource-representation">
+    <h3>Resource Representation</h3>
+    <p>
+      [=DID-Linked Resources=] MUST be retrievable either individually (by their
+      full <code>resourceId</code>) or in aggregate (by querying resources linked
+      to a given DID using a particular filter).
+    </p>
+
+    <p>
+      When queried individually, the result MUST return the full resource
+      representation associated with the provided <code>resourceId</code>. When
+      queried in aggregate, the result MUST return an array of resource metadata
+      entries, each describing a distinct resource or version of the same
+      resource.
+    </p>
+  </section>
+
+  <!-- §6.4 -->
+  <section id="binding-verification-mechanisms">
+    <h3>Binding Verification Mechanisms</h3>
+
+    <p>
+      A critical aspect of [=DID-Linked Resources=] is the ability for a
+      [=conforming DLR Consumer=] to verify that a resource was authorized by
+      the <a data-cite="DID-CORE#dfn-did-controller">DID controller</a>.
+      Different DID methods provide different infrastructure for this
+      verification.
+    </p>
+
+    <p>
+      DID methods that implement [=DID-Linked Resources=] MUST specify which
+      [=Binding Verification Mechanism=](s) they support and what a
+      [=conforming DLR Consumer=] MUST verify before treating a resource as
+      authentic.
+    </p>
+
+    <!-- §6.4.1 -->
+    <section id="ledger-validated-binding">
+      <h4>Ledger-Validated Binding</h4>
+      <p>
+        In DID methods backed by a distributed ledger or similar consensus-based
+        verifiable data registry (for example <code>did:cheqd</code>,
+        <code>did:indy</code>, <code>did:ebsi</code> [[DID-EBSI]],
+        <code>did:ethr</code> [[DID-ETHR]]) the binding between a DID and its
+        resources is enforced by the ledger's consensus mechanism.
+      </p>
+
+      <p>In this model:</p>
+      <ul>
+        <li>
+          The DID controller submits a transaction to create or update a
+          resource, signed using a key associated with the DID.
+        </li>
+        <li>
+          The ledger validates the transaction signature against the DID
+          Document's verification methods before accepting the resource.
+        </li>
+        <li>
+          A [=conforming DLR Consumer=] that trusts the ledger can treat the
+          presence of the resource on the ledger as sufficient proof of
+          authorization.
+        </li>
+      </ul>
+
+      <p>
+        When using ledger-validated binding, the <code>proof</code> property in
+        resource metadata (see <a href="#proof"></a>) MAY be omitted.
+      </p>
+
+      <div class="note">
+        DID methods using this mechanism SHOULD document which verification
+        relationship (e.g., <code>authentication</code>,
+        <code>assertionMethod</code>) is required for resource transactions.
+      </div>
+    </section>
+
+    <!-- §6.4.2 -->
+    <section id="signature-based-binding">
+      <h4>Signature-Based Binding</h4>
+      <p>
+        For DID methods that do not rely on a ledger (for example
+        <code>did:web</code> [[DID-WEB]], <code>did:webvh</code> [[DID-WEBVH]],
+        <code>did:key</code>, <code>did:peer</code>, <code>did:jwk</code>,
+        <code>did:pkh</code>) the binding between a DID and its resources can
+        be established through a cryptographic proof attached to the resource or
+        its metadata.
+      </p>
+
+      <p>
+        When using signature-based binding, the <code>proof</code> property MUST
+        be present in the resource metadata. The
+        <code>verificationMethod</code> referenced in the proof MUST correspond
+        to a verification method in the DID Document at the time the proof was
+        created.
+      </p>
+
+      <p>
+        [=Conforming DLR Consumers=] MUST perform the following verification
+        steps:
+      </p>
+
+      <ol class="algorithm">
+        <li>Resolve the DID to obtain the DID Document.</li>
+        <li>
+          Locate the verification method referenced in
+          <code>proof.verificationMethod</code>.
+        </li>
+        <li>
+          Verify that the verification method is listed under an appropriate
+          verification relationship (e.g., <code>assertionMethod</code>).
+        </li>
+        <li>
+          Validate the cryptographic signature in <code>proof.proofValue</code>
+          against the resource content (or metadata, depending on what was
+          signed).
+        </li>
+        <li>
+          If the <code>checksum</code> property is present, verify that the
+          fetched resource content matches the checksum.
+        </li>
+      </ol>
+
+      <p>
+        If any of these steps fail, the [=conforming DLR Consumer=] MUST treat
+        the resource as unverified.
+      </p>
+    </section>
+
+    <!-- §6.4.3 -->
+    <section id="content-addressable-binding">
+      <h4>Content-Addressable Binding</h4>
+      <p>
+        In some architectures, the resource content is stored in a
+        content-addressable system (for example, IPFS or Arweave), and the
+        binding is established by anchoring the content identifier (hash) in the
+        DID Document Metadata.
+      </p>
+
+      <p>
+        This mechanism provides <strong>integrity</strong> (proof that the
+        content has not been tampered with) but does not on its own provide
+        <strong>authorization</strong> (proof that the DID controller approved
+        the resource). For this reason, content-addressable binding SHOULD be
+        combined with either ledger-validated binding or signature-based binding
+        to provide a complete trust chain.
+      </p>
+    </section>
+
+    <!-- §6.4.4 -->
+    <section id="choosing-a-binding-verification-mechanism">
+      <h4>Choosing a Binding Verification Mechanism</h4>
+
+      <table class="simple">
+        <thead>
+          <tr>
+            <th>Mechanism</th>
+            <th>Provides Integrity?</th>
+            <th>Provides Authorization?</th>
+            <th>Requires Ledger?</th>
+            <th>Requires <code>proof</code>?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Ledger-Validated</td>
+            <td>Yes (via consensus)</td>
+            <td>Yes (via transaction validation)</td>
+            <td>Yes</td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td>Signature-Based</td>
+            <td>Yes (via proof verification)</td>
+            <td>Yes (via proof verification)</td>
+            <td>No</td>
+            <td>Yes</td>
+          </tr>
+          <tr>
+            <td>Content-Addressable</td>
+            <td>Yes (via hash comparison)</td>
+            <td>No (must be combined)</td>
+            <td>No</td>
+            <td>No (but SHOULD be combined)</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     §7  RESOURCE PARAMETERS
+════════════════════════════════════════════════════════════════════ -->
+<section id="resource-parameters">
+  <h2>Resource Parameters</h2>
+
+  <p>
+    Resource parameters are completely independent of any specific DID method
+    and function the same way for all DIDs. See the <code>query</code> component
+    of the [[DID-CORE]] DID URL syntax.
+  </p>
+
+  <table class="simple">
+    <thead>
+      <tr>
+        <th>Parameter</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>resourceId</code></td>
+        <td>String (method-specific unique identifier format)</td>
+        <td>The unique identifier of a particular [=DID-Linked Resource=].</td>
+      </tr>
+      <tr>
+        <td><code>resourceCollectionId</code></td>
+        <td>String (method-specific unique identifier format)</td>
+        <td>
+          Can be used to query all resources associated with a DID if combined
+          with <code>resourceMetadata=true</code>.
+        </td>
+      </tr>
+      <tr>
+        <td><code>resourceName</code></td>
+        <td>String</td>
+        <td>The specific name of a [=DID-Linked Resource=].</td>
+      </tr>
+      <tr>
+        <td><code>resourceType</code></td>
+        <td>String</td>
+        <td>The specific type of a [=DID-Linked Resource=].</td>
+      </tr>
+      <tr>
+        <td><code>resourceVersionTime</code></td>
+        <td>XML Datetime (UTC, no sub-second precision)</td>
+        <td>Used to fetch a version of a resource at a specific point in time.</td>
+      </tr>
+      <tr>
+        <td><code>checksum</code></td>
+        <td>String</td>
+        <td>
+          Used to specify a particular resource checksum to demonstrate it is
+          untampered.
+        </td>
+      </tr>
+      <tr>
+        <td><code>resourceMetadata</code></td>
+        <td>Boolean</td>
+        <td>
+          Used to fetch metadata related to a specific resource or group of
+          resources.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     §8  RESOLUTION AND DEREFERENCING
+════════════════════════════════════════════════════════════════════ -->
+<section id="resolution-and-dereferencing">
+  <h2>Resolution and Dereferencing</h2>
+
+  <p>
+    Requests to fetch resources are considered a DID URL dereferencing scenario.
+    The process uses DID URL paths to lead to a resource object, rather than a
+    DID Document.
+  </p>
+
+  <p>
+    Normal DID URL dereferencing can be understood as a two-step process:
+  </p>
+
+  <ol>
+    <li>
+      <strong>Resolution:</strong> The DID is resolved to its corresponding DID
+      Document using the relevant DID method.
+    </li>
+    <li>
+      <strong>Dereferencing:</strong> A resource is located using the path,
+      query, and/or fragment components of the DID URL.
+    </li>
+  </ol>
+
+  <p>
+    Dereferencing a [=DID-Linked Resource URL=] returns the full resource
+    representation. A metadata representation MUST also be obtainable, either
+    alongside the resource itself or via a distinct query mechanism.
+  </p>
+
+  <pre class="example json" title="Resource Metadata">
+{
+  "resourceUri": "did:example:13d5ad44-9e99-428f-81e9-274458cefddc/resources/bb2118f3-5e55-4510-b420-33ef9e1726d2",
+  "resourceCollectionId": "13d5ad44-9e99-428f-81e9-274458cefddc",
+  "resourceId": "bb2118f3-5e55-4510-b420-33ef9e1726d2",
+  "resourceName": "PassportSchema",
+  "resourceType": "JSONSchema2020",
+  "resourceVersion": "1.0.1",
+  "mediaType": "application/json",
+  "created": "2022-04-20T20:19:19Z",
+  "checksum": "sha256:a7c369ee9da8b25a2d6e93973fa8ca939b75abb6c39799d879a929ebea1adc0a",
+  "previousVersionId": "67f2df00-0b6e-404b-8c70-1d63200e6412",
+  "nextVersionId": "98922424-c214-4439-b52c-f68ddb450b40"
+}
+  </pre>
+
+  <!-- §8.1 -->
+  <section id="dereferencing-algorithm">
+    <h3>Dereferencing Algorithm</h3>
+
+    <p>
+      This section defines the algorithm that a [=conforming DLR Consumer=]
+      MUST follow when dereferencing a [=DID-Linked Resource URL=].
+    </p>
+
+    <p>
+      <strong>Input:</strong> A [=DID-Linked Resource URL=] conforming to the
+      ABNF in <a href="#did-linked-resource-url-syntax"></a>.
+    </p>
+    <p>
+      <strong>Output:</strong> One of the following: (a) the resource content,
+      (b) an array of resource metadata entries, or (c) a DLR error object (see
+      <a href="#error-format"></a>).
+    </p>
+
+    <ol class="algorithm">
+      <li>
+        <strong>Parse</strong> the [=DID-Linked Resource URL=] into its
+        components: <code>did</code>, <code>path</code>, <code>query</code>, and
+        <code>fragment</code>.
+      </li>
+      <li>
+        <strong>Resolve</strong> the <code>did</code> component using the
+        applicable DID method to obtain the DID Document and
+        <code>didDocumentMetadata</code>. If resolution fails, return an error
+        with <code>error</code> set to <code>"notFound"</code>.
+      </li>
+      <li>
+        <strong>Check for deactivation.</strong> If the DID Document Metadata
+        indicates the DID is deactivated (<code>"deactivated": true</code>),
+        return an error with <code>error</code> set to
+        <code>"deactivated"</code>, unless the DID method explicitly permits
+        resource access after deactivation.
+      </li>
+      <li>
+        <strong>Extract</strong> the <code>linkedResourceMetadata</code> array
+        from the <code>didDocumentMetadata</code>. If no
+        <code>linkedResourceMetadata</code> is present, return an error with
+        <code>error</code> set to <code>"notFound"</code>.
+      </li>
+      <li>
+        <strong>Apply path-based lookup.</strong> If the <code>path</code>
+        component contains a <code>resourceId</code> (e.g.,
+        <code>/resources/{resourceId}</code>), filter the
+        <code>linkedResourceMetadata</code> array to entries matching that
+        <code>resourceId</code>. If no match is found, return an error with
+        <code>error</code> set to <code>"notFound"</code>.
+      </li>
+      <li>
+        <strong>Apply query parameter filters.</strong> For each query parameter
+        present (<code>resourceId</code>, <code>resourceCollectionId</code>,
+        <code>resourceName</code>, <code>resourceType</code>,
+        <code>resourceVersion</code>, <code>resourceVersionTime</code>,
+        <code>checksum</code>), further filter the candidate set to entries
+        matching the specified values.
+      </li>
+      <li>
+        <strong>Check the <code>resourceMetadata</code> parameter.</strong>
+        <ul>
+          <li>
+            If <code>resourceMetadata=true</code>, return the filtered array of
+            resource metadata entries (even if multiple entries match). Skip to
+            step 10.
+          </li>
+          <li>If <code>resourceMetadata=false</code> or not specified, continue.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Evaluate the candidate set.</strong>
+        <ul>
+          <li>
+            If the candidate set is empty, return an error with
+            <code>error</code> set to <code>"notFound"</code>.
+          </li>
+          <li>
+            If the candidate set contains exactly one entry, proceed to step 9.
+          </li>
+          <li>
+            If the candidate set contains multiple entries with the same
+            <code>resourceName</code> and <code>resourceType</code>, select the
+            entry with the latest <code>created</code> timestamp.
+          </li>
+          <li>
+            If the candidate set contains multiple entries that differ in
+            <code>resourceName</code> or <code>resourceType</code>, return an
+            error with <code>error</code> set to <code>"ambiguousQuery"</code>.
+            The error SHOULD include a <code>candidates</code> array listing
+            the <code>resourceId</code> values of the matching entries.
+          </li>
+        </ul>
+      </li>
+      <li>
+        <strong>Fetch and return the resource.</strong> Using the
+        <code>resourceUri</code> of the selected entry, retrieve the full
+        resource content. If a <code>checksum</code> is present, verify the
+        fetched content against the checksum per
+        <a href="#integrity-verification"></a>. If a <code>proof</code> is
+        present, verify it according to the rules in
+        <a href="#signature-based-binding"></a>. If a <code>fragment</code> is
+        present in the original URL, extract the sub-component identified by the
+        fragment. Return the resource content.
+      </li>
+      <li>
+        <strong>Return the result</strong> along with appropriate dereferencing
+        metadata (e.g., <code>contentType</code>, <code>retrieved</code>
+        timestamp).
+      </li>
+    </ol>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     §9  RULES FOR AMBIGUOUS QUERIES
+════════════════════════════════════════════════════════════════════ -->
+<section id="rules-and-logic-for-handling-ambiguous-queries">
+  <h2>Rules and Logic for Handling Ambiguous Queries</h2>
+
+  <section id="ambiguity-triggers-errors">
+    <h3>Ambiguity Triggers Errors</h3>
+    <p>
+      If a query results in multiple matching resources and does not include
+      sufficient parameters to disambiguate between them, the resolver MUST
+      return an error.
+    </p>
+  </section>
+
+  <section id="multiple-versions-of-the-same-resource">
+    <h3>Multiple Versions of the Same Resource</h3>
+    <p>
+      If multiple versions of a single resource exist (resources with the same
+      <code>resourceType</code> and <code>resourceName</code> but different
+      <code>versionId</code> values) and no specific version is requested, the
+      resolver MUST default to returning the latest version. This situation is
+      not considered ambiguous, as the resource identity is clear; only the
+      version is unspecified.
+    </p>
+  </section>
+
+  <section id="ambiguous-query-with-resourcemetadata-true">
+    <h3>Ambiguous Query with <code>resourceMetadata=true</code></h3>
+    <p>
+      When a query is ambiguous but includes the
+      <code>resourceMetadata=true</code> parameter, the resolver SHOULD return
+      metadata for all matching resources.
+    </p>
+
+    <pre class="example" title="Request — ambiguous query with resourceMetadata=true">
+did:example:c1685ca0-1f5b-439c-8eb8-5c0e85ab7cd0?resourceType=String&amp;resourceMetadata=true
+    </pre>
+
+    <pre class="example json" title="Response — array of matching resource metadata">
+{
+  "@context": "https://w3id.org/did-resolution/v1",
+  "dereferencingMetadata": {
+    "contentType": "application/did+ld+json",
+    "retrieved": "2023-04-26T15:38:26Z",
+    "did": {
+      "didString": "did:example:c1685ca0-1f5b-439c-8eb8-5c0e85ab7cd0",
+      "methodSpecificId": "c1685ca0-1f5b-439c-8eb8-5c0e85ab7cd0",
+      "method": "example"
+    }
+  },
+  "contentStream": {
+    "created": "2023-01-25T11:58:10Z",
+    "versionId": "e5615fc2-6f13-42b1-989c-49576a574cef",
+    "linkedResourceMetadata": [
+      {
+        "resourceURI": "did:example:c1685ca0-1f5b-439c-8eb8-5c0e85ab7cd0/resources/9ba3922e-d5f5-4f53-b265-fc0d4e988c77",
+        "resourceCollectionId": "c1685ca0-1f5b-439c-8eb8-5c0e85ab7cd0",
+        "resourceId": "9ba3922e-d5f5-4f53-b265-fc0d4e988c77",
+        "resourceName": "exampleResourceName1",
+        "resourceType": "exampleResourceType",
+        "mediaType": "application/json",
+        "resourceVersion": "",
+        "created": "2023-01-25T12:08:39Z",
+        "checksum": "sha256:e1dbc03b50bdb995961dc8843df6539b79d03bf49787ed6462189ee97d27eaf3",
+        "previousVersionId": null,
+        "nextVersionId": null
+      },
+      {
+        "resourceURI": "did:example:c1685ca0-1f5b-439c-8eb8-5c0e85ab7cd0/resources/e733ebb7-c8dd-41ed-9d42-33bceea70952",
+        "resourceCollectionId": "c1685ca0-1f5b-439c-8eb8-5c0e85ab7cd0",
+        "resourceId": "e733ebb7-c8dd-41ed-9d42-33bceea70952",
+        "resourceName": "exampleResourceName2",
+        "resourceType": "exampleResourceType",
+        "mediaType": "application/json",
+        "resourceVersion": "",
+        "created": "2023-01-25T12:04:52Z",
+        "checksum": "sha256:cffd829b06797f85407be9353056db722ca3eca0c05ab0462a42d30f19cdef09",
+        "previousVersionId": null,
+        "nextVersionId": null
+      }
+    ]
+  },
+  "contentMetadata": {}
+}
+    </pre>
+  </section>
+
+  <section id="http-accept-headers">
+    <h3>HTTP Accept Headers</h3>
+    <p>
+      Clients MAY use the <code>Accept</code> HTTP header to express a
+      preference for the media type of the dereferenced resource. The resolver
+      MUST respect the <code>Accept</code> header if possible.
+    </p>
+  </section>
+
+  <section id="error-format">
+    <h3>Error Format</h3>
+    <p>
+      When a [=conforming DLR Consumer=] encounters an error during
+      dereferencing, it MUST return an error object within the
+      <code>dereferencingMetadata</code>. The error object MUST include the
+      following property:
+    </p>
+
+    <table class="simple">
+      <thead>
+        <tr><th>Property</th><th>Required?</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>error</code></td>
+          <td>yes</td>
+          <td>A string identifying the error type.</td>
+        </tr>
+        <tr>
+          <td><code>message</code></td>
+          <td>no</td>
+          <td>A human-readable string describing the error.</td>
+        </tr>
+        <tr>
+          <td><code>candidates</code></td>
+          <td>no</td>
+          <td>
+            An array of <code>resourceId</code> strings for matching entries,
+            included when the error type is <code>"ambiguousQuery"</code>.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="simple">
+      <thead>
+        <tr><th>Error Type</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>"notFound"</code></td>
+          <td>No resource matching the query was found.</td>
+        </tr>
+        <tr>
+          <td><code>"ambiguousQuery"</code></td>
+          <td>The query matched multiple resources that could not be disambiguated.</td>
+        </tr>
+        <tr>
+          <td><code>"deactivated"</code></td>
+          <td>The parent DID has been deactivated.</td>
+        </tr>
+        <tr>
+          <td><code>"integrityError"</code></td>
+          <td>
+            The fetched resource content did not match the expected
+            <code>checksum</code>.
+          </td>
+        </tr>
+        <tr>
+          <td><code>"proofVerificationFailed"</code></td>
+          <td>
+            The <code>proof</code> on the resource metadata could not be
+            verified.
+          </td>
+        </tr>
+        <tr>
+          <td><code>"methodNotSupported"</code></td>
+          <td>The DID method does not support [=DID-Linked Resources=].</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <pre class="example json" title="Error response — ambiguousQuery">
+{
+  "@context": "https://w3id.org/did-resolution/v1",
+  "dereferencingMetadata": {
+    "error": "ambiguousQuery",
+    "message": "Multiple resources matched the query. Specify additional parameters to disambiguate.",
+    "candidates": [
+      "9ba3922e-d5f5-4f53-b265-fc0d4e988c77",
+      "e733ebb7-c8dd-41ed-9d42-33bceea70952"
+    ]
+  },
+  "contentStream": null,
+  "contentMetadata": {}
+}
+    </pre>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     §10  RESOLUTION AND DEREFERENCING EXAMPLES
+════════════════════════════════════════════════════════════════════ -->
+<section id="resolution-and-dereferencing-examples">
+  <h2>Resolution and Dereferencing Examples</h2>
+
+  <p>
+    This section contains non-normative examples illustrating the request
+    format and expected response for each query parameter.
+  </p>
+
+  <!-- §10.1 -->
+  <section id="resourcemetadata-and-filter">
+    <h3>ResourceMetadata and Filter</h3>
+    <p>
+      A composite query requesting the <code>resourceName</code>,
+      <code>resourceType</code>, and <code>resourceMetadata=true</code>.
+      This filter returns the metadata of ALL resources of this name and type.
+    </p>
+
+    <pre class="example" title="Request — composite metadata query">
+did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceType=exampleResourceType&amp;resourceName=exampleResourceName&amp;resourceMetadata=true
+    </pre>
+
+    <pre class="example json" title="Response — metadata for all matching versions">
+{
+  "@context": "https://w3id.org/did-resolution/v1",
+  "dereferencingMetadata": {
+    "contentType": "application/did+ld+json",
+    "retrieved": "2023-04-27T11:10:17Z",
+    "did": {
+      "didString": "did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c",
+      "methodSpecificId": "d8ac0372-0d4b-413e-8ef5-8e8f07822b2c",
+      "method": "example"
+    }
+  },
+  "contentStream": {
+    "created": "2023-02-21T14:28:47Z",
+    "versionId": "44f49254-8106-40ee-99ad-e50ac9517346",
+    "linkedResourceMetadata": [
+      {
+        "resourceURI": "did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c/resources/bae5cb6c-564a-4ed4-8c0e-d5c3b0f8ae0a",
+        "resourceCollectionId": "d8ac0372-0d4b-413e-8ef5-8e8f07822b2c",
+        "resourceId": "bae5cb6c-564a-4ed4-8c0e-d5c3b0f8ae0a",
+        "resourceName": "exampleResourceName",
+        "resourceType": "exampleResourceType",
+        "mediaType": "application/json",
+        "resourceVersion": "1.14.41",
+        "created": "2023-02-22T08:57:23Z",
+        "checksum": "sha256:93ba6f3c55ee073e6278f98e820776e73cfd9d3e32dc5882507ee8effbdbfadd",
+        "previousVersionId": "40829caf-b415-4b1d-91a3-b56dfb6374f4",
+        "nextVersionId": null
+      },
+      {
+        "resourceURI": "did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c/resources/40829caf-b415-4b1d-91a3-b56dfb6374f4",
+        "resourceCollectionId": "d8ac0372-0d4b-413e-8ef5-8e8f07822b2c",
+        "resourceId": "40829caf-b415-4b1d-91a3-b56dfb6374f4",
+        "resourceName": "exampleResourceName",
+        "resourceType": "exampleResourceType",
+        "mediaType": "application/json",
+        "resourceVersion": "1.45.24",
+        "created": "2023-02-22T08:55:07Z",
+        "checksum": "sha256:2a6af570635ed49a39eae9a9c60ccb40d61466839d4ab2f17432a8ac705da489",
+        "previousVersionId": "547abdb3-99f8-4040-b030-3296c4668846",
+        "nextVersionId": "bae5cb6c-564a-4ed4-8c0e-d5c3b0f8ae0a"
+      },
+      {
+        "resourceURI": "did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c/resources/547abdb3-99f8-4040-b030-3296c4668846",
+        "resourceCollectionId": "d8ac0372-0d4b-413e-8ef5-8e8f07822b2c",
+        "resourceId": "547abdb3-99f8-4040-b030-3296c4668846",
+        "resourceName": "exampleResourceName",
+        "resourceType": "exampleResourceType",
+        "mediaType": "application/json",
+        "resourceVersion": "1.42.26",
+        "created": "2023-02-22T08:54:14Z",
+        "checksum": "sha256:4524f2193da6e5cc28d8a71f268d097891d053d4f206b045347ae117ce70d8ac",
+        "previousVersionId": null,
+        "nextVersionId": "40829caf-b415-4b1d-91a3-b56dfb6374f4"
+      }
+    ]
+  },
+  "contentMetadata": {}
+}
+    </pre>
+  </section>
+
+  <!-- §10.2 -->
+  <section id="resourceid-parameter">
+    <h3>ResourceId Parameter</h3>
+    <p>
+      The <code>resourceId</code> parameter can be used to filter a particular
+      resource version by its unique ID.
+    </p>
+
+    <pre class="example" title="Request — query by resourceId">
+did:example:b5d70adf-31ca-4662-aa10-d3a54cd8f06c?resourceId=5e16a3f9-7c6e-4b6b-8e28-20f56780ee25
+    </pre>
+
+    <pre class="example json" title="Response — the resource itself (schema)">
+{
+  "title": "Example Verifiable Credential Schema",
+  "description": "Example schema for DID-Linked Resources spec",
+  "type": "object",
+  "properties": {
+    "@context": {
+      "description": "Defines semantic context of the Example Credential",
+      "type": "array",
+      "items": { "type": "string", "format": "uri" }
+    }
+  }
+}
+    </pre>
+  </section>
+
+  <!-- §10.3 -->
+  <section id="resourcecollectionid-parameter">
+    <h3>ResourceCollectionId Parameter</h3>
+    <p>
+      The <code>resourceCollectionId</code> parameter filters all resources
+      linked to a particular DID by the <code>collectionId</code> property. It
+      is recommended that this query is only used when there is one resource
+      linked to a DID. If it is used with multiple resources, it is recommended
+      to be combined with another query parameter such as
+      <code>resourceMetadata=true</code>. Otherwise, it is likely to result in
+      an ambiguous query.
+    </p>
+
+    <pre class="example" title="Request — query by resourceCollectionId">
+did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceCollectionId=d8ac0372-0d4b-413e-8ef5-8e8f07822b2c
+    </pre>
+
+    <pre class="example json" title="Response — the resource itself (schema)">
+{
+  "title": "Example Verifiable Credential Schema",
+  "description": "Example schema for DID-Linked Resources spec",
+  "type": "object",
+  "properties": {
+    "@context": {
+      "description": "Defines semantic context of the Example Credential",
+      "type": "array",
+      "items": { "type": "string", "format": "uri" }
+    }
+  }
+}
+    </pre>
+  </section>
+
+  <!-- §10.4 -->
+  <section id="resourcetype-parameter">
+    <h3>ResourceType Parameter</h3>
+    <p>
+      This parameter filters by the <code>resourceType</code> property. This
+      SHOULD only be used if there is one resource associated with the DID.
+      Otherwise additional filters MAY be added to avoid ambiguous queries.
+    </p>
+
+    <pre class="example" title="Request — query by resourceType">
+did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceType=exampleResourceType
+    </pre>
+
+    <pre class="example json" title="Response — the resource itself (schema)">
+{
+  "title": "Example Verifiable Credential Schema",
+  "description": "Example schema for DID-Linked Resources spec",
+  "type": "object",
+  "properties": {
+    "@context": {
+      "description": "Defines semantic context of the Example Credential",
+      "type": "array",
+      "items": { "type": "string", "format": "uri" }
+    }
+  }
+}
+    </pre>
+  </section>
+
+  <!-- §10.5 -->
+  <section id="resourcename-parameter">
+    <h3>ResourceName Parameter</h3>
+    <p>
+      This parameter filters by the <code>resourceName</code> property. This
+      SHOULD only be used if there is one resource associated with the DID.
+      Otherwise additional filters MAY be added to avoid ambiguous queries.
+    </p>
+
+    <pre class="example" title="Request — query by resourceName">
+did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceName=exampleResourceName
+    </pre>
+
+    <pre class="example json" title="Response — the resource itself (schema)">
+{
+  "title": "Example Verifiable Credential Schema",
+  "description": "Example schema for DID-Linked Resources spec",
+  "type": "object",
+  "properties": {
+    "@context": {
+      "description": "Defines semantic context of the Example Credential",
+      "type": "array",
+      "items": { "type": "string", "format": "uri" }
+    }
+  }
+}
+    </pre>
+  </section>
+
+  <!-- §10.6 -->
+  <section id="resourcename-and-resourcetype-parameters">
+    <h3>ResourceName and ResourceType Parameters</h3>
+    <p>
+      This combined filter SHOULD fetch the latest version of the resource with
+      the given name and type.
+    </p>
+
+    <pre class="example" title="Request — query by resourceName and resourceType">
+did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceName=exampleResourceName&amp;resourceType=exampleResourceType
+    </pre>
+
+    <pre class="example json" title="Response — the resource itself (latest version)">
+{
+  "title": "Example Verifiable Credential Schema",
+  "description": "Example schema for DID-Linked Resources spec",
+  "type": "object",
+  "properties": {
+    "@context": {
+      "description": "Defines semantic context of the Example Credential",
+      "type": "array",
+      "items": { "type": "string", "format": "uri" }
+    }
+  }
+}
+    </pre>
+  </section>
+
+  <!-- §10.7 -->
+  <section id="resourceversion-parameter">
+    <h3>ResourceVersion Parameter</h3>
+    <p>
+      This parameter filters by the <code>resourceVersion</code> field.
+    </p>
+
+    <pre class="example" title="Request — query by resourceVersion">
+did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceVersion=1.14.41
+    </pre>
+
+    <pre class="example json" title="Response — the resource itself">
+{
+  "title": "Example Verifiable Credential Schema",
+  "description": "Example schema for DID-Linked Resources spec",
+  "version": "1.14.41",
+  "type": "object",
+  "properties": {
+    "@context": {
+      "description": "Defines semantic context of the Example Credential",
+      "type": "array",
+      "items": { "type": "string", "format": "uri" }
+    }
+  }
+}
+    </pre>
+  </section>
+
+  <!-- §10.8 -->
+  <section id="resourceversiontime-parameter">
+    <h3>ResourceVersionTime Parameter</h3>
+    <div class="note">
+      This parameter SHOULD always be accompanied by another resource query
+      qualifier.
+    </div>
+
+    <pre class="example" title="Request — query by resourceVersionTime and resourceVersion">
+did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceVersionTime=2023-02-22T06:58:18Z&amp;resourceVersion=1.14.41
+    </pre>
+
+    <pre class="example json" title="Response — the resource itself">
+{
+  "title": "Example Verifiable Credential Schema",
+  "description": "Example schema for DID-Linked Resources spec",
+  "version": "1.14.41",
+  "type": "object",
+  "properties": {
+    "@context": {
+      "description": "Defines semantic context of the Example Credential",
+      "type": "array",
+      "items": { "type": "string", "format": "uri" }
+    }
+  }
+}
+    </pre>
+  </section>
+
+  <!-- §10.9 -->
+  <section id="checksum-parameter">
+    <h3>Checksum Parameter</h3>
+    <p>
+      This parameter can be used to check that the <code>checksum</code> matches
+      the resource's metadata. If the fetched resource content does not match,
+      the resolver MUST return an <code>"integrityError"</code>.
+    </p>
+
+    <pre class="example" title="Request — query by checksum">
+did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?checksum=sha256:27ad51a49f079a6634b18bbc3ac08dd2d91f13fabf72ea8e5d83692fe4820058
+    </pre>
+
+    <pre class="example json" title="Response — the resource itself">
+{
+  "title": "Example Verifiable Credential Schema",
+  "description": "Example schema for DID-Linked Resources spec",
+  "version": "1.14.41",
+  "type": "object",
+  "properties": {
+    "@context": {
+      "description": "Defines semantic context of the Example Credential",
+      "type": "array",
+      "items": { "type": "string", "format": "uri" }
+    }
+  }
+}
+    </pre>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     §11  PRACTICAL CONSIDERATIONS
+════════════════════════════════════════════════════════════════════ -->
+<section id="practical-considerations">
+  <h2>Practical Considerations</h2>
+
+  <section id="creation-of-a-resource">
+    <h3>Creation of a Resource</h3>
+    <p>
+      The creation of a [=DID-Linked Resource=] is defined by the specific
+      capabilities and constraints of the corresponding DID Method. Each method
+      MAY define its own procedures and required parameters for resource
+      creation, provided that the resulting metadata includes the required core
+      properties represented in a valid form of
+      <code>linkedResourceMetadata</code>.
+    </p>
+  </section>
+
+  <section id="recommendations-for-constructing-linkedresourcemetadata">
+    <h3>Recommendations for constructing linkedResourceMetadata</h3>
+    <p>
+      DID Methods that support [=DID-Linked Resources=] SHOULD define how
+      <code>linkedResourceMetadata</code> entries are constructed and
+      maintained. Resources with the same <code>resourceName</code> and
+      <code>resourceType</code> MAY be grouped as different versions of the same
+      logical resource, while resources with distinct names and types MAY coexist
+      within the same <code>resourceCollectionId</code>.
+    </p>
+  </section>
+
+  <section id="applicability-for-non-ledger-did-methods">
+    <h3>Applicability for Non-Ledger DID Methods</h3>
+
+    <p>
+      This section provides guidance for implementing [=DID-Linked Resources=]
+      in DID methods that do not use a distributed ledger as their verifiable
+      data registry. This includes (but is not limited to)
+      <code>did:web</code> [[DID-WEB]], <code>did:webvh</code> [[DID-WEBVH]],
+      <code>did:key</code>, <code>did:peer</code>, <code>did:jwk</code>, and
+      <code>did:pkh</code>.
+    </p>
+
+    <section id="web-based-did-methods">
+      <h4>Web-Based DID Methods (<code>did:web</code>)</h4>
+      <p>
+        Web-based DID methods such as <code>did:web</code> [[DID-WEB]] present
+        unique constraints due to the stateless and document-centric nature of
+        HTTP infrastructure.
+      </p>
+      <ul>
+        <li>
+          The DID Document and its <code>didDocumentMetadata</code> (including
+          <code>linkedResourceMetadata</code>) SHOULD be published as a JSON or
+          JSON-LD file at the well-known URI defined by the
+          <code>did:web</code> specification.
+        </li>
+        <li>
+          When a new [=DID-Linked Resource=] is created or modified, the
+          published <code>didDocumentMetadata</code> file MUST be updated.
+        </li>
+        <li>
+          Because <code>did:web</code> does not have a built-in consensus
+          mechanism, implementations MUST use signature-based binding (see
+          <a href="#signature-based-binding"></a>). Each resource metadata entry
+          MUST include a <code>proof</code> property.
+        </li>
+        <li>
+          Implementers SHOULD use HTTPS with valid TLS certificates and SHOULD
+          set appropriate cache headers to balance freshness with availability.
+        </li>
+      </ul>
+    </section>
+
+    <section id="verifiable-web-based-did-methods">
+      <h4>Verifiable Web-Based DID Methods (<code>did:webvh</code>)</h4>
+      <p>
+        <code>did:webvh</code> [[DID-WEBVH]] (Web + Verifiable History) extends
+        <code>did:web</code> by adding a cryptographically verifiable,
+        append-only log of DID Document versions. This provides stronger
+        integrity guarantees while retaining web-based hosting.
+      </p>
+      <ul>
+        <li>
+          The verifiable log maintained by <code>did:webvh</code> provides a
+          tamper-evident history for the DID Document. [=DID-Linked Resource=]
+          metadata SHOULD be anchored in log entries so that the binding can be
+          verified against the log history.
+        </li>
+        <li>
+          When a new resource is created or superseded, a new log entry SHOULD
+          be published that includes the updated
+          <code>linkedResourceMetadata</code>.
+        </li>
+        <li>
+          Because <code>did:webvh</code> does not rely on a distributed ledger,
+          implementations MUST use signature-based binding (see
+          <a href="#signature-based-binding"></a>). Each resource metadata entry
+          MUST include a <code>proof</code>.
+        </li>
+        <li>
+          The <code>resourceVersionTime</code> parameter (see
+          <a href="#resource-parameters"></a>) is particularly well-suited to
+          <code>did:webvh</code> deployments because the verifiable log permits
+          exact reconstruction of the DID Document state at any historical
+          timestamp.
+        </li>
+      </ul>
+    </section>
+
+    <section id="static-did-methods">
+      <h4>Static DID Methods (<code>did:key</code>, <code>did:jwk</code>)</h4>
+      <p>
+        Static DID methods derive the DID Document deterministically from the
+        DID itself and do not support DID Document updates.
+      </p>
+      <ul>
+        <li>
+          The <code>linkedResourceMetadata</code> cannot be stored in
+          <code>didDocumentMetadata</code> (since the DID Document is not
+          mutable). Instead, the resource metadata and <code>proof</code> SHOULD
+          be stored alongside the resource itself and provided to the
+          [=conforming DLR Consumer=] by the same channel that delivers the
+          resource URI.
+        </li>
+        <li>
+          The [=conforming DLR Consumer=] MUST verify the <code>proof</code> by
+          resolving the DID and validating the proof signature against the
+          deterministic DID Document.
+        </li>
+      </ul>
+    </section>
+
+    <section id="peer-did-methods">
+      <h4>Peer DID Methods (<code>did:peer</code>)</h4>
+      <p>
+        Peer DID methods are designed for pairwise or small-group interactions
+        and typically do not publish DID Documents to a public registry.
+      </p>
+      <ul>
+        <li>
+          [=DID-Linked Resources=] and their metadata are exchanged directly
+          between peers, typically over DIDComm or a similar secure messaging
+          protocol.
+        </li>
+        <li>
+          Signature-based binding (see <a href="#signature-based-binding"></a>)
+          MUST be used to establish authorization.
+        </li>
+        <li>
+          The resource metadata (including the <code>proof</code>) SHOULD be
+          transmitted alongside the resource content, rather than being fetched
+          from a public endpoint.
+        </li>
+      </ul>
+    </section>
+  </section>
+
+  <section id="access-control-and-provenance">
+    <h3>Access Control and Provenance</h3>
+    <p>
+      Each DID Method or implementation MAY define mechanisms to ensure the
+      authenticity, authorization, and integrity of linked resources. This MAY
+      include cryptographic proofs within the metadata, DID-based access control
+      lists, or binding to verifiable credentials. Provenance and auditability
+      of resource updates SHOULD be considered, particularly when supporting
+      mutable resources or collaborative workflows.
+    </p>
+  </section>
+
+  <section id="resource-lifecycle">
+    <h3>Resource Lifecycle</h3>
+
+    <table class="simple">
+      <thead>
+        <tr>
+          <th>Lifecycle Stage</th>
+          <th>Description</th>
+          <th>Expected Behavior</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Creation</strong></td>
+          <td>A new resource is published under a DID for the first time.</td>
+          <td>
+            A new <code>linkedResourceMetadata</code> entry is added.
+            <code>previousVersionId</code> is empty. The
+            [=conforming DLR Producer=] MUST generate a unique
+            <code>resourceId</code>.
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Update</strong></td>
+          <td>A new version of an existing resource is published.</td>
+          <td>
+            A new <code>linkedResourceMetadata</code> entry is added with a new
+            <code>resourceId</code>. The <code>previousVersionId</code> of the
+            new entry SHOULD reference the previous version's
+            <code>resourceId</code>. The <code>resourceName</code> and
+            <code>resourceType</code> SHOULD remain the same.
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Deprecation</strong></td>
+          <td>
+            A resource is marked as no longer recommended for use, but remains
+            accessible.
+          </td>
+          <td>
+            The resource metadata MAY include a <code>deprecated: true</code>
+            flag (see <a href="#resource-deactivation-or-deprecation"></a>).
+            [=Conforming DLR Consumers=] SHOULD still be able to dereference
+            the resource.
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Deactivation</strong></td>
+          <td>A resource is permanently removed from active use.</td>
+          <td>
+            The DID method defines whether the resource is purged or retained
+            in an archived state.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="surfacing-a-vc-dlr-as-a-linked-verifiable-presentation">
+    <h3>Surfacing a VC DLR as a Linked Verifiable Presentation</h3>
+
+    <p>
+      When a [=DID-Linked Resource=] contains a Verifiable Credential (VC),
+      that credential MAY also be publicly discoverable through the DIF
+      [[LINKED-VP]] specification. This section describes how the two
+      specifications can be composed.
+    </p>
+
+    <p>
+      [[LINKED-VP]] enables a DID controller to advertise publicly accessible
+      Verifiable Presentations via a
+      <code>LinkedVerifiablePresentation</code> service endpoint in the DID
+      Document. When a DLR holds a VC that the controller wishes to make
+      publicly discoverable, the controller MAY wrap that VC in a Verifiable
+      Presentation and expose it through both mechanisms simultaneously:
+    </p>
+
+    <ol>
+      <li>
+        The underlying VC (or the VP wrapping it) is published as a
+        [=DID-Linked Resource=] and assigned a <code>resourceUri</code> in the
+        usual way.
+      </li>
+      <li>
+        A <code>LinkedVerifiablePresentation</code> service endpoint is added to
+        the DID Document. The <code>serviceEndpoint</code> value SHOULD be set
+        to the DLR URL (the <code>resourceUri</code>) of the resource, making
+        the DLR URL the canonical retrieval address.
+      </li>
+    </ol>
+
+    <pre class="example json" title="DID Document service entry referencing a DLR">
+{
+  "service": [
+    {
+      "id": "did:web:example.com#accreditation-vp",
+      "type": "LinkedVerifiablePresentation",
+      "serviceEndpoint": [
+        "did:web:example.com/resources/f3d9a1bc-4e2f-4c7a-b895-1234567890ab"
+      ]
+    }
+  ]
+}
+    </pre>
+
+    <pre class="example json" title="Corresponding DLR metadata entry">
+{
+  "resourceURI": "did:web:example.com/resources/f3d9a1bc-4e2f-4c7a-b895-1234567890ab",
+  "resourceCollectionId": "example.com",
+  "resourceId": "f3d9a1bc-4e2f-4c7a-b895-1234567890ab",
+  "resourceName": "AccreditationCredential",
+  "resourceType": "VerifiableCredential",
+  "mediaType": "application/vc+ld+json",
+  "created": "2024-09-01T09:00:00Z",
+  "checksum": "sha256:b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9",
+  "previousVersionId": "",
+  "nextVersionId": "",
+  "proof": {
+    "type": "DataIntegrityProof",
+    "cryptosuite": "eddsa-jcs-2022",
+    "verificationMethod": "did:web:example.com#key-1",
+    "created": "2024-09-01T09:00:00Z",
+    "proofPurpose": "assertionMethod",
+    "proofValue": "z4Q8..."
+  }
+}
+    </pre>
+
+    <p>This composition provides several benefits:</p>
+    <ul>
+      <li>
+        <strong>Persistent, content-verified retrieval:</strong> The DLR URL
+        provides a stable, checksum-verifiable reference to the credential.
+      </li>
+      <li>
+        <strong>Standard discoverability:</strong> Any [[LINKED-VP]]-aware
+        resolver can discover the credential by resolving the DID and inspecting
+        the <code>LinkedVerifiablePresentation</code> service endpoint, without
+        requiring knowledge of the DLR mechanism.
+      </li>
+      <li>
+        <strong>Version traceability:</strong> If the credential is superseded,
+        a new DLR version can be published with the
+        <code>previousVersionId</code> chain intact.
+      </li>
+    </ul>
+
+    <div class="note">
+      Implementers SHOULD be aware of the privacy implications noted in the
+      [[LINKED-VP]] specification: linked VPs are publicly accessible and
+      potentially indexable. This pattern is appropriate for organizational or
+      institutional credentials (e.g., accreditations, licences, registrations)
+      where public discoverability is desirable. It is NOT appropriate for
+      personal, sensitive, or selective-disclosure credentials.
+    </div>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     §12  SECURITY CONSIDERATIONS
+════════════════════════════════════════════════════════════════════ -->
+<section id="security-considerations">
+  <h2>Security Considerations</h2>
+
+  <section id="proving-control-and-binding">
+    <h3>Proving Control and Binding</h3>
+    <p>
+      To ensure that a [=DID-Linked Resource=] is legitimately associated with a
+      DID, DID methods MUST specify which [=Binding Verification Mechanism=](s)
+      (see <a href="#binding-verification-mechanisms"></a>) are supported and
+      what a [=conforming DLR Consumer=] MUST verify.
+    </p>
+    <p>
+      DID Methods SHOULD specify which verification relationship (e.g.,
+      <code>authentication</code>, <code>assertionMethod</code>,
+      <code>capabilityInvocation</code>) is required for resource operations. If
+      a DID method does not specify a verification relationship,
+      [=conforming DLR Consumers=] SHOULD default to requiring
+      <code>assertionMethod</code>.
+    </p>
+  </section>
+
+  <section id="alternative-resource-locations">
+    <h3>Alternative Resource Locations</h3>
+    <p>
+      [=DID-Linked Resources=] MAY reside at locations different from the
+      storage or resolution infrastructure used by the DID itself. In such
+      cases, the external location SHOULD be clearly specified in the
+      <code>resourceURI</code> field within <code>linkedResourceMetadata</code>.
+    </p>
+  </section>
+
+  <section id="parent-did-deactivation">
+    <h3>Parent DID Deactivation</h3>
+    <p>
+      If a parent DID is deactivated, the status of its associated
+      [=DID-Linked Resources=] SHOULD be clearly defined by the DID Method. It
+      is RECOMMENDED that child resources automatically inherit the deactivated
+      status of the parent DID.
+    </p>
+  </section>
+
+  <section id="persistence-after-broken-link-with-did">
+    <h3>Persistence after Broken Link with DID</h3>
+    <p>
+      There are scenarios in which a resource may become logically detached from
+      its parent DID, for example when keys used to control the resource are
+      removed from the DID Document. DID Methods SHOULD clearly define policies
+      for handling orphaned or stale resources.
+    </p>
+  </section>
+
+  <section id="integrity-verification">
+    <h3>Integrity Verification</h3>
+    <p>
+      [=Conforming DLR Consumers=] SHOULD verify the integrity of fetched
+      resources whenever a <code>checksum</code> is present in the resource
+      metadata:
+    </p>
+    <ol class="algorithm">
+      <li>
+        Fetch the resource content from the <code>resourceUri</code>.
+      </li>
+      <li>
+        Parse the <code>checksum</code> value to extract the
+        <code>algorithm-id</code> (the portion before the colon) and the
+        <code>hex-string</code> (the portion after the colon). If the value
+        does not contain a colon separator, the checksum is non-conforming;
+        see the backward-compatibility note in <a href="#checksum"></a>.
+      </li>
+      <li>
+        Compute the cryptographic hash of the fetched content using the
+        algorithm identified by <code>algorithm-id</code>.
+      </li>
+      <li>
+        Compare the computed hash (hex-encoded, lowercase) with the
+        <code>hex-string</code> from the checksum value.
+      </li>
+      <li>
+        If the hashes do not match, the [=conforming DLR Consumer=] MUST treat
+        the resource as untrusted and SHOULD return an error with
+        <code>error</code> set to <code>"integrityError"</code>.
+      </li>
+    </ol>
+    <p>
+      <code>sha256</code> is RECOMMENDED as a baseline hash algorithm. See
+      <a href="#checksum"></a> for the full list of defined algorithm
+      identifiers.
+    </p>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     §13  PRIVACY CONSIDERATIONS
+════════════════════════════════════════════════════════════════════ -->
+<section id="privacy-considerations">
+  <h2>Privacy Considerations</h2>
+
+  <section id="linkability-and-pseudonymity">
+    <h3>Linkability and Pseudonymity</h3>
+    <p>
+      Resources SHOULD NOT contain personally identifiable information. This is
+      particularly important for ledger-based DID methods, where resource
+      content may be publicly visible and immutable. Even when resource content
+      does not contain PII directly, the metadata itself (such as resource names,
+      types, and creation timestamps) can reveal patterns about the DID
+      controller's activities.
+    </p>
+  </section>
+
+  <section id="immutability">
+    <h3>Immutability</h3>
+    <p>
+      For DID methods that store resources on immutable infrastructure (e.g.,
+      blockchains, content-addressable storage), resource content cannot be
+      deleted or modified after publication. DID controllers SHOULD carefully
+      consider what data is included in resources before publishing.
+    </p>
+  </section>
+
+  <section id="encrypted-data-in-resources">
+    <h3>Encrypted Data in Resources</h3>
+    <p>
+      DID Methods MAY introduce encryption for their resources, to protect the
+      information contained in the resource or to gate access to the resource.
+    </p>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     §14  ARCHITECTURAL CONSIDERATIONS
+════════════════════════════════════════════════════════════════════ -->
+<section id="architectural-considerations">
+  <h2>Architectural Considerations</h2>
+
+  <section id="resource-versioning">
+    <h3>Resource Versioning</h3>
+    <p>
+      Multiple resources can be stored within a collection and linked to the
+      same DID. Resources that contain both a <code>resourceName</code> and a
+      <code>resourceType</code> SHOULD be treated as part of a versioning
+      sequence. DID methods SHOULD treat resources with identical
+      <code>resourceName</code> and <code>resourceType</code> as sequential
+      versions when accompanied by differing <code>resourceId</code> values.
+    </p>
+  </section>
+
+  <section id="resources-in-service-endpoint-versus-did-document-metadata">
+    <h3>Resources in Service Endpoint versus DID Document Metadata</h3>
+    <p>
+      [=DID-Linked Resources=] are not <em>defined</em> through service
+      endpoints; the authoritative binding, metadata, and version history for
+      every resource lives in <code>linkedResourceMetadata</code> within the
+      <code>didDocumentMetadata</code> section of the DID Document. Service
+      endpoints MUST NOT be used as the primary mechanism for expressing or
+      managing [=DID-Linked Resources=].
+    </p>
+    <p>
+      However, a DLR URL MAY be <em>referenced</em> from a service endpoint for
+      the purpose of discoverability by external specifications. For example,
+      the [[LINKED-VP]] specification allows a DID controller to advertise
+      publicly accessible Verifiable Presentations via a
+      <code>LinkedVerifiablePresentation</code> service endpoint. When a DLR
+      contains a credential or presentation that should be discoverable in this
+      way, the <code>serviceEndpoint</code> value MAY point to the
+      <code>resourceUri</code> of the corresponding DLR (see
+      <a href="#surfacing-a-vc-dlr-as-a-linked-verifiable-presentation"></a>).
+      In such cases:
+    </p>
+    <ul>
+      <li>
+        The service endpoint serves solely as a <strong>discovery
+        pointer</strong>. The DLR mechanism remains the authoritative system for
+        binding, versioning, integrity verification, and proof validation.
+      </li>
+      <li>
+        A [=conforming DLR Consumer=] that discovers a resource via a service
+        endpoint SHOULD still resolve the <code>linkedResourceMetadata</code>
+        entry for that <code>resourceId</code> to obtain the full metadata,
+        checksum, and proof before trusting the resource.
+      </li>
+      <li>
+        If the service endpoint URL and the <code>resourceUri</code> in
+        <code>linkedResourceMetadata</code> differ, the
+        <code>linkedResourceMetadata</code> value is authoritative.
+      </li>
+    </ul>
+  </section>
+
+  <section id="resource-deactivation-or-deprecation">
+    <h3>Resource Deactivation or Deprecation</h3>
+    <p>
+      DID Methods MAY support additional metadata properties that indicate the
+      deactivation or deprecation status of a resource. For example, a
+      <code>deprecated: true</code> or <code>deactivated: true</code> flag
+      within the resource metadata can alert consuming systems not to rely on
+      the resource without requiring immediate deletion.
+    </p>
+    <p>
+      Implementations SHOULD continue to support dereferencing of deprecated
+      resources for archival and verification purposes, unless policy or security
+      requirements dictate otherwise.
+    </p>
+  </section>
+
+  <section id="resource-extensions">
+    <h3>Resource Extensions</h3>
+    <p>
+      The base structure of <code>linkedResourceMetadata</code> is intentionally
+      flexible to support evolving use cases. Future specifications or community
+      registries MAY define extensions. Examples include:
+    </p>
+    <ul>
+      <li>
+        <code>dnsPointer</code>: A DNS name associated with the resource (e.g.,
+        for domain verification).
+      </li>
+      <li>
+        <code>x509Cert</code>: An X.509 certificate or fingerprint tied to the
+        resource contents.
+      </li>
+      <li>
+        <code>accessControl</code>: A policy object defining who can access or
+        modify the resource.
+      </li>
+      <li>
+        <code>validUntil</code>: An expiration timestamp for time-limited
+        validity.
+      </li>
+    </ul>
+  </section>
+</section>
+
+</body>
+</html>
