@@ -899,6 +899,48 @@ DIGIT              = %x30-39
   <section id="resource-metadata-properties">
     <h3>Resource Metadata Properties</h3>
 
+    <p>
+  Resource Metadata Properties are distinct from the core properties defined in
+  <a href="#core-properties"></a> in both their purpose and their role in the
+  DLR lifecycle.
+  </p>
+  
+  <p>
+    The core properties — <code>resourceUri</code> and <code>resourceId</code> —
+    are <strong>identity properties</strong>. They are required, and together they
+    form the stable, unique address by which a resource is located and
+    unambiguously identified. Without them, a resource cannot be referenced or
+    dereferenced at all.
+  </p>
+  
+  <p>
+    Resource Metadata Properties, by contrast, are <strong>descriptive
+    properties</strong>. They are all OPTIONAL and exist to provide consuming
+    systems with the context needed to evaluate, validate, and manage a resource
+    without necessarily fetching its full content. They answer questions such as:
+    what kind of content is this, when was it published, has it been tampered
+    with, and where does it sit in a version history?
+  </p>
+  
+  <p>
+    In practice this means resource metadata properties are primarily useful to
+    <a>conforming DLR Consumers</a> — for example, a verifier checking whether a
+    status list was current at the time a credential was issued, or a resolver
+    confirming content integrity before processing a schema. They are not required
+    to locate or retrieve the resource itself, but they significantly strengthen
+    the trust and auditability of the resource once retrieved.
+  </p>
+  
+  <div class="note">
+    Because resource metadata properties are carried in the
+    <code>linkedResourceMetadata</code> array within
+    <code>didDocumentMetadata</code> rather than in the resource content itself,
+    they are under the control of the
+    <a data-cite="DID-CORE#dfn-did-controller">DID controller</a> and are subject
+    to the same binding verification mechanisms described in
+    <a href="#binding-verification-mechanisms"></a>.
+  </div>
+
     <section id="media-type">
       <h4>Media Type</h4>
       <p>
