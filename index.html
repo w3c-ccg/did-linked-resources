@@ -899,6 +899,48 @@ DIGIT              = %x30-39
   <section id="resource-metadata-properties">
     <h3>Resource Metadata Properties</h3>
 
+    <p>
+  Resource Metadata Properties are distinct from the core properties defined in
+  <a href="#core-properties"></a> in both their purpose and their role in the
+  DLR lifecycle.
+  </p>
+  
+  <p>
+    The core properties, <code>resourceUri</code> and <code>resourceId</code>,
+    are <strong>identity properties</strong>. They are required, and together they
+    form the stable, unique address by which a resource is located and
+    unambiguously identified. Without them, a resource cannot be referenced or
+    dereferenced at all.
+  </p>
+  
+  <p>
+    Resource Metadata Properties, by contrast, are <strong>descriptive
+    properties</strong>. They are all OPTIONAL and exist to provide consuming
+    systems with the context needed to evaluate, validate, and manage a resource
+    without necessarily fetching its full content. They answer questions such as:
+    what kind of content is this, when was it published, has it been tampered
+    with, and where does it sit in a version history?
+  </p>
+  
+  <p>
+    In practice, this means resource metadata properties are primarily useful to
+    <a>conforming DLR Consumers</a>; for example, a verifier checking whether a
+    status list was current at the time a credential was issued, or a resolver
+    confirming content integrity before processing a schema. They are not required
+    to locate or retrieve the resource itself, but they significantly strengthen
+    the trust and auditability of the resource once retrieved.
+  </p>
+  
+  <div class="note">
+    Because resource metadata properties are carried in the
+    <code>linkedResourceMetadata</code> array within
+    <code>didDocumentMetadata</code> rather than in the resource content itself,
+    they are under the control of the
+    <a data-cite="DID-CORE#dfn-did-controller">DID controller</a> and are subject
+    to the same binding verification mechanisms described in
+    <a href="#binding-verification-mechanisms"></a>.
+  </div>
+
     <section id="media-type">
       <h4>Media Type</h4>
       <p>
@@ -1152,7 +1194,7 @@ hex-string      = 1*HEXDIG
 
   <p>
     In the context of [=DID-Linked Resources=],
-    <dfn>binding</dfn> refers to the relationship between a resource and a
+    binding refers to the relationship between a resource and a
     Decentralized Identifier (DID). This binding is OPTIONAL but is highly
     recommended.
   </p>
@@ -1213,7 +1255,7 @@ hex-string      = 1*HEXDIG
     "nextVersion": "",
     "linkedResourceMetadata": [
       {
-        "resourceURI": "did:example:13d5ad44-9e99-428f-81e9-274458cefddc/resources/44547089-170b-4f5a-bcbc-06e46e0089e4",
+        "resourceUri": "did:example:13d5ad44-9e99-428f-81e9-274458cefddc/resources/44547089-170b-4f5a-bcbc-06e46e0089e4",
         "resourceCollectionId": "13d5ad44-9e99-428f-81e9-274458cefddc",
         "resourceId": "44547089-170b-4f5a-bcbc-06e46e0089e4",
         "resourceName": "PassportSchema",
@@ -1226,7 +1268,7 @@ hex-string      = 1*HEXDIG
         "nextVersionId": "bb2118f3-5e55-4510-b420-33ef9e1726d2"
       },
       {
-        "resourceURI": "did:example:13d5ad44-9e99-428f-81e9-274458cefddc/resources/bb2118f3-5e55-4510-b420-33ef9e1726d2",
+        "resourceUri": "did:example:13d5ad44-9e99-428f-81e9-274458cefddc/resources/bb2118f3-5e55-4510-b420-33ef9e1726d2",
         "resourceCollectionId": "13d5ad44-9e99-428f-81e9-274458cefddc",
         "resourceId": "bb2118f3-5e55-4510-b420-33ef9e1726d2",
         "resourceName": "PassportSchema",
@@ -1672,6 +1714,34 @@ hex-string      = 1*HEXDIG
       </li>
     </ol>
   </section>
+
+  <div class="note">
+    The W3C DID Resolution specification is actively developing a formal
+    algorithm for DID URL path handling, including a
+    <code>PathService</code> service type that provides a general-purpose
+    mechanism for routing DID URL paths to HTTP endpoints. Implementers
+    SHOULD monitor the relevant work in progress in the
+    <a href="https://github.com/w3c/did-resolution">DID Resolution
+    repository</a> and expect a future revision of this specification
+    to align the dereferencing algorithm in
+    <a href="#dereferencing-algorithm"></a> with the normative path
+    handling defined there once ratified.
+  
+    DID-Linked Resources and <code>PathService</code> are complementary
+    at different layers. <code>PathService</code> provides transport
+    routing, mapping a DID URL path to an HTTP location.
+    <code>linkedResourceMetadata</code> provides the control plane:
+    integrity verification, version traversal, and controller
+    authorisation. A DID method MAY declare both a
+    <code>PathService</code> with <code>basePath: "/resources/"</code>
+    and publish <code>linkedResourceMetadata</code> for the same path
+    space. In that case, resolvers that understand only
+    <code>PathService</code> can still route to the resource, while
+    DLR-aware resolvers gain the full metadata and verification layer.
+    This provides a graceful degradation path for implementations
+    adopting DLR semantics incrementally.
+  </div>
+  
 </section>
 
 <!-- ═══════════════════════════════════════════════════════════════
@@ -1730,7 +1800,7 @@ did:example:c1685ca0-1f5b-439c-8eb8-5c0e85ab7cd0?resourceType=String&amp;resourc
     "versionId": "e5615fc2-6f13-42b1-989c-49576a574cef",
     "linkedResourceMetadata": [
       {
-        "resourceURI": "did:example:c1685ca0-1f5b-439c-8eb8-5c0e85ab7cd0/resources/9ba3922e-d5f5-4f53-b265-fc0d4e988c77",
+        "resourceUri": "did:example:c1685ca0-1f5b-439c-8eb8-5c0e85ab7cd0/resources/9ba3922e-d5f5-4f53-b265-fc0d4e988c77",
         "resourceCollectionId": "c1685ca0-1f5b-439c-8eb8-5c0e85ab7cd0",
         "resourceId": "9ba3922e-d5f5-4f53-b265-fc0d4e988c77",
         "resourceName": "exampleResourceName1",
@@ -1743,7 +1813,7 @@ did:example:c1685ca0-1f5b-439c-8eb8-5c0e85ab7cd0?resourceType=String&amp;resourc
         "nextVersionId": null
       },
       {
-        "resourceURI": "did:example:c1685ca0-1f5b-439c-8eb8-5c0e85ab7cd0/resources/e733ebb7-c8dd-41ed-9d42-33bceea70952",
+        "resourceUri": "did:example:c1685ca0-1f5b-439c-8eb8-5c0e85ab7cd0/resources/e733ebb7-c8dd-41ed-9d42-33bceea70952",
         "resourceCollectionId": "c1685ca0-1f5b-439c-8eb8-5c0e85ab7cd0",
         "resourceId": "e733ebb7-c8dd-41ed-9d42-33bceea70952",
         "resourceName": "exampleResourceName2",
@@ -1903,7 +1973,7 @@ did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceType=exampleResourceTyp
     "versionId": "44f49254-8106-40ee-99ad-e50ac9517346",
     "linkedResourceMetadata": [
       {
-        "resourceURI": "did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c/resources/bae5cb6c-564a-4ed4-8c0e-d5c3b0f8ae0a",
+        "resourceUri": "did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c/resources/bae5cb6c-564a-4ed4-8c0e-d5c3b0f8ae0a",
         "resourceCollectionId": "d8ac0372-0d4b-413e-8ef5-8e8f07822b2c",
         "resourceId": "bae5cb6c-564a-4ed4-8c0e-d5c3b0f8ae0a",
         "resourceName": "exampleResourceName",
@@ -1916,7 +1986,7 @@ did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceType=exampleResourceTyp
         "nextVersionId": null
       },
       {
-        "resourceURI": "did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c/resources/40829caf-b415-4b1d-91a3-b56dfb6374f4",
+        "resourceUri": "did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c/resources/40829caf-b415-4b1d-91a3-b56dfb6374f4",
         "resourceCollectionId": "d8ac0372-0d4b-413e-8ef5-8e8f07822b2c",
         "resourceId": "40829caf-b415-4b1d-91a3-b56dfb6374f4",
         "resourceName": "exampleResourceName",
@@ -1929,7 +1999,7 @@ did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceType=exampleResourceTyp
         "nextVersionId": "bae5cb6c-564a-4ed4-8c0e-d5c3b0f8ae0a"
       },
       {
-        "resourceURI": "did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c/resources/547abdb3-99f8-4040-b030-3296c4668846",
+        "resourceUri": "did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c/resources/547abdb3-99f8-4040-b030-3296c4668846",
         "resourceCollectionId": "d8ac0372-0d4b-413e-8ef5-8e8f07822b2c",
         "resourceId": "547abdb3-99f8-4040-b030-3296c4668846",
         "resourceName": "exampleResourceName",
@@ -2214,108 +2284,149 @@ did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?checksum=sha256:27ad51a49f079a6
   </section>
 
   <section id="applicability-for-non-ledger-did-methods">
-    <h3>Applicability for Non-Ledger DID Methods</h3>
+  <h3>Applicability for Non-Ledger DID Methods</h3>
+
+  <p>
+    This section provides guidance for implementing [=DID-Linked Resources=]
+    in DID methods that do not use a distributed ledger as their verifiable
+    data registry. This includes (but is not limited to)
+    <code>did:web</code> [[DID-WEB]], <code>did:webvh</code> [[DID-WEBVH]], 
+    <code>did:key</code>, <code>did:peer</code>, 
+    <code>did:jwk</code>, and <code>did:pkh</code>.
+  </p>
+
+  <section id="method-support-for-dlrs">
+    <h4>Does a DID Method Need to Explicitly Support DLRs?</h4>
 
     <p>
-      This section provides guidance for implementing [=DID-Linked Resources=]
-      in DID methods that do not use a distributed ledger as their verifiable
-      data registry. This includes (but is not limited to)
-      <code>did:web</code> [[DID-WEB]], <code>did:webvh</code> [[DID-WEBVH]],
-      <code>did:key</code>, <code>did:peer</code>, <code>did:jwk</code>, and
-      <code>did:pkh</code>.
+      A common question for implementers is whether a DID method must explicitly
+      support [=DID-Linked Resources=] before a
+      <a data-cite="DID-CORE#dfn-did-controller">DID controller</a> can begin
+      publishing them. The answer depends on the type of DID method in use.
     </p>
 
-    <section id="web-based-did-methods">
-      <h4>Web-Based DID Methods (<code>did:web</code>)</h4>
-      <p>
-        Web-based DID methods such as <code>did:web</code> [[DID-WEB]] present
-        unique constraints due to the stateless and document-centric nature of
-        HTTP infrastructure.
-      </p>
-      <ul>
-        <li>
-          The DID Document and its <code>didDocumentMetadata</code> (including
-          <code>linkedResourceMetadata</code>) SHOULD be published as a JSON or
-          JSON-LD file at the well-known URI defined by the
-          <code>did:web</code> specification.
-        </li>
-        <li>
-          When a new [=DID-Linked Resource=] is created or modified, the
-          published <code>didDocumentMetadata</code> file MUST be updated.
-        </li>
-        <li>
-          Because <code>did:web</code> does not have a built-in consensus
-          mechanism, implementations MUST use signature-based binding (see
-          <a href="#signature-based-binding"></a>). Each resource metadata entry
-          MUST include a <code>proof</code> property.
-        </li>
-        <li>
-          Implementers SHOULD use HTTPS with valid TLS certificates and SHOULD
-          set appropriate cache headers to balance freshness with availability.
-        </li>
-      </ul>
-    </section>
+    <p>
+      For ledger-based DID methods, the answer is yes. The ledger controls what
+      is written to <code>didDocumentMetadata</code>, so the method
+      infrastructure must explicitly support [=DID-Linked Resources=] in order
+      for <code>linkedResourceMetadata</code> to be written, stored, and
+      surfaced through resolution.
+    </p>
 
-    <section id="verifiable-web-based-did-methods">
-      <h4>Verifiable Web-Based DID Methods (<code>did:webvh</code>)</h4>
-      <p>
-        <code>did:webvh</code> [[DID-WEBVH]] (Web + Verifiable History) extends
-        <code>did:web</code> by adding a cryptographically verifiable,
-        append-only log of DID Document versions. This provides stronger
-        integrity guarantees while retaining web-based hosting.
-      </p>
-      <ul>
-        <li>
-          The verifiable log maintained by <code>did:webvh</code> provides a
-          tamper-evident history for the DID Document. [=DID-Linked Resource=]
-          metadata SHOULD be anchored in log entries so that the binding can be
-          verified against the log history.
-        </li>
-        <li>
-          When a new resource is created or superseded, a new log entry SHOULD
-          be published that includes the updated
-          <code>linkedResourceMetadata</code>.
-        </li>
-        <li>
-          Because <code>did:webvh</code> does not rely on a distributed ledger,
-          implementations MUST use signature-based binding (see
-          <a href="#signature-based-binding"></a>). Each resource metadata entry
-          MUST include a <code>proof</code>.
-        </li>
-        <li>
-          The <code>resourceVersionTime</code> parameter (see
-          <a href="#resource-parameters"></a>) is particularly well-suited to
-          <code>did:webvh</code> deployments because the verifiable log permits
-          exact reconstruction of the DID Document state at any historical
-          timestamp.
-        </li>
-      </ul>
-    </section>
+    <p>
+      For non-ledger DID methods such as <code>did:web</code> [[DID-WEB]] and
+      <code>did:webvh</code> [[DID-WEBVH]], a
+      <a data-cite="DID-CORE#dfn-did-controller">DID controller</a> can adopt
+      [=DID-Linked Resources=] entirely on their own initiative. Publishing
+      <code>linkedResourceMetadata</code> in <code>didDocumentMetadata</code>
+      is itself the act of supporting [=DID-Linked Resources=]. No method-level
+      changes are required. In this sense, DLR support for non-ledger methods
+      is <strong>controller-driven</strong> rather than
+      <strong>method-driven</strong>.
+    </p>
 
-    <section id="static-did-methods">
-      <h4>Static DID Methods (<code>did:key</code>, <code>did:jwk</code>)</h4>
-      <p>
-        Static DID methods derive the DID Document deterministically from the
-        DID itself and do not support DID Document updates.
-      </p>
-      <ul>
-        <li>
-          The <code>linkedResourceMetadata</code> cannot be stored in
-          <code>didDocumentMetadata</code> (since the DID Document is not
-          mutable). Instead, the resource metadata and <code>proof</code> SHOULD
-          be stored alongside the resource itself and provided to the
-          [=conforming DLR Consumer=] by the same channel that delivers the
-          resource URI.
-        </li>
-        <li>
-          The [=conforming DLR Consumer=] MUST verify the <code>proof</code> by
-          resolving the DID and validating the proof signature against the
-          deterministic DID Document.
-        </li>
-      </ul>
-    </section>
+    <div class="note">
+      The binding verification mechanism in use determines the level of trust a
+      [=conforming DLR Consumer=] can place in the resource. For non-ledger
+      methods, signature-based binding (see
+      <a href="#signature-based-binding"></a>) MUST be used to establish
+      authorization, meaning each <code>linkedResourceMetadata</code> entry
+      MUST include a <code>proof</code> signed by a verification method in the
+      DID Document.
+    </div>
+  </section>
 
-    <section id="peer-did-methods">
+  <section id="web-based-did-methods">
+    <h4>Web-Based DID Methods (<code>did:web</code>)</h4>
+    <p>
+      Web-based DID methods such as <code>did:web</code> [[DID-WEB]] present
+      unique constraints due to the stateless and document-centric nature of
+      HTTP infrastructure.
+    </p>
+    <ul>
+      <li>
+        The DID Document and its <code>didDocumentMetadata</code> (including
+        <code>linkedResourceMetadata</code>) SHOULD be published as a JSON or
+        JSON-LD file at the well-known URI defined by the
+        <code>did:web</code> specification.
+      </li>
+      <li>
+        When a new [=DID-Linked Resource=] is created or modified, the
+        published <code>didDocumentMetadata</code> file MUST be updated.
+      </li>
+      <li>
+        Because <code>did:web</code> does not have a built-in consensus
+        mechanism, implementations MUST use signature-based binding (see
+        <a href="#signature-based-binding"></a>). Each resource metadata entry
+        MUST include a <code>proof</code> property.
+      </li>
+      <li>
+        Implementers SHOULD use HTTPS with valid TLS certificates and SHOULD
+        set appropriate cache headers to balance freshness with availability.
+      </li>
+    </ul>
+  </section>
+
+  <section id="verifiable-web-based-did-methods">
+    <h4>Verifiable Web-Based DID Methods (<code>did:webvh</code>)</h4>
+    <p>
+      <code>did:webvh</code> [[DID-WEBVH]] (Web + Verifiable History) extends
+      <code>did:web</code> by adding a cryptographically verifiable,
+      append-only log of DID Document versions. This provides stronger
+      integrity guarantees while retaining web-based hosting.
+    </p>
+    <ul>
+      <li>
+        The verifiable log maintained by <code>did:webvh</code> provides a
+        tamper-evident history for the DID Document. [=DID-Linked Resource=]
+        metadata SHOULD be anchored in log entries so that the binding can be
+        verified against the log history.
+      </li>
+      <li>
+        When a new resource is created or superseded, a new log entry SHOULD
+        be published that includes the updated
+        <code>linkedResourceMetadata</code>.
+      </li>
+      <li>
+        Because <code>did:webvh</code> does not rely on a distributed ledger,
+        implementations MUST use signature-based binding (see
+        <a href="#signature-based-binding"></a>). Each resource metadata entry
+        MUST include a <code>proof</code>.
+      </li>
+      <li>
+        The <code>resourceVersionTime</code> parameter (see
+        <a href="#resource-parameters"></a>) is particularly well-suited to
+        <code>did:webvh</code> deployments because the verifiable log permits
+        exact reconstruction of the DID Document state at any historical
+        timestamp.
+      </li>
+    </ul>
+  </section>
+
+  <section id="static-did-methods">
+    <h4>Static DID Methods (<code>did:key</code>, <code>did:jwk</code>)</h4>
+    <p>
+      Static DID methods derive the DID Document deterministically from the
+      DID itself and do not support DID Document updates.
+    </p>
+    <ul>
+      <li>
+        The <code>linkedResourceMetadata</code> cannot be stored in
+        <code>didDocumentMetadata</code> (since the DID Document is not
+        mutable). Instead, the resource metadata and <code>proof</code>
+        SHOULD be stored alongside the resource itself and provided to the
+        [=conforming DLR Consumer=] by the same channel that delivers the
+        resource URI.
+      </li>
+      <li>
+        The [=conforming DLR Consumer=] MUST verify the <code>proof</code>
+        by resolving the DID and validating the proof signature against the
+        deterministic DID Document.
+      </li>
+    </ul>
+  </section>
+
+  <section id="peer-did-methods">
       <h4>Peer DID Methods (<code>did:peer</code>)</h4>
       <p>
         Peer DID methods are designed for pairwise or small-group interactions
@@ -2328,8 +2439,9 @@ did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?checksum=sha256:27ad51a49f079a6
           protocol.
         </li>
         <li>
-          Signature-based binding (see <a href="#signature-based-binding"></a>)
-          MUST be used to establish authorization.
+          Signature-based binding (see
+          <a href="#signature-based-binding"></a>) MUST be used to establish
+          authorization.
         </li>
         <li>
           The resource metadata (including the <code>proof</code>) SHOULD be
@@ -2338,6 +2450,233 @@ did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?checksum=sha256:27ad51a49f079a6
         </li>
       </ul>
     </section>
+  
+  </section>
+  
+  <section id="cross-method-resource-resolution">
+    <h3>Cross-Method Resource Resolution</h3>
+  
+    <p>
+      A [=DID-Linked Resource=] does not need to be stored on the same
+      infrastructure as the DID that references it. Because the
+      <code>resourceUri</code> and <code>alternativeUri</code> properties are
+      standard URIs conforming to [[RFC3986]], they can point to any addressable
+      location, including a
+      <a data-cite="DID-CORE#dfn-did-url">DID URL</a> belonging to a different
+      DID method. This applies equally to ledger-based and non-ledger DID
+      methods.
+    </p>
+  
+    <p>
+      The key principle is that <code>linkedResourceMetadata</code> is the
+      trust anchor, regardless of where it is published. The resource itself
+      can live anywhere addressable. This decouples <strong>where the resource
+      is stored</strong> from <strong>where the trust anchor lives</strong>,
+      enabling a range of practical deployment patterns:
+    </p>
+  
+    <ul>
+      <li>
+        A <code>did:web</code> or <code>did:webvh</code> controller publishing
+        <code>linkedResourceMetadata</code> with an <code>alternativeUri</code>
+        pointing to a resource stored on a distributed ledger such as
+        <code>did:cheqd</code>, gaining ledger-level immutability and
+        tamper-evidence without the DID itself needing to be ledger-based.
+      </li>
+      <li>
+        A ledger-based DID such as <code>did:cheqd</code> or
+        <code>did:ebsi</code> using <code>alternativeUri</code> to point to
+        a resource stored on a different ledger or on IPFS, where storage
+        economics or retrieval performance favour an alternative location.
+      </li>
+      <li>
+        A ledger-based DID using <code>alternativeUri</code> to point to an
+        HTTP mirror of a resource for availability or performance, while the
+        <code>checksum</code> in <code>linkedResourceMetadata</code> on the
+        ledger guarantees the mirrored content has not been tampered with.
+      </li>
+    </ul>
+  
+    <pre class="example json"
+      title="linkedResourceMetadata using a ledger-based alternativeUri from a did:web DID">
+  {
+    "resourceUri": "did:web:example.com/resources/f3d9a1bc-4e2f-4c7a-b895-1234567890ab",
+    "resourceCollectionId": "example.com",
+    "resourceId": "f3d9a1bc-4e2f-4c7a-b895-1234567890ab",
+    "resourceName": "AccreditationSchema",
+    "resourceType": "JSONSchema2020",
+    "mediaType": "application/json",
+    "created": "2024-09-01T09:00:00Z",
+    "checksum": "sha256:b94d27b9934d3e08a52e52d7da7dabfa...",
+    "alternativeUri": [
+      "did:cheqd:mainnet:zF7rhDBfUt9d1gJPjx7s1J/resources/f3d9a1bc-4e2f-4c7a-b895-1234567890ab"
+    ],
+    "proof": {
+      "type": "DataIntegrityProof",
+      "cryptosuite": "eddsa-jcs-2022",
+      "verificationMethod": "did:web:example.com#key-1",
+      "created": "2024-09-01T09:00:00Z",
+      "proofPurpose": "assertionMethod",
+      "proofValue": "z4Q8..."
+    }
+  }
+    </pre>
+  
+    <p>
+      In this example, a <code>did:web</code> controller publishes
+      <code>linkedResourceMetadata</code> with an <code>alternativeUri</code>
+      pointing to a <code>did:cheqd</code> resource. A
+      [=conforming DLR Consumer=] that supports both DID methods can dereference
+      either URI to retrieve the resource. The <code>did:cheqd</code> URI
+      provides ledger-backed immutability and consensus validation; the
+      <code>did:web</code> <code>linkedResourceMetadata</code> provides the
+      index, version chain, and controller-signed proof.
+    </p>
+  
+    <div class="note">
+      This pattern is particularly well-suited to <code>did:webvh</code>
+      [[DID-WEBVH]] deployments. The verifiable append-only log provides a
+      tamper-evident history of the <code>linkedResourceMetadata</code> entries,
+      meaning a [=conforming DLR Consumer=] can verify both that the metadata
+      was present at a specific point in time and that the resource content has
+      not been modified, by combining the log history with the
+      <code>checksum</code> in the metadata and the integrity guarantees of the
+      ledger-based <code>alternativeUri</code>.
+    </div>
+  
+    <div class="note">
+      A [=conforming DLR Consumer=] resolving a cross-method resource MUST
+      support the DID methods of both the DID and the <code>alternativeUri</code>
+      in order to fully verify the resource. Implementations SHOULD clearly
+      communicate to relying parties which URIs were successfully resolved and
+      verified, and which were not, so that the level of assurance can be
+      correctly understood.
+    </div>
+  
+  </section>
+
+  <section id="resolver-driven-dlrs">
+    <h3>Resolver-Driven DLR Support</h3>
+  
+    <p>
+      The DLR model described in this specification assumes that
+      <code>linkedResourceMetadata</code> is published in
+      <code>didDocumentMetadata</code>, providing a standardised index of
+      resources associated with a DID. However, there is an alternative
+      deployment model in which the resolver itself takes on responsibility
+      for locating, fetching, and verifying resources, without requiring the
+      DID method to surface <code>linkedResourceMetadata</code> at all.
+    </p>
+  
+    <p>
+      In this model:
+    </p>
+  
+    <ul>
+      <li>
+        The DID method only needs to resolve the DID Document. It does not
+        need to explicitly support [=DID-Linked Resources=] at the
+        infrastructure level.
+      </li>
+      <li>
+        The resolver has prior knowledge of where resources associated with
+        a given DID or DID method are located; for example, a known
+        endpoint pattern, a content-addressable system such as IPFS, or a
+        ledger-specific resource storage mechanism.
+      </li>
+      <li>
+        Each resource carries its own proof, signed by a verification method
+        in the DID Document. The resolver fetches the resource and verifies
+        the proof directly against the resolved DID Document, without
+        consulting a <code>linkedResourceMetadata</code> index.
+      </li>
+    </ul>
+  
+    <p>
+      This approach is practically viable and may already reflect how some
+      implementations work, particularly in closed or well-defined ecosystems
+      where resource locations are predictable and the resolver is under the
+      control of the consuming application.
+    </p>
+  
+    <p>
+      The primary trade-off compared to the standard DLR model is
+      discoverability. Without <code>linkedResourceMetadata</code>, there is
+      no standardised way for a [=conforming DLR Consumer=] to ask what
+      resources exist under a given DID, traverse version history, or filter
+      by <code>resourceName</code> or <code>resourceType</code>. The resolver
+      must have out-of-band knowledge of where to look, which works well in
+      constrained ecosystems but limits interoperability in open ones.
+    </p>
+  
+    <table class="simple">
+      <thead>
+        <tr>
+          <th>Property</th>
+          <th>Standard DLR Model</th>
+          <th>Resolver-Driven Model</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Resource discovery</td>
+          <td>
+            Via <code>linkedResourceMetadata</code> index in
+            <code>didDocumentMetadata</code>
+          </td>
+          <td>Resolver has prior knowledge of resource locations</td>
+        </tr>
+        <tr>
+          <td>Integrity verification</td>
+          <td>
+            Checksum and proof anchored in
+            <code>linkedResourceMetadata</code>
+          </td>
+          <td>Proof travels with the resource itself</td>
+        </tr>
+        <tr>
+          <td>Method dependency</td>
+          <td>
+            Method must surface <code>linkedResourceMetadata</code>
+            through resolution
+          </td>
+          <td>Method only needs to resolve the DID Document</td>
+        </tr>
+        <tr>
+          <td>Version traversal</td>
+          <td>
+            Supported via <code>previousVersionId</code> and
+            <code>nextVersionId</code> chain
+          </td>
+          <td>Not supported without additional out-of-band convention</td>
+        </tr>
+        <tr>
+          <td>Openness</td>
+          <td>
+            Any [=conforming DLR Consumer=] can discover and verify
+            resources
+          </td>
+          <td>
+            Requires resolver awareness of the specific ecosystem
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <div class="note">
+      Resolver-driven DLR support is a valid deployment model and is not
+      precluded by this specification. Implementations adopting this model
+      SHOULD ensure that each resource carries a
+      <a href="#proof">proof</a> conforming to [[VC-DATA-INTEGRITY]], signed
+      by a verification method in the DID Document, so that a
+      [=conforming DLR Consumer=] can independently verify the resource
+      without relying solely on the resolver's prior knowledge. Where
+      possible, implementations SHOULD also consider publishing
+      <code>linkedResourceMetadata</code> to support discoverability and
+      interoperability with consumers that do not have resolver-specific
+      knowledge.
+    </div>
+  
   </section>
 
   <section id="access-control-and-provenance">
@@ -2459,7 +2798,7 @@ did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?checksum=sha256:27ad51a49f079a6
 
     <pre class="example json" title="Corresponding DLR metadata entry">
 {
-  "resourceURI": "did:web:example.com/resources/f3d9a1bc-4e2f-4c7a-b895-1234567890ab",
+  "resourceUri": "did:web:example.com/resources/f3d9a1bc-4e2f-4c7a-b895-1234567890ab",
   "resourceCollectionId": "example.com",
   "resourceId": "f3d9a1bc-4e2f-4c7a-b895-1234567890ab",
   "resourceName": "AccreditationCredential",
@@ -2540,7 +2879,7 @@ did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?checksum=sha256:27ad51a49f079a6
       [=DID-Linked Resources=] MAY reside at locations different from the
       storage or resolution infrastructure used by the DID itself. In such
       cases, the external location SHOULD be clearly specified in the
-      <code>resourceURI</code> field within <code>linkedResourceMetadata</code>.
+      <code>resourceUri</code> field within <code>linkedResourceMetadata</code>.
     </p>
   </section>
 
